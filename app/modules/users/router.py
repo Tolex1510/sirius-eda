@@ -17,7 +17,7 @@ router = APIRouter()
 @router.post("/register")
 def register_user(payload: UserCreate, db: Session = Depends(get_db)):
     # Формат email проверяет Pydantic (EmailStr), длину телефона проверяем здесь:
-    # это техническая валидация, а уникальность email - бизнес-правило сервиса.
+    # это техническая валидация, а уникальность email относится к бизнес-правилам сервиса.
     if payload.phone and len(payload.phone) < 10:
         raise HTTPException(
             status_code=400,
