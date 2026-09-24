@@ -3,13 +3,15 @@
 подключение модулей и создание таблиц базы данных.
 """
 from fastapi import FastAPI
+from app.config import REPOSITORY_BACKEND
 from app.database import Base, engine
 from app.modules.users.router import router as users_router
 from app.modules.menu.router import router as menu_router
 from app.modules.orders.router import router as orders_router
 from app.modules.delivery.router import router as delivery_router
 
-Base.metadata.create_all(bind=engine)
+if REPOSITORY_BACKEND == "postgres":
+    Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Sirius.Food API")
 

@@ -2,11 +2,13 @@
 Инфраструктурный слой модуля меню (круг 3: Interface Adapters).
 """
 from abc import ABC, abstractmethod
+from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
 from app.domain.entities import MenuItem
 from app.models import MenuItem as MenuItemModel
+from app.memory_storage import InMemoryStorage
 
 
 class MenuRepository(ABC):
@@ -53,3 +55,34 @@ class SqlAlchemyMenuRepository(MenuRepository):
         self.db.commit()
         self.db.refresh(row)
         return row.to_entity()
+
+
+class InMemoryMenuRepository(MenuRepository):
+    """Хранит данные в памяти процесса. Используется в тестах и без СУБД."""
+
+    def __init__(self, storage: InMemoryStorage):
+        self.storage = storage
+
+    def get_by_id(self, item_id: int) -> MenuItem | None:
+        item = self.storage.menu_items.get(item_id)
+        return replace(item) if item else None
+
+    def get_by_name(self, name: str) -> MenuItem | None:
+        for item in self.storage.menu_items.values():
+            if item.name == name:
+                return replace(item)
+        return None
+
+    def create(self, name: str, price: float) -> MenuItem:
+        item = MenuItem(
+            id=self.storage.next_id("menu_items"),
+            name=name,
+            price=price,
+            is_available=True,
+        )
+        self.storage.menu_items[item.id] = item
+        return replace(item)
+
+    def save(self, item: MenuItem) -> MenuItem:
+        self.storage.menu_items[item.id] = replace(item)
+        return replace(item)
