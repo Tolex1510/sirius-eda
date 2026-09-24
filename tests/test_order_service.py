@@ -1,0 +1,78 @@
+import pytest
+
+from app.domain.entities import MenuItem, OrderStatus, User
+from app.domain.exceptions import BusinessRuleError, NotFoundError
+from app.modules.orders.repository import InMemoryOrderRepository
+from app.modules.orders.service import OrderService
+from tests.conftest import add_menu_item, add_user
+
+
+@pytest.fixture
+def service(storage) -> OrderService:
+    return OrderService(InMemoryOrderRepository(storage))
+
+
+def test_create_order_charges_balance(service, storage):
+    user = add_user(storage, balance=500)
+    item = add_menu_item(storage, price=150)
+
+    order_id = service.create_order(user.id, item.id, quantity=2)
+
+    assert storage.users[user.id].balance == 200
+    order = storage.orders[order_id]
+    assert (order.user_id, order.item_id, order.quantity) == (user.id, item.id, 2)
+    assert order.status == OrderStatus.PROCESSING
+
+
+def test_unknown_user(service, storage):
+    item = add_menu_item(storage)
+
+    with pytest.raises(NotFoundError, match="Пользователь не найден"):
+        service.create_order(999, item.id, quantity=1)
+
+
+def test_unknown_menu_item(service, storage):
+    user = add_user(storage, balance=500)
+
+    with pytest.raises(NotFoundError, match="Блюдо не найдено"):
+        service.create_order(user.id, 999, quantity=1)
+
+
+def test_unavailable_menu_item(service, storage):
+    user = add_user(storage, balance=500)
+    item = add_menu_item(storage, is_available=False)
+
+    with pytest.raises(BusinessRuleError, match="Блюдо недоступно"):
+        service.create_order(user.id, item.id, quantity=1)
+
+
+def test_insufficient_funds_leaves_state_untouched(service, storage):
+    user = add_user(storage, balance=100)
+    item = add_menu_item(storage, price=150)
+
+    with pytest.raises(BusinessRuleError, match="Недостаточно средств"):
+        service.create_order(user.id, item.id, quantity=1)
+
+    assert storage.users[user.id].balance == 100
+    assert storage.orders == {}
+
+
+def test_service_depends_only_on_abstraction():
+    class FakeRepository:
+        def __init__(self):
+            self.saved = None
+
+        def get_user_by_id(self, user_id):
+            return User(id=user_id, email="a@b.ru", phone=None, balance=1000, is_blocked=False)
+
+        def get_menu_item_by_id(self, item_id):
+            return MenuItem(id=item_id, name="Борщ", price=100, is_available=True)
+
+        def save_order(self, user_id, item_id, quantity, new_balance):
+            self.saved = (user_id, item_id, quantity, new_balance)
+            return 42
+
+    repository = FakeRepository()
+
+    assert OrderService(repository).create_order(1, 2, quantity=3) == 42
+    assert repository.saved == (1, 2, 3, 700)
