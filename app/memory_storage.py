@@ -16,6 +16,8 @@ class InMemoryStorage:
     orders: dict[int, Order] = field(default_factory=dict)
     deliveries: dict[int, Delivery] = field(default_factory=dict)
     refresh_tokens: dict[int, RefreshTokenRecord] = field(default_factory=dict)
+    # (provider, subject) -> user_id
+    external_accounts: dict[tuple[str, str], int] = field(default_factory=dict)
     _ids: dict[str, count] = field(default_factory=dict)
 
     def next_id(self, table: str) -> int:

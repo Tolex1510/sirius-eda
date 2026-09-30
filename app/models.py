@@ -1,7 +1,7 @@
 """
 Определение ORM-моделей предметной области «Сириус.Еда».
 """
-from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.domain import entities
@@ -111,3 +111,17 @@ class RefreshToken(Base):
     token_hash = Column(String(64), unique=True, nullable=False)
     expires_at = Column(DateTime(timezone=True), nullable=False)
     is_revoked = Column(Boolean, nullable=False, default=False, server_default="false")
+
+
+class ExternalAccount(Base):
+    """Привязка аккаунта внешнего провайдера (Google) к пользователю."""
+    __tablename__ = "external_accounts"
+    __table_args__ = (UniqueConstraint("provider", "subject", name="uq_external_accounts_provider_subject"),)
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    provider = Column(String(32), nullable=False)
+    # Постоянный id пользователя у провайдера (claim sub). Email может смениться, sub нет.
+    subject = Column(String(255), nullable=False)
+    email = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())

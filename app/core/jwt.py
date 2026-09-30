@@ -60,3 +60,22 @@ def decode_token(token: str, expected_type: str) -> int:
 def token_fingerprint(token: str) -> str:
     """SHA-256 токена для хранения в БД. bcrypt не нужен: токен и так случайный и длинный."""
     return hashlib.sha256(token.encode()).hexdigest()
+
+
+def sign_payload(payload: dict, token_type: str, ttl: timedelta) -> str:
+    """Подписанный короткоживущий контейнер для служебных данных, например state OAuth."""
+    return jwt.encode(
+        {**payload, "type": token_type, "exp": datetime.now(UTC) + ttl},
+        settings.SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
+
+def read_signed_payload(token: str, token_type: str) -> dict:
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM], options={"require": ["exp", "type"]})
+    except jwt.PyJWTError as e:
+        raise InvalidTokenError() from e
+    if payload["type"] != token_type:
+        raise InvalidTokenError()
+    return payload

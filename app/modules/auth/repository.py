@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.domain.entities import RefreshTokenRecord
 from app.memory_storage import InMemoryStorage
+from app.models import ExternalAccount as ExternalAccountModel
 from app.models import RefreshToken as RefreshTokenModel
 
 
@@ -28,6 +29,12 @@ class AuthRepository(ABC):
 
     @abstractmethod
     def revoke_all_refresh_tokens(self, user_id: int) -> None: ...
+
+    @abstractmethod
+    def get_user_id_by_external(self, provider: str, subject: str) -> int | None: ...
+
+    @abstractmethod
+    def link_external(self, user_id: int, provider: str, subject: str, email: str | None) -> None: ...
 
 
 class SqlAlchemyAuthRepository(AuthRepository):
@@ -64,6 +71,18 @@ class SqlAlchemyAuthRepository(AuthRepository):
         self.db.query(RefreshTokenModel).filter(RefreshTokenModel.user_id == user_id).update({"is_revoked": True})
         self.db.commit()
 
+    def get_user_id_by_external(self, provider: str, subject: str) -> int | None:
+        row = (
+            self.db.query(ExternalAccountModel.user_id)
+            .filter(ExternalAccountModel.provider == provider, ExternalAccountModel.subject == subject)
+            .first()
+        )
+        return row[0] if row else None
+
+    def link_external(self, user_id: int, provider: str, subject: str, email: str | None) -> None:
+        self.db.add(ExternalAccountModel(user_id=user_id, provider=provider, subject=subject, email=email))
+        self.db.commit()
+
 
 class InMemoryAuthRepository(AuthRepository):
     """Хранит данные в памяти процесса. Используется в тестах и без СУБД."""
@@ -98,3 +117,9 @@ class InMemoryAuthRepository(AuthRepository):
         for record in self.storage.refresh_tokens.values():
             if record.user_id == user_id:
                 record.is_revoked = True
+
+    def get_user_id_by_external(self, provider: str, subject: str) -> int | None:
+        return self.storage.external_accounts.get((provider, subject))
+
+    def link_external(self, user_id: int, provider: str, subject: str, email: str | None) -> None:
+        self.storage.external_accounts[(provider, subject)] = user_id

@@ -23,5 +23,10 @@ class Settings(BaseSettings):
     # Стоимость bcrypt. 12 для продакшена, в тестах понижается ради скорости.
     BCRYPT_ROUNDS: int = Field(default=12, ge=4, le=16)
 
+    # Вход через Google. Пока client id не задан, эндпоинты /auth/google/* отвечают 503.
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    GOOGLE_REDIRECT_URI: str = "http://localhost:8000/auth/google/callback"
+
 
 settings = Settings()

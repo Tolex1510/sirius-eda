@@ -12,8 +12,9 @@ from app.core.jwt import (
     token_fingerprint,
 )
 from app.core.security import verify_password
-from app.domain.entities import TokenPair, User
+from app.domain.entities import ExternalIdentity, Role, TokenPair, User
 from app.domain.exceptions import AccessDeniedError, AuthenticationError
+from app.modules.auth.oauth import OAuthError, OAuthProvider
 from app.modules.auth.repository import AuthRepository
 from app.modules.users.repository import UserRepository
 
@@ -56,6 +57,43 @@ class AuthService:
             raise AuthenticationError("Пользователь не найден")
         self._ensure_active(user)
         return self.issue_tokens(user.id)
+
+    def login_with_provider(self, provider: OAuthProvider, code: str, code_verifier: str) -> TokenPair:
+        """Вход через внешнего провайдера по коду из Authorization Code Flow."""
+        try:
+            identity = provider.fetch_identity(code, code_verifier)
+        except OAuthError:
+            raise AuthenticationError("Не удалось войти через внешнего провайдера")
+
+        user = self._resolve_external_user(identity)
+        self._ensure_active(user)
+        return self.issue_tokens(user.id)
+
+    def _resolve_external_user(self, identity: ExternalIdentity) -> User:
+        """
+        Ищет пользователя по паре (провайдер, sub). Если привязки нет, связывает
+        с пользователем по email или создаёт нового. По email связываем только
+        подтверждённый провайдером адрес, иначе чужой аккаунт можно захватить,
+        указав у провайдера его email.
+        """
+        user_id = self.auth_repository.get_user_id_by_external(identity.provider, identity.subject)
+        if user_id is not None:
+            user = self.user_repository.get_by_id(user_id)
+            if not user:
+                raise AuthenticationError("Пользователь не найден")
+            return user
+
+        if not identity.email or not identity.email_verified:
+            raise AuthenticationError("Провайдер не подтвердил email")
+
+        user = self.user_repository.get_by_email(identity.email) or self.user_repository.create(
+            email=identity.email,
+            phone=None,
+            password_hash=None,
+            role=Role.STUDENT,
+        )
+        self.auth_repository.link_external(user.id, identity.provider, identity.subject, identity.email)
+        return user
 
     def logout(self, refresh_token: str) -> None:
         record = self.auth_repository.get_refresh_token(token_fingerprint(refresh_token))

@@ -81,3 +81,12 @@ class TokenPair:
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+
+
+@dataclass
+class ExternalIdentity:
+    """Пользователь, подтверждённый внешним провайдером."""
+    provider: str
+    subject: str
+    email: str | None
+    email_verified: bool
