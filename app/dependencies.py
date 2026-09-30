@@ -5,9 +5,10 @@
 """
 from collections.abc import Iterator
 
-from app.config import REPOSITORY_BACKEND
+from app.core.config import settings
 from app.database import SessionLocal
 from app.memory_storage import InMemoryStorage
+from app.modules.auth.repository import AuthRepository, InMemoryAuthRepository, SqlAlchemyAuthRepository
 from app.modules.delivery.repository import (
     DeliveryRepository,
     InMemoryDeliveryRepository,
@@ -21,7 +22,7 @@ memory_storage = InMemoryStorage()
 
 
 def _provide(sql_repository_cls, memory_repository_cls) -> Iterator:
-    if REPOSITORY_BACKEND == "memory":
+    if settings.REPOSITORY_BACKEND == "memory":
         yield memory_repository_cls(memory_storage)
         return
 
@@ -47,3 +48,6 @@ def get_order_repository() -> Iterator[OrderRepository]:
 def get_delivery_repository() -> Iterator[DeliveryRepository]:
     yield from _provide(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository)
 
+
+def get_auth_repository() -> Iterator[AuthRepository]:
+    yield from _provide(SqlAlchemyAuthRepository, InMemoryAuthRepository)

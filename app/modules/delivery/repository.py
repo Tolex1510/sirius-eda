@@ -29,6 +29,13 @@ class DeliveryRepository(ABC):
     def get_by_id(self, delivery_id: int) -> Delivery | None: ...
 
     @abstractmethod
+    def list_by_courier(self, courier_id: int) -> list[Delivery]: ...
+
+    @abstractmethod
+    def list_by_customer(self, user_id: int) -> list[Delivery]:
+        """Доставки заказов, оформленных пользователем."""
+
+    @abstractmethod
     def create(self, order_id: int, courier_id: int, status: str) -> int:
         """Создаёт доставку и возвращает её идентификатор."""
 
@@ -59,6 +66,19 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
     def get_by_id(self, delivery_id: int) -> Delivery | None:
         delivery = self.db.query(DeliveryModel).filter(DeliveryModel.id == delivery_id).first()
         return delivery.to_entity() if delivery else None
+
+    def list_by_courier(self, courier_id: int) -> list[Delivery]:
+        rows = self.db.query(DeliveryModel).filter(DeliveryModel.courier_id == courier_id).order_by(DeliveryModel.id)
+        return [row.to_entity() for row in rows]
+
+    def list_by_customer(self, user_id: int) -> list[Delivery]:
+        rows = (
+            self.db.query(DeliveryModel)
+            .join(OrderModel, OrderModel.id == DeliveryModel.order_id)
+            .filter(OrderModel.user_id == user_id)
+            .order_by(DeliveryModel.id)
+        )
+        return [row.to_entity() for row in rows]
 
     def create(self, order_id: int, courier_id: int, status: str) -> int:
         new_delivery = DeliveryModel(order_id=order_id, courier_id=courier_id, status=status)
@@ -99,6 +119,16 @@ class InMemoryDeliveryRepository(DeliveryRepository):
     def get_by_id(self, delivery_id: int) -> Delivery | None:
         delivery = self.storage.deliveries.get(delivery_id)
         return replace(delivery) if delivery else None
+
+    def list_by_courier(self, courier_id: int) -> list[Delivery]:
+        return [replace(d) for d in self.storage.deliveries.values() if d.courier_id == courier_id]
+
+    def list_by_customer(self, user_id: int) -> list[Delivery]:
+        return [
+            replace(d)
+            for d in self.storage.deliveries.values()
+            if self.storage.orders[d.order_id].user_id == user_id
+        ]
 
     def create(self, order_id: int, courier_id: int, status: str) -> int:
         delivery_id = self.storage.next_id("deliveries")

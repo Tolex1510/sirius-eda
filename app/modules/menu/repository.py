@@ -21,6 +21,9 @@ class MenuRepository(ABC):
     def get_by_name(self, name: str) -> MenuItem | None: ...
 
     @abstractmethod
+    def list_all(self) -> list[MenuItem]: ...
+
+    @abstractmethod
     def create(self, name: str, price: float) -> MenuItem:
         """Создаёт доступное для заказа блюдо."""
 
@@ -39,6 +42,9 @@ class SqlAlchemyMenuRepository(MenuRepository):
     def get_by_name(self, name: str) -> MenuItem | None:
         item = self.db.query(MenuItemModel).filter(MenuItemModel.name == name).first()
         return item.to_entity() if item else None
+
+    def list_all(self) -> list[MenuItem]:
+        return [item.to_entity() for item in self.db.query(MenuItemModel).order_by(MenuItemModel.id)]
 
     def create(self, name: str, price: float) -> MenuItem:
         new_item = MenuItemModel(name=name, price=price, is_available=True)
@@ -72,6 +78,9 @@ class InMemoryMenuRepository(MenuRepository):
             if item.name == name:
                 return replace(item)
         return None
+
+    def list_all(self) -> list[MenuItem]:
+        return [replace(item) for item in self.storage.menu_items.values()]
 
     def create(self, name: str, price: float) -> MenuItem:
         item = MenuItem(

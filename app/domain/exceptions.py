@@ -9,12 +9,16 @@ class DomainError(ValueError):
     pass
 
 
+class AuthenticationError(DomainError):
+    """Не удалось установить, кто делает запрос: неверный пароль или токен."""
+
+
 class NotFoundError(DomainError):
     pass
 
 
 class AccessDeniedError(DomainError):
-    pass
+    """Пользователь известен, но прав на действие или объект у него нет."""
 
 
 class BusinessRuleError(DomainError):

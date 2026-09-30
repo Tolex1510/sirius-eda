@@ -2,8 +2,11 @@
 Слой бизнес-логики модуля заказов (круги 1 и 2: Entities и Use Cases).
 Импорты fastapi и sqlalchemy здесь запрещены.
 """
-from app.domain.exceptions import BusinessRuleError, NotFoundError
+from app.domain.entities import Order, OrderStatus, Role, User
+from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
 from app.modules.orders.repository import OrderRepository
+
+KITCHEN_STATUSES = (OrderStatus.PROCESSING, OrderStatus.PAID)
 
 
 class OrderService:
@@ -31,5 +34,28 @@ class OrderService:
             user_id=user_id,
             item_id=item_id,
             quantity=quantity,
+            total_cost=total_cost,
             new_balance=user.balance - total_cost,
         )
+
+    def cancel_order(self, order_id: int, actor: User) -> Order:
+        """Отменяет заказ и возвращает деньги. Отменить можно только свой заказ."""
+        order = self.repository.get_order(order_id)
+        if not order:
+            raise NotFoundError("Заказ не найден")
+
+        # Защита от IDOR: order_id пришёл от клиента, владельца сверяем с пользователем из JWT.
+        if order.user_id != actor.id and actor.role != Role.ADMIN:
+            raise AccessDeniedError("Нет доступа к чужому заказу")
+
+        if order.status != OrderStatus.PROCESSING or not self.repository.cancel_and_refund(order):
+            raise BusinessRuleError("Отменить можно только заказ в обработке")
+
+        order.status = OrderStatus.CANCELLED
+        return order
+
+    def list_user_orders(self, actor: User) -> list[Order]:
+        return self.repository.list_orders_by_user(actor.id)
+
+    def get_kitchen_orders(self) -> list[Order]:
+        return self.repository.list_orders_by_status(KITCHEN_STATUSES)

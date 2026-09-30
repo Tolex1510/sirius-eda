@@ -3,7 +3,9 @@
 """
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.core.dependencies import require_role
 from app.dependencies import get_menu_repository
+from app.domain.entities import Role, User
 from app.domain.exceptions import DomainError
 from app.http_errors import to_http_exception
 from app.modules.menu.repository import MenuRepository
@@ -18,8 +20,20 @@ def get_menu_service(repository: MenuRepository = Depends(get_menu_repository)) 
     return MenuService(repository)
 
 
+menu_editor = require_role(Role.ADMIN, Role.COOK)
+
+
+@router.get("/items")
+def list_menu_items(service: MenuService = Depends(get_menu_service)):
+    return service.list_items()
+
+
 @router.post("/items")
-def create_menu_item(payload: MenuItemCreate, service: MenuService = Depends(get_menu_service)):
+def create_menu_item(
+    payload: MenuItemCreate,
+    _: User = Depends(menu_editor),
+    service: MenuService = Depends(get_menu_service),
+):
     if payload.price <= 0:
         raise HTTPException(
             status_code=400,
@@ -44,6 +58,7 @@ def create_menu_item(payload: MenuItemCreate, service: MenuService = Depends(get
 def update_menu_item(
     item_id: int,
     payload: MenuItemUpdate,
+    _: User = Depends(menu_editor),
     service: MenuService = Depends(get_menu_service),
 ):
     if payload.price is not None and payload.price <= 0:

@@ -11,6 +11,9 @@ class MenuService:
     def __init__(self, repository: MenuRepository):
         self.repository = repository
 
+    def list_items(self) -> list[MenuItem]:
+        return self.repository.list_all()
+
     def create_item(self, name: str, price: float) -> MenuItem:
         if self.repository.get_by_name(name):
             raise BusinessRuleError("Блюдо с таким названием уже существует")

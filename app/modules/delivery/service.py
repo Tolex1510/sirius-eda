@@ -2,7 +2,7 @@
 Слой бизнес-логики модуля доставки (круги 1 и 2: Entities и Use Cases).
 Импорты fastapi и sqlalchemy здесь запрещены.
 """
-from app.domain.entities import DeliveryStatus, OrderStatus
+from app.domain.entities import Delivery, DeliveryStatus, OrderStatus, Role, User
 from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
 from app.modules.delivery.repository import DeliveryRepository
 
@@ -11,8 +11,12 @@ class DeliveryService:
     def __init__(self, repository: DeliveryRepository):
         self.repository = repository
 
-    def assign_courier(self, order_id: int, courier_id: int) -> int:
+    def assign_courier(self, order_id: int, courier_id: int, actor: User) -> int:
         """Назначает курьера на заказ и возвращает идентификатор доставки."""
+        # courier_id пришёл от клиента: курьер может взять доставку только на себя.
+        if actor.role != Role.ADMIN and courier_id != actor.id:
+            raise AccessDeniedError("Курьер может назначить доставку только себе")
+
         order = self.repository.get_order_by_id(order_id)
         if not order:
             raise NotFoundError("Заказ не найден")
@@ -27,6 +31,9 @@ class DeliveryService:
         if courier.is_blocked:
             raise AccessDeniedError("Курьер заблокирован и не может быть назначен")
 
+        if courier.role != Role.COURIER:
+            raise BusinessRuleError("Назначить можно только пользователя с ролью courier")
+
         if self.repository.get_active_delivery_by_courier(courier_id):
             raise BusinessRuleError("У курьера уже есть активная доставка")
 
@@ -36,10 +43,25 @@ class DeliveryService:
             status=DeliveryStatus.IN_PROGRESS,
         )
 
-    def complete_delivery(self, delivery_id: int) -> None:
+    def get_delivery(self, delivery_id: int, actor: User) -> Delivery:
         delivery = self.repository.get_by_id(delivery_id)
         if not delivery:
             raise NotFoundError("Доставка не найдена")
+        self._ensure_can_view(delivery, actor)
+        return delivery
+
+    def list_my_deliveries(self, actor: User) -> list[Delivery]:
+        if actor.role == Role.COURIER:
+            return self.repository.list_by_courier(actor.id)
+        return self.repository.list_by_customer(actor.id)
+
+    def complete_delivery(self, delivery_id: int, actor: User) -> None:
+        delivery = self.repository.get_by_id(delivery_id)
+        if not delivery:
+            raise NotFoundError("Доставка не найдена")
+
+        if actor.role != Role.ADMIN and delivery.courier_id != actor.id:
+            raise AccessDeniedError("Завершить можно только свою доставку")
 
         if delivery.status == DeliveryStatus.COMPLETED:
             raise BusinessRuleError("Доставка уже завершена")
@@ -54,3 +76,12 @@ class DeliveryService:
             order.status = OrderStatus.DELIVERED
 
         self.repository.save_completion(delivery, order)
+
+    def _ensure_can_view(self, delivery: Delivery, actor: User) -> None:
+        """Защита от IDOR: доставку видят её курьер, заказчик и администратор."""
+        if actor.role == Role.ADMIN or delivery.courier_id == actor.id:
+            return
+        order = self.repository.get_order_by_id(delivery.order_id)
+        if order and order.user_id == actor.id:
+            return
+        raise AccessDeniedError("Нет доступа к чужой доставке")
