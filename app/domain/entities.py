@@ -3,12 +3,23 @@
 Не зависят ни от ORM, ни от веб-фреймворка.
 """
 from dataclasses import dataclass
+from datetime import datetime
+
+
+class Role:
+    STUDENT = "student"
+    COOK = "cook"
+    COURIER = "courier"
+    ADMIN = "admin"
+
+    ALL = (STUDENT, COOK, COURIER, ADMIN)
 
 
 class OrderStatus:
     PROCESSING = "processing"
     PAID = "paid"
     DELIVERED = "delivered"
+    CANCELLED = "cancelled"
 
 
 class DeliveryStatus:
@@ -25,6 +36,9 @@ class User:
     phone: str | None
     balance: float
     is_blocked: bool
+    role: str = Role.STUDENT
+    # None у пользователей, вошедших только через внешнего провайдера.
+    password_hash: str | None = None
 
 
 @dataclass
@@ -42,6 +56,7 @@ class Order:
     item_id: int
     quantity: int
     status: str
+    total_cost: float = 0.0
 
 
 @dataclass
@@ -50,3 +65,19 @@ class Delivery:
     order_id: int
     courier_id: int | None
     status: str
+
+
+@dataclass
+class RefreshTokenRecord:
+    id: int
+    user_id: int
+    token_hash: str
+    expires_at: datetime
+    is_revoked: bool
+
+
+@dataclass
+class TokenPair:
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"

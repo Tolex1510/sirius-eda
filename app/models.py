@@ -1,10 +1,18 @@
 """
 Определение ORM-моделей предметной области «Сириус.Еда».
 """
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.domain import entities
+
+
+class Role(Base):
+    """Роль пользователя: student, cook, courier, admin."""
+    __tablename__ = "roles"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
 
 
 class User(Base):
@@ -15,6 +23,10 @@ class User(Base):
     phone = Column(String, nullable=True)
     balance = Column(Float, default=0.0)
     is_blocked = Column(Boolean, default=False)
+    password_hash = Column(String, nullable=True)
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
+
+    role = relationship("Role", lazy="joined")
 
     def to_entity(self) -> entities.User:
         return entities.User(
@@ -23,6 +35,8 @@ class User(Base):
             phone=self.phone,
             balance=self.balance,
             is_blocked=self.is_blocked,
+            role=self.role.name,
+            password_hash=self.password_hash,
         )
 
 
@@ -51,6 +65,8 @@ class Order(Base):
     item_id = Column(Integer, ForeignKey("menu_items.id"))
     quantity = Column(Integer, nullable=False)
     status = Column(String, default="processing")
+    # Сумма фиксируется в момент заказа: цена блюда может измениться до отмены.
+    total_cost = Column(Float, nullable=False)
 
     user = relationship("User")
     item = relationship("MenuItem")
@@ -62,6 +78,7 @@ class Order(Base):
             item_id=self.item_id,
             quantity=self.quantity,
             status=self.status,
+            total_cost=self.total_cost,
         )
 
 
@@ -83,3 +100,14 @@ class Delivery(Base):
             courier_id=self.courier_id,
             status=self.status,
         )
+
+
+class RefreshToken(Base):
+    """Выданный refresh-токен. Хранится хеш, чтобы утечка БД не дала рабочих токенов."""
+    __tablename__ = "refresh_tokens"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    token_hash = Column(String(64), unique=True, nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    is_revoked = Column(Boolean, nullable=False, default=False, server_default="false")
