@@ -1,0 +1,3 @@
+transactions=13181
+rows_returned=4083718
+rows_fetched=205865
