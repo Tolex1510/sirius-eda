@@ -3,6 +3,7 @@
 даёт одинаковый результат на любой реализации репозиториев.
 SQLAlchemy-реализация проверяется на SQLite в памяти, запуск PostgreSQL не нужен.
 """
+import fakeredis
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +14,8 @@ from app.domain.entities import Role
 from app.models import Role as RoleModel
 from app.domain.exceptions import BusinessRuleError
 from app.memory_storage import InMemoryStorage
-from app.modules.menu.repository import InMemoryMenuRepository, SqlAlchemyMenuRepository
+from app.core.cache import CacheAside
+from app.modules.menu.repository import CachedMenuRepository, InMemoryMenuRepository, SqlAlchemyMenuRepository
 from app.modules.menu.service import MenuService
 from app.modules.orders.repository import InMemoryOrderRepository, SqlAlchemyOrderRepository
 from app.modules.orders.service import OrderService
@@ -39,7 +41,15 @@ def sqlalchemy_repositories():
         db.close()
 
 
-@pytest.fixture(params=[memory_repositories, sqlalchemy_repositories], ids=["memory", "sqlalchemy"])
+def cached_sqlalchemy_repositories():
+    for users, menu, orders in sqlalchemy_repositories():
+        yield users, CachedMenuRepository(menu, CacheAside(fakeredis.FakeRedis(decode_responses=True))), orders
+
+
+@pytest.fixture(
+    params=[memory_repositories, sqlalchemy_repositories, cached_sqlalchemy_repositories],
+    ids=["memory", "sqlalchemy", "sqlalchemy+redis"],
+)
 def repositories(request):
     yield from request.param()
 

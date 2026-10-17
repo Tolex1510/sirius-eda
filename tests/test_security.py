@@ -6,10 +6,10 @@ import importlib
 
 import pytest
 from fastapi.testclient import TestClient
-from redis import Redis
 
 from app.core.config import settings
 from app.core.rate_limit import get_redis
+from app.core.redis import create_redis
 from app.domain.entities import DeliveryStatus, OrderStatus, Role
 from tests.conftest import add_delivery, add_menu_item, add_order, create_account
 
@@ -162,7 +162,7 @@ def test_registration_spam_gives_429(client):
 def test_redis_outage_does_not_block_login(client, storage):
     from app.main import app
 
-    app.dependency_overrides[get_redis] = lambda: Redis(port=1, socket_connect_timeout=0.1)
+    app.dependency_overrides[get_redis] = lambda: create_redis("redis://127.0.0.1:1/0")
     client.post("/users/register", json={"email": "ok@sirius.ru", "password": "password123"})
 
     response = client.post("/auth/login", json={"email": "ok@sirius.ru", "password": "password123"})

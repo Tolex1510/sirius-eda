@@ -3,19 +3,13 @@
 в отличие от счётчика в памяти процесса.
 """
 import logging
-from functools import lru_cache
 
 from fastapi import Depends, HTTPException, Request
 from redis import Redis, RedisError
 
-from app.core.config import settings
+from app.core.redis import get_redis
 
 logger = logging.getLogger(__name__)
-
-
-@lru_cache
-def get_redis() -> Redis:
-    return Redis.from_url(settings.REDIS_URL, socket_timeout=1, socket_connect_timeout=1)
 
 
 def rate_limit(max_requests: int, window_seconds: int, scope: str | None = None):

@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     ALLOWED_ORIGINS: list[str] = []
     REPOSITORY_BACKEND: Literal["postgres", "memory"] = "postgres"
+    # false выключает кеш меню: так снимается замер «до» без правки кода.
+    MENU_CACHE_ENABLED: bool = True
 
     ACCESS_TOKEN_TTL_MINUTES: int = 15
     REFRESH_TOKEN_TTL_DAYS: int = 7

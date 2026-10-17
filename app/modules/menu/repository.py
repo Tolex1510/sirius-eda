@@ -2,10 +2,11 @@
 Инфраструктурный слой модуля меню (круг 3: Interface Adapters).
 """
 from abc import ABC, abstractmethod
-from dataclasses import replace
+from dataclasses import asdict, replace
 
 from sqlalchemy.orm import Session
 
+from app.core.cache import CacheAside
 from app.domain.entities import Category, CategoryMenu, MenuItem
 from app.memory_storage import InMemoryStorage
 from app.models import Category as CategoryModel
@@ -180,3 +181,90 @@ class InMemoryMenuRepository(MenuRepository):
             key=lambda i: (i.name, i.id),
         )
         return CategoryMenu(id=category.id, name=category.name, items=items)
+
+
+MENU_ALL_KEY = "menu:all"
+MENU_ALL_TTL = 300
+CATEGORY_TTL = 600
+
+
+def category_key(category_id: int) -> str:
+    return f"menu:category:{category_id}"
+
+
+class CachedMenuRepository(MenuRepository):
+    """
+    Cache-Aside для чтения меню. Декоратор над любым MenuRepository: чтение всего меню
+    и разделов идёт через Redis, остальное передаётся в исходный репозиторий без изменений.
+
+    Инвалидация событийная: после каждой записи в меню сбрасываются затронутые ключи.
+    TTL страхует от того, что сброс не прошёл или данные поменяли в БД в обход приложения.
+    MenuService про кеш не знает и работает с этим классом как с обычным репозиторием.
+    """
+
+    def __init__(self, inner: MenuRepository, cache: CacheAside):
+        self.inner = inner
+        self.cache = cache
+
+    def list_all(self) -> list[MenuItem]:
+        data = self.cache.get_or_load(
+            MENU_ALL_KEY,
+            MENU_ALL_TTL,
+            lambda: [asdict(item) for item in self.inner.list_all()],
+        )
+        return [MenuItem(**item) for item in data]
+
+    def get_category_menu(self, category_id: int) -> CategoryMenu | None:
+        def load():
+            menu = self.inner.get_category_menu(category_id)
+            return asdict(menu) if menu else None
+
+        data = self.cache.get_or_load(category_key(category_id), CATEGORY_TTL, load)
+        if data is None:
+            return None
+        return CategoryMenu(id=data["id"], name=data["name"], items=[MenuItem(**i) for i in data["items"]])
+
+    def warm_up(self) -> None:
+        """Заполняет кеш при старте, чтобы первые запросы после деплоя не шли в БД."""
+        self.cache.put(MENU_ALL_KEY, MENU_ALL_TTL, [asdict(item) for item in self.inner.list_all()])
+        for category in self.inner.list_categories():
+            self.cache.put(category_key(category.id), CATEGORY_TTL, asdict(self.inner.get_category_menu(category.id)))
+
+    def create(self, name: str, price: float, category_id: int | None = None) -> MenuItem:
+        item = self.inner.create(name, price, category_id)
+        self._invalidate(item.category_id)
+        return item
+
+    def save(self, item: MenuItem) -> MenuItem:
+        before = self.inner.get_by_id(item.id)
+        saved = self.inner.save(item)
+        # При переносе блюда устаревают оба раздела: старый и новый.
+        self._invalidate(saved.category_id, before.category_id if before else None)
+        return saved
+
+    def _invalidate(self, *category_ids: int | None) -> None:
+        keys = [MENU_ALL_KEY] + [category_key(c) for c in set(category_ids) if c is not None]
+        self.cache.invalidate(*keys)
+
+    # Остальные операции кешировать незачем: они редкие или нужны свежими.
+
+    def get_by_id(self, item_id: int) -> MenuItem | None:
+        return self.inner.get_by_id(item_id)
+
+    def get_by_name(self, name: str) -> MenuItem | None:
+        return self.inner.get_by_name(name)
+
+    def get_category(self, category_id: int) -> Category | None:
+        return self.inner.get_category(category_id)
+
+    def get_category_by_name(self, name: str) -> Category | None:
+        return self.inner.get_category_by_name(name)
+
+    def list_categories(self) -> list[Category]:
+        return self.inner.list_categories()
+
+    def create_category(self, name: str) -> Category:
+        category = self.inner.create_category(name)
+        # Для новой категории мог закешироваться промах (None), если её id запрашивали раньше.
+        self.cache.invalidate(category_key(category.id))
+        return category
