@@ -6,6 +6,7 @@ from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
+from app.database import short_transactions
 from app.domain.entities import Role, User
 from app.memory_storage import InMemoryStorage
 from app.models import Role as RoleModel
@@ -38,6 +39,7 @@ class UserRepository(ABC):
     def set_role(self, user_id: int, role: str) -> User: ...
 
 
+@short_transactions
 class SqlAlchemyUserRepository(UserRepository):
     def __init__(self, db: Session):
         self.db = db

@@ -94,3 +94,12 @@ def test_menu_categories_are_the_same_for_every_backend(repositories):
     assert [i.name for i in menu.list_items()] == ["Цезарь", "Борщ", "Щи", "Без раздела"]
     assert [i.name for i in menu.get_category_menu(soups.id).items] == ["Борщ", "Щи"]
     assert [c.name for c in menu.list_categories()] == ["Салаты", "Супы"]
+
+
+def test_sql_repositories_release_connection_after_each_call():
+    for users, menu, orders in sqlalchemy_repositories():
+        user = users.create("a@sirius.ru", None, None)
+        menu.create("Борщ", 150)
+        for read in (lambda: users.get_by_id(user.id), menu.list_all, lambda: orders.get_order(1)):
+            read()
+            assert not users.db.in_transaction()

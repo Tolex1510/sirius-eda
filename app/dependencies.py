@@ -4,7 +4,8 @@
 (REPOSITORY_BACKEND=postgres|memory) не требует их изменения.
 """
 import logging
-from collections.abc import Iterator
+from collections.abc import AsyncIterator, Iterator
+from contextlib import contextmanager
 
 from app.core.cache import CacheAside
 from app.core.config import settings
@@ -31,20 +32,18 @@ logger = logging.getLogger(__name__)
 memory_storage = InMemoryStorage()
 
 
-def _provide(sql_repository_cls, memory_repository_cls) -> Iterator:
+@contextmanager
+def _repository_scope(sql_repository_factory, memory_repository_cls) -> Iterator:
+    """Репозиторий с собственной сессией БД. Для CLI и прогрева кеша."""
     if settings.REPOSITORY_BACKEND == "memory":
         yield memory_repository_cls(memory_storage)
         return
 
     db = SessionLocal()
     try:
-        yield sql_repository_cls(db)
+        yield sql_repository_factory(db)
     finally:
         db.close()
-
-
-def get_user_repository() -> Iterator[UserRepository]:
-    yield from _provide(SqlAlchemyUserRepository, InMemoryUserRepository)
 
 
 def _sql_menu_repository(db) -> MenuRepository:
@@ -54,32 +53,50 @@ def _sql_menu_repository(db) -> MenuRepository:
     return repository
 
 
-def get_menu_repository() -> Iterator[MenuRepository]:
-    yield from _provide(_sql_menu_repository, InMemoryMenuRepository)
+def user_repository_scope():
+    return _repository_scope(SqlAlchemyUserRepository, InMemoryUserRepository)
+
+
+def menu_repository_scope():
+    return _repository_scope(_sql_menu_repository, InMemoryMenuRepository)
+
+
+# Зависимости объявлены async: код после yield (закрытие сессии) выполняется в event loop
+# и не ждёт свободный поток. Соединение к этому моменту уже в пуле, см. short_transactions.
+
+
+async def get_user_repository() -> AsyncIterator[UserRepository]:
+    with user_repository_scope() as repository:
+        yield repository
+
+
+async def get_menu_repository() -> AsyncIterator[MenuRepository]:
+    with menu_repository_scope() as repository:
+        yield repository
+
+
+async def get_order_repository() -> AsyncIterator[OrderRepository]:
+    with _repository_scope(SqlAlchemyOrderRepository, InMemoryOrderRepository) as repository:
+        yield repository
+
+
+async def get_delivery_repository() -> AsyncIterator[DeliveryRepository]:
+    with _repository_scope(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository) as repository:
+        yield repository
+
+
+async def get_auth_repository() -> AsyncIterator[AuthRepository]:
+    with _repository_scope(SqlAlchemyAuthRepository, InMemoryAuthRepository) as repository:
+        yield repository
 
 
 def warm_up_menu_cache() -> None:
     """Вызывается при старте приложения. Ошибка прогрева не мешает запуску: кеш заполнится на первых запросах."""
     if settings.REPOSITORY_BACKEND != "postgres" or not settings.MENU_CACHE_ENABLED:
         return
-    provider = get_menu_repository()
     try:
-        repository = next(provider)
-        repository.warm_up()
+        with menu_repository_scope() as repository:
+            repository.warm_up()
         logger.info("Menu cache warmed up")
     except Exception:
         logger.warning("Menu cache warm-up failed", exc_info=True)
-    finally:
-        provider.close()
-
-
-def get_order_repository() -> Iterator[OrderRepository]:
-    yield from _provide(SqlAlchemyOrderRepository, InMemoryOrderRepository)
-
-
-def get_delivery_repository() -> Iterator[DeliveryRepository]:
-    yield from _provide(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository)
-
-
-def get_auth_repository() -> Iterator[AuthRepository]:
-    yield from _provide(SqlAlchemyAuthRepository, InMemoryAuthRepository)

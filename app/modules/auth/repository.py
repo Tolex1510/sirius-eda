@@ -8,6 +8,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
+from app.database import short_transactions
 from app.domain.entities import RefreshTokenRecord
 from app.memory_storage import InMemoryStorage
 from app.models import ExternalAccount as ExternalAccountModel
@@ -37,6 +38,7 @@ class AuthRepository(ABC):
     def link_external(self, user_id: int, provider: str, subject: str, email: str | None) -> None: ...
 
 
+@short_transactions
 class SqlAlchemyAuthRepository(AuthRepository):
     def __init__(self, db: Session):
         self.db = db

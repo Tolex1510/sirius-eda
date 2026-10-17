@@ -6,11 +6,12 @@ from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
+from app.database import short_transactions
 from app.domain.entities import Delivery, DeliveryStatus, Order, User
+from app.memory_storage import InMemoryStorage
 from app.models import Delivery as DeliveryModel
 from app.models import Order as OrderModel
 from app.models import User as UserModel
-from app.memory_storage import InMemoryStorage
 
 
 class DeliveryRepository(ABC):
@@ -44,6 +45,7 @@ class DeliveryRepository(ABC):
         """Сохраняет новые статусы доставки и заказа одной транзакцией."""
 
 
+@short_transactions
 class SqlAlchemyDeliveryRepository(DeliveryRepository):
     def __init__(self, db: Session):
         self.db = db

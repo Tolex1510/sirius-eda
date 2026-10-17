@@ -7,11 +7,12 @@ from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
+from app.database import short_transactions
 from app.domain.entities import MenuItem, Order, OrderStatus, User
+from app.memory_storage import InMemoryStorage
 from app.models import MenuItem as MenuItemModel
 from app.models import Order as OrderModel
 from app.models import User as UserModel
-from app.memory_storage import InMemoryStorage
 
 
 class OrderRepository(ABC):
@@ -47,6 +48,7 @@ class OrderRepository(ABC):
         """
 
 
+@short_transactions
 class SqlAlchemyOrderRepository(OrderRepository):
     def __init__(self, db: Session):
         self.db = db

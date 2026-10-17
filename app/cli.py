@@ -8,7 +8,7 @@
 import argparse
 import getpass
 
-from app.dependencies import get_menu_repository, get_user_repository
+from app.dependencies import menu_repository_scope, user_repository_scope
 from app.domain.entities import Role
 from app.domain.exceptions import DomainError
 from app.modules.menu.service import MenuService
@@ -22,32 +22,26 @@ SEED_CATEGORIES = (
 
 def create_user(email: str, role: str) -> None:
     password = getpass.getpass("Пароль: ")
-    repository_provider = get_user_repository()
-    service = UserService(next(repository_provider))
-    try:
-        user = service.register(email=email, password=password, role=role)
-    except DomainError as e:
-        raise SystemExit(f"Ошибка: {e}")
-    finally:
-        repository_provider.close()
+    with user_repository_scope() as repository:
+        try:
+            user = UserService(repository).register(email=email, password=password, role=role)
+        except DomainError as e:
+            raise SystemExit(f"Ошибка: {e}")
     print(f"Создан пользователь {user.id} {user.email} с ролью {user.role}")
 
 
 def seed_menu(items_per_category: int) -> None:
     """Тестовое меню для нагрузочных замеров. Повторный запуск ничего не дублирует."""
-    repository_provider = get_menu_repository()
-    service = MenuService(next(repository_provider))
     created = 0
-    try:
+    with menu_repository_scope() as repository:
+        service = MenuService(repository)
         for index, name in enumerate(SEED_CATEGORIES):
-            category = service.repository.get_category_by_name(name) or service.create_category(name)
+            category = repository.get_category_by_name(name) or service.create_category(name)
             for number in range(1, items_per_category + 1):
                 item_name = f"{name} №{number}"
-                if not service.repository.get_by_name(item_name):
+                if not repository.get_by_name(item_name):
                     service.create_item(item_name, price=90 + index * 15 + number * 5, category_id=category.id)
                     created += 1
-    finally:
-        repository_provider.close()
     print(f"Добавлено блюд: {created}")
 
 

@@ -7,6 +7,7 @@ from dataclasses import asdict, replace
 from sqlalchemy.orm import Session
 
 from app.core.cache import CacheAside
+from app.database import short_transactions
 from app.domain.entities import Category, CategoryMenu, MenuItem
 from app.memory_storage import InMemoryStorage
 from app.models import Category as CategoryModel
@@ -49,6 +50,7 @@ class MenuRepository(ABC):
     def get_category_menu(self, category_id: int) -> CategoryMenu | None: ...
 
 
+@short_transactions
 class SqlAlchemyMenuRepository(MenuRepository):
     def __init__(self, db: Session):
         self.db = db
