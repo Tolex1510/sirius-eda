@@ -1,0 +1,2 @@
+keyspace_hits:18051
+keyspace_misses:0

@@ -52,6 +52,25 @@ class MenuItemUpdate(BaseModel):
     category_id: int | None = None
 
 
+class MenuItemResponse(BaseModel):
+    id: int
+    name: str
+    price: float
+    is_available: bool
+    category_id: int | None
+
+
+class CategoryResponse(BaseModel):
+    id: int
+    name: str
+
+
+class CategoryMenuResponse(BaseModel):
+    id: int
+    name: str
+    items: list[MenuItemResponse]
+
+
 class CategoryCreate(BaseModel):
     name: str = Field(min_length=2, max_length=100)
 

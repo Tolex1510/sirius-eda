@@ -10,7 +10,14 @@ from app.domain.exceptions import DomainError
 from app.http_errors import to_http_exception
 from app.modules.menu.repository import MenuRepository
 from app.modules.menu.service import MenuService
-from app.schemas import CategoryCreate, MenuItemCreate, MenuItemUpdate
+from app.schemas import (
+    CategoryCreate,
+    CategoryMenuResponse,
+    CategoryResponse,
+    MenuItemCreate,
+    MenuItemResponse,
+    MenuItemUpdate,
+)
 
 router = APIRouter()
 
@@ -23,17 +30,19 @@ def get_menu_service(repository: MenuRepository = Depends(get_menu_repository)) 
 menu_editor = require_role(Role.ADMIN, Role.COOK)
 
 
-@router.get("/items")
+# response_model включает сериализацию через pydantic-core. Без него FastAPI
+# обходит 300 блюд в jsonable_encoder на чистом Python, и это дороже чтения из кеша.
+@router.get("/items", response_model=list[MenuItemResponse])
 def list_menu_items(service: MenuService = Depends(get_menu_service)):
     return service.list_items()
 
 
-@router.get("/categories")
+@router.get("/categories", response_model=list[CategoryResponse])
 def list_categories(service: MenuService = Depends(get_menu_service)):
     return service.list_categories()
 
 
-@router.get("/categories/{category_id}")
+@router.get("/categories/{category_id}", response_model=CategoryMenuResponse)
 def get_category_menu(category_id: int, service: MenuService = Depends(get_menu_service)):
     try:
         return service.get_category_menu(category_id)
