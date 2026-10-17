@@ -6,13 +6,14 @@
 from dataclasses import dataclass, field
 from itertools import count
 
-from app.domain.entities import Delivery, MenuItem, Order, RefreshTokenRecord, User
+from app.domain.entities import Category, Delivery, MenuItem, Order, RefreshTokenRecord, User
 
 
 @dataclass
 class InMemoryStorage:
     users: dict[int, User] = field(default_factory=dict)
     menu_items: dict[int, MenuItem] = field(default_factory=dict)
+    categories: dict[int, Category] = field(default_factory=dict)
     orders: dict[int, Order] = field(default_factory=dict)
     deliveries: dict[int, Delivery] = field(default_factory=dict)
     refresh_tokens: dict[int, RefreshTokenRecord] = field(default_factory=dict)

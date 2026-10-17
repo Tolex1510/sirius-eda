@@ -10,7 +10,7 @@ from app.domain.exceptions import DomainError
 from app.http_errors import to_http_exception
 from app.modules.menu.repository import MenuRepository
 from app.modules.menu.service import MenuService
-from app.schemas import MenuItemCreate, MenuItemUpdate
+from app.schemas import CategoryCreate, MenuItemCreate, MenuItemUpdate
 
 router = APIRouter()
 
@@ -26,6 +26,33 @@ menu_editor = require_role(Role.ADMIN, Role.COOK)
 @router.get("/items")
 def list_menu_items(service: MenuService = Depends(get_menu_service)):
     return service.list_items()
+
+
+@router.get("/categories")
+def list_categories(service: MenuService = Depends(get_menu_service)):
+    return service.list_categories()
+
+
+@router.get("/categories/{category_id}")
+def get_category_menu(category_id: int, service: MenuService = Depends(get_menu_service)):
+    try:
+        return service.get_category_menu(category_id)
+    except DomainError as e:
+        raise to_http_exception(e)
+
+
+@router.post("/categories")
+def create_category(
+    payload: CategoryCreate,
+    _: User = Depends(menu_editor),
+    service: MenuService = Depends(get_menu_service),
+):
+    try:
+        category = service.create_category(payload.name)
+    except DomainError as e:
+        raise to_http_exception(e)
+
+    return {"status": "success", "category_id": category.id}
 
 
 @router.post("/items")
@@ -47,7 +74,7 @@ def create_menu_item(
         )
 
     try:
-        item = service.create_item(name=payload.name, price=payload.price)
+        item = service.create_item(name=payload.name, price=payload.price, category_id=payload.category_id)
     except DomainError as e:
         raise to_http_exception(e)
 
@@ -73,6 +100,7 @@ def update_menu_item(
             name=payload.name,
             price=payload.price,
             is_available=payload.is_available,
+            category_id=payload.category_id,
         )
     except DomainError as e:
         raise to_http_exception(e)

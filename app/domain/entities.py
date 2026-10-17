@@ -47,6 +47,21 @@ class MenuItem:
     name: str
     price: float
     is_available: bool
+    category_id: int | None = None
+
+
+@dataclass
+class Category:
+    id: int
+    name: str
+
+
+@dataclass
+class CategoryMenu:
+    """Категория вместе с её блюдами: так её отдаёт GET /menu/categories/{id}."""
+    id: int
+    name: str
+    items: list[MenuItem]
 
 
 @dataclass

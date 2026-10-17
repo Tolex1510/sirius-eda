@@ -40,6 +40,17 @@ class User(Base):
         )
 
 
+class Category(Base):
+    """Раздел меню: супы, горячее, напитки."""
+    __tablename__ = "categories"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), unique=True, nullable=False)
+
+    def to_entity(self) -> entities.Category:
+        return entities.Category(id=self.id, name=self.name)
+
+
 class MenuItem(Base):
     __tablename__ = "menu_items"
 
@@ -47,6 +58,7 @@ class MenuItem(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     is_available = Column(Boolean, default=True)
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True, index=True)
 
     def to_entity(self) -> entities.MenuItem:
         return entities.MenuItem(
@@ -54,6 +66,7 @@ class MenuItem(Base):
             name=self.name,
             price=self.price,
             is_available=self.is_available,
+            category_id=self.category_id,
         )
 
 

@@ -69,3 +69,18 @@ def test_order_scenario_is_the_same_for_every_backend(repositories):
         orders.cancel_order(order_id, actor=user)
     assert user_repository.get_by_id(user.id).balance == 500
     assert user_repository.get_by_id(user.id).role == Role.STUDENT
+
+
+def test_menu_categories_are_the_same_for_every_backend(repositories):
+    _, menu_repository, _ = repositories
+    menu = MenuService(menu_repository)
+    soups = menu.create_category("Супы")
+    salads = menu.create_category("Салаты")
+    menu.create_item("Щи", 120, category_id=soups.id)
+    menu.create_item("Без раздела", 50)
+    menu.create_item("Борщ", 150, category_id=soups.id)
+    menu.create_item("Цезарь", 250, category_id=salads.id)
+
+    assert [i.name for i in menu.list_items()] == ["Цезарь", "Борщ", "Щи", "Без раздела"]
+    assert [i.name for i in menu.get_category_menu(soups.id).items] == ["Борщ", "Щи"]
+    assert [c.name for c in menu.list_categories()] == ["Салаты", "Супы"]

@@ -42,12 +42,18 @@ class TokenResponse(BaseModel):
 class MenuItemCreate(BaseModel):
     name: str
     price: float
+    category_id: int | None = None
 
 
 class MenuItemUpdate(BaseModel):
     name: str | None = None
     price: float | None = None
     is_available: bool | None = None
+    category_id: int | None = None
+
+
+class CategoryCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=100)
 
 
 class OrderCreate(BaseModel):
