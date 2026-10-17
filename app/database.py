@@ -3,12 +3,22 @@
 """
 import functools
 
-from sqlalchemy import create_engine
+from sqlalchemy import URL, create_engine, make_url
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 from app.core.config import settings
 
-engine = create_engine(settings.DATABASE_URL)
+
+def database_url() -> URL:
+    # В SQLAlchemy 2.1 драйвер по умолчанию для postgresql:// сменился с psycopg2 на psycopg 3.
+    # В зависимостях psycopg2, поэтому без явного драйвера свежая установка не запустится.
+    url = make_url(settings.DATABASE_URL)
+    if url.drivername == "postgresql":
+        url = url.set(drivername="postgresql+psycopg2")
+    return url
+
+
+engine = create_engine(database_url())
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

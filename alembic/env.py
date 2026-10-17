@@ -20,9 +20,9 @@ if config.config_file_name is not None:
 # URL берётся из настроек приложения, а не из alembic.ini: секреты живут только в .env.
 from app import models  # noqa: F401  регистрирует таблицы в Base.metadata
 from app.core.config import settings
-from app.database import Base
+from app.database import Base, database_url
 
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL.replace("%", "%%"))
+config.set_main_option("sqlalchemy.url", database_url().render_as_string(hide_password=False).replace("%", "%%"))
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
