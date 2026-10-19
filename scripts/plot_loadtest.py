@@ -25,9 +25,9 @@ GRID = "#e4e3df"
 SERIES = [("#2a78d6", "Без кеша"), ("#eb6834", "С кешем Redis")]
 
 
-def locust_history(label: str) -> tuple[list[float], list[float], list[float]]:
+def locust_history(label: str, results: Path = RESULTS) -> tuple[list[float], list[float], list[float]]:
     seconds, rps, p95 = [], [], []
-    with open(RESULTS / f"{label}_stats_history.csv") as f:
+    with open(results / f"{label}_stats_history.csv") as f:
         rows = [r for r in csv.DictReader(f) if r["Name"] == "Aggregated" and r["95%"] != "N/A"]
     start = int(rows[0]["Timestamp"])
     for row in rows:
@@ -44,13 +44,22 @@ def db_cpu(label: str) -> tuple[list[float], list[float]]:
     return [int(r["time"]) - start for r in rows], [float(r["db_cpu"]) for r in rows]
 
 
-def line_chart(path: Path, title: str, subtitle: str, unit: str, digits: int, series: list[tuple[list, list]]) -> None:
+def line_chart(
+    path: Path,
+    title: str,
+    subtitle: str,
+    unit: str,
+    digits: int,
+    series: list[tuple[list, list]],
+    names: list[str] | None = None,
+) -> None:
     fig, ax = plt.subplots(figsize=(8, 3.6), dpi=150)
     fig.patch.set_facecolor(SURFACE)
     ax.set_facecolor(SURFACE)
 
     top = max(max(y) for _, y in series)
-    for (color, name), (x, y) in zip(SERIES, series):
+    names = names or [name for _, name in SERIES]
+    for (color, _), name, (x, y) in zip(SERIES, names, series):
         ax.plot(x, y, color=color, linewidth=2, label=name, solid_capstyle="round")
         steady = [v for t, v in zip(x, y) if t >= STEADY_FROM]
         mean = sum(steady) / len(steady)
