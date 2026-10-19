@@ -13,11 +13,27 @@ from fastapi.testclient import TestClient
 
 from app.domain.entities import Delivery, MenuItem, Order, Role, User
 from app.memory_storage import InMemoryStorage
+from app.modules.orders.notifier import OrderNotifier
 
 
 @pytest.fixture
 def storage() -> InMemoryStorage:
     return InMemoryStorage()
+
+
+class RecordingNotifier(OrderNotifier):
+    """Запоминает события вместо PDF, email и SMS."""
+
+    def __init__(self):
+        self.created: list[tuple[int, int]] = []
+
+    def order_created(self, order_id: int, customer: User) -> None:
+        self.created.append((order_id, customer.id))
+
+
+@pytest.fixture
+def notifier() -> RecordingNotifier:
+    return RecordingNotifier()
 
 
 def add_user(
@@ -63,7 +79,7 @@ def add_delivery(storage: InMemoryStorage, order_id: int, courier_id: int, statu
 
 
 @pytest.fixture
-def client(storage):
+def client(storage, notifier):
     """
     Приложение целиком, но на in-memory хранилище и fakeredis.
     Хранилище общее с фикстурой storage, чтобы тест мог менять данные напрямую.
@@ -82,6 +98,7 @@ def client(storage):
         dependencies.get_user_repository: lambda: InMemoryUserRepository(storage),
         dependencies.get_menu_repository: lambda: InMemoryMenuRepository(storage),
         dependencies.get_order_repository: lambda: InMemoryOrderRepository(storage),
+        dependencies.get_order_notifier: lambda: notifier,
         dependencies.get_delivery_repository: lambda: InMemoryDeliveryRepository(storage),
         dependencies.get_auth_repository: lambda: InMemoryAuthRepository(storage),
         get_redis: lambda: redis,

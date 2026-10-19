@@ -6,10 +6,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.core.dependencies import get_current_user, require_role
-from app.dependencies import get_order_repository
+from app.dependencies import get_order_notifier, get_order_repository
 from app.domain.entities import Role, User
 from app.domain.exceptions import DomainError
 from app.http_errors import to_http_exception
+from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
 from app.modules.orders.service import OrderService
 from app.schemas import OrderCreate
@@ -19,9 +20,12 @@ router = APIRouter()
 kitchen_router = APIRouter()
 
 
-def get_order_service(repository: OrderRepository = Depends(get_order_repository)) -> OrderService:
-    """Сборка слоёв: конкретный репозиторий внедряется в сервис через конструктор."""
-    return OrderService(repository)
+def get_order_service(
+    repository: OrderRepository = Depends(get_order_repository),
+    notifier: OrderNotifier = Depends(get_order_notifier),
+) -> OrderService:
+    """Сборка слоёв: конкретные реализации внедряются в сервис через конструктор."""
+    return OrderService(repository, notifier)
 
 
 @router.post("/create")

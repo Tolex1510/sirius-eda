@@ -4,14 +4,16 @@
 """
 from app.domain.entities import Order, OrderStatus, Role, User
 from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
+from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
 
 KITCHEN_STATUSES = (OrderStatus.PROCESSING, OrderStatus.PAID)
 
 
 class OrderService:
-    def __init__(self, repository: OrderRepository):
+    def __init__(self, repository: OrderRepository, notifier: OrderNotifier):
         self.repository = repository
+        self.notifier = notifier
 
     def create_order(self, user_id: int, item_id: int, quantity: int) -> int:
         """Сценарий оформления заказа. Возвращает идентификатор заказа."""
@@ -30,13 +32,16 @@ class OrderService:
         if user.balance < total_cost:
             raise BusinessRuleError("Недостаточно средств на балансе студента")
 
-        return self.repository.save_order(
+        order_id = self.repository.save_order(
             user_id=user_id,
             item_id=item_id,
             quantity=quantity,
             total_cost=total_cost,
             new_balance=user.balance - total_cost,
         )
+        # После сохранения: чек и уведомления о заказе, которого нет в БД, никому не нужны.
+        self.notifier.order_created(order_id, user)
+        return order_id
 
     def cancel_order(self, order_id: int, actor: User) -> Order:
         """Отменяет заказ и возвращает деньги. Отменить можно только свой заказ."""

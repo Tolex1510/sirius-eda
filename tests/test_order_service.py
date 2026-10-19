@@ -4,12 +4,12 @@ from app.domain.entities import MenuItem, OrderStatus, Role, User
 from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
 from app.modules.orders.repository import InMemoryOrderRepository
 from app.modules.orders.service import OrderService
-from tests.conftest import add_menu_item, add_user
+from tests.conftest import RecordingNotifier, add_menu_item, add_user
 
 
 @pytest.fixture
-def service(storage) -> OrderService:
-    return OrderService(InMemoryOrderRepository(storage))
+def service(storage, notifier) -> OrderService:
+    return OrderService(InMemoryOrderRepository(storage), notifier)
 
 
 def test_create_order_charges_balance(service, storage):
@@ -75,8 +75,24 @@ def test_service_depends_only_on_abstraction():
 
     repository = FakeRepository()
 
-    assert OrderService(repository).create_order(1, 2, quantity=3) == 42
+    assert OrderService(repository, RecordingNotifier()).create_order(1, 2, quantity=3) == 42
     assert repository.saved == (1, 2, 3, 300, 700)
+
+
+def test_new_order_triggers_notifications(service, storage, notifier):
+    user = add_user(storage, balance=500)
+    order_id = service.create_order(user.id, add_menu_item(storage).id, quantity=1)
+
+    assert notifier.created == [(order_id, user.id)]
+
+
+def test_rejected_order_sends_nothing(service, storage, notifier):
+    user = add_user(storage, balance=10)
+
+    with pytest.raises(BusinessRuleError):
+        service.create_order(user.id, add_menu_item(storage, price=100).id, quantity=1)
+
+    assert notifier.created == []
 
 
 def test_cancel_own_order_refunds_price_paid(service, storage):

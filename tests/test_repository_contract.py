@@ -21,6 +21,7 @@ from app.modules.orders.repository import InMemoryOrderRepository, SqlAlchemyOrd
 from app.modules.orders.service import OrderService
 from app.modules.users.repository import InMemoryUserRepository, SqlAlchemyUserRepository
 from app.modules.users.service import UserService
+from tests.conftest import RecordingNotifier
 
 
 def memory_repositories():
@@ -58,7 +59,7 @@ def test_order_scenario_is_the_same_for_every_backend(repositories):
     user_repository, menu_repository, order_repository = repositories
     users = UserService(user_repository)
     menu = MenuService(menu_repository)
-    orders = OrderService(order_repository)
+    orders = OrderService(order_repository, RecordingNotifier())
 
     user = users.register("student@sirius.ru", "password123")
     users.top_up_balance(user.id, 500, actor=user)

@@ -4,9 +4,13 @@
 
     python -m app.cli create-user --email admin@sirius.ru --role admin
     python -m app.cli seed-menu
+    python -m app.cli load-users --count 50 > tokens.txt
 """
 import argparse
 import getpass
+import secrets
+
+from app.core.jwt import create_access_token
 
 from app.dependencies import menu_repository_scope, user_repository_scope
 from app.domain.entities import Role
@@ -45,6 +49,20 @@ def seed_menu(items_per_category: int) -> None:
     print(f"Добавлено блюд: {created}")
 
 
+def load_users(count: int) -> None:
+    """Студенты для нагрузочных замеров заказов. Печатает access-токены по одному в строке.
+    Логин через API не подходит: rate limiting пустит только 5 входов в минуту с одного IP."""
+    with user_repository_scope() as repository:
+        service = UserService(repository)
+        for number in range(1, count + 1):
+            email = f"load{number}@sirius.test"
+            user = repository.get_by_email(email) or service.register(
+                email=email, password=secrets.token_urlsafe(16), phone=f"+7900{number:07d}"
+            )
+            repository.update_balance(user.id, 10_000_000)
+            print(create_access_token(user.id))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -53,12 +71,16 @@ def main() -> None:
     create.add_argument("--role", choices=Role.ALL, default=Role.STUDENT)
     seed = commands.add_parser("seed-menu", help="заполнить меню тестовыми блюдами")
     seed.add_argument("--items-per-category", type=int, default=25)
+    load = commands.add_parser("load-users", help="студенты с балансом для замеров, печатает токены")
+    load.add_argument("--count", type=int, default=50)
 
     args = parser.parse_args()
     if args.command == "create-user":
         create_user(args.email, args.role)
     elif args.command == "seed-menu":
         seed_menu(args.items_per_category)
+    elif args.command == "load-users":
+        load_users(args.count)
 
 
 if __name__ == "__main__":
