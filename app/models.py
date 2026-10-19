@@ -1,7 +1,9 @@
 """
 Определение ORM-моделей предметной области «Сириус.Еда».
 """
-from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
+from datetime import UTC, datetime
+
+from sqlalchemy import Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.domain import entities
@@ -80,6 +82,7 @@ class Order(Base):
     status = Column(String, default="processing")
     # Сумма фиксируется в момент заказа: цена блюда может измениться до отмены.
     total_cost = Column(Float, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC), server_default=func.now())
 
     user = relationship("User")
     item = relationship("MenuItem")
@@ -92,6 +95,40 @@ class Order(Base):
             quantity=self.quantity,
             status=self.status,
             total_cost=self.total_cost,
+            created_at=self.created_at,
+        )
+
+
+class TaskLog(Base):
+    """
+    Журнал фоновых задач заказа. Пара (order_id, kind) уникальна:
+    по ней задача узнаёт, что уже выполнена, и не шлёт второй чек или письмо.
+    """
+    __tablename__ = "task_logs"
+    __table_args__ = (UniqueConstraint("order_id", "kind", name="uq_task_logs_order_id_kind"),)
+
+    id = Column(Integer, primary_key=True)
+    order_id = Column(Integer, ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    kind = Column(String(20), nullable=False)
+    status = Column(String(20), nullable=False)
+    attempts = Column(Integer, nullable=False, default=1)
+    error = Column(String(500), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    updated_at = Column(DateTime(timezone=True), nullable=False)
+
+
+class OrderStats(Base):
+    """Сводка заказов за день. Пересчитывает периодическая задача Celery Beat."""
+    __tablename__ = "order_stats"
+
+    day = Column(Date, primary_key=True)
+    orders = Column(Integer, nullable=False)
+    revenue = Column(Float, nullable=False)
+    updated_at = Column(DateTime(timezone=True), nullable=False)
+
+    def to_entity(self) -> entities.DailyOrderStats:
+        return entities.DailyOrderStats(
+            day=self.day, orders=self.orders, revenue=self.revenue, updated_at=self.updated_at
         )
 
 

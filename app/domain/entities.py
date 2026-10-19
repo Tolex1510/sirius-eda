@@ -3,7 +3,7 @@
 Не зависят ни от ORM, ни от веб-фреймворка.
 """
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 
 
 class Role:
@@ -72,6 +72,16 @@ class Order:
     quantity: int
     status: str
     total_cost: float = 0.0
+    created_at: datetime | None = None
+
+
+@dataclass
+class DailyOrderStats:
+    """Сводка заказов за сутки по UTC. Отменённые заказы не учитываются."""
+    day: date
+    orders: int
+    revenue: float
+    updated_at: datetime
 
 
 @dataclass

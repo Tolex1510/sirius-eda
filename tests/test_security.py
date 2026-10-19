@@ -18,6 +18,7 @@ PROTECTED = [
     ("get", "/orders/my", None),
     ("post", "/orders/1/cancel", None),
     ("get", "/kitchen/orders", None),
+    ("get", "/orders/stats", None),
     ("get", "/users/me", None),
     ("get", "/users/1", None),
     ("post", "/users/1/topup?amount=10", None),
@@ -56,6 +57,8 @@ def test_refresh_token_as_bearer_gives_401(client, storage):
 WRONG_ROLE = [
     (Role.STUDENT, "get", "/kitchen/orders", None),
     (Role.COURIER, "get", "/kitchen/orders", None),
+    (Role.STUDENT, "get", "/orders/stats", None),
+    (Role.COOK, "get", "/orders/stats", None),
     (Role.STUDENT, "post", "/menu/items", {"name": "Борщ", "price": 100}),
     (Role.COURIER, "patch", "/menu/items/1", {"price": 1}),
     (Role.COOK, "post", "/orders/create", {"item_id": 1, "quantity": 1}),

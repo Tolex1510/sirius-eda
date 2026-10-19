@@ -5,6 +5,8 @@
     python -m app.cli create-user --email admin@sirius.ru --role admin
     python -m app.cli seed-menu
     python -m app.cli load-users --count 50 > tokens.txt
+    python -m app.cli dlq-list
+    python -m app.cli dlq-replay
 """
 import argparse
 import getpass
@@ -63,6 +65,21 @@ def load_users(count: int) -> None:
             print(create_access_token(user.id))
 
 
+def dlq_list() -> None:
+    from app.tasks.dead_letters import list_dead_letters
+
+    letters = list_dead_letters()
+    for letter in letters:
+        print(f"{letter['failed_at']}  {letter['task']}{letter['args']}  {letter['error']}")
+    print(f"В DLQ задач: {len(letters)}")
+
+
+def dlq_replay() -> None:
+    from app.tasks.dead_letters import replay_dead_letters
+
+    print(f"Возвращено в очередь: {replay_dead_letters()}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -73,6 +90,8 @@ def main() -> None:
     seed.add_argument("--items-per-category", type=int, default=25)
     load = commands.add_parser("load-users", help="студенты с балансом для замеров, печатает токены")
     load.add_argument("--count", type=int, default=50)
+    commands.add_parser("dlq-list", help="задачи в Dead Letter Queue")
+    commands.add_parser("dlq-replay", help="вернуть задачи из DLQ в рабочую очередь")
 
     args = parser.parse_args()
     if args.command == "create-user":
@@ -81,6 +100,10 @@ def main() -> None:
         seed_menu(args.items_per_category)
     elif args.command == "load-users":
         load_users(args.count)
+    elif args.command == "dlq-list":
+        dlq_list()
+    elif args.command == "dlq-replay":
+        dlq_replay()
 
 
 if __name__ == "__main__":

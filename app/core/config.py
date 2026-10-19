@@ -19,6 +19,11 @@ class Settings(BaseSettings):
     REPOSITORY_BACKEND: Literal["postgres", "memory"] = "postgres"
     # false выключает кеш меню: так снимается замер «до» без правки кода.
     MENU_CACHE_ENABLED: bool = True
+    # sync выполняет PDF, email и SMS в потоке запроса: так снимается замер «до» без правки кода.
+    ORDER_TASKS_MODE: Literal["celery", "sync"] = "celery"
+    # Сбои заглушек внешних сервисов для показа ретраев и DLQ. 0 выключает сбой.
+    FAKE_EMAIL_FAIL_EVERY: int = Field(default=5, ge=0)
+    FAKE_SMS_FLAKY_EVERY: int = Field(default=3, ge=0)
 
     ACCESS_TOKEN_TTL_MINUTES: int = 15
     REFRESH_TOKEN_TTL_DAYS: int = 7

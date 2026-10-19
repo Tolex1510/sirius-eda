@@ -16,7 +16,7 @@ def test_register_response_is_unchanged(client):
     assert body == {"status": "success", "user_id": body["user_id"], "email": "student@sirius.ru"}
 
 
-def test_full_order_flow(client, storage):
+def test_full_order_flow(client, storage, notifier):
     student_id, student = create_account(client, storage)
     _, cook = create_account(client, storage, Role.COOK)
     courier_id, courier = create_account(client, storage, Role.COURIER)
@@ -33,6 +33,7 @@ def test_full_order_flow(client, storage):
     assert response.json() == {"status": "success", "order_id": order_id}
     assert storage.users[student_id].balance == 700
     assert storage.orders[order_id].user_id == student_id
+    assert notifier.created == [(order_id, student_id)]
 
     assert [o["id"] for o in client.get("/kitchen/orders", headers=cook).json()] == [order_id]
     assert [o["id"] for o in client.get("/orders/my", headers=student).json()] == [order_id]
@@ -116,3 +117,22 @@ def test_refresh_endpoint_rotates(client, storage):
     assert second.status_code == 200
     assert replay.status_code == 401
     assert client.post("/auth/refresh", json={"refresh_token": second.json()["refresh_token"]}).status_code == 401
+
+
+def test_admin_sees_stats_refreshed_by_beat(client, storage):
+    from datetime import UTC, datetime
+
+    from app.modules.orders.repository import InMemoryOrderRepository
+    from app.modules.orders.service import OrderStatsService
+
+    student_id, student = create_account(client, storage, balance=1000)
+    _, admin = create_account(client, storage, Role.ADMIN)
+    item_id = client.post("/menu/items", json={"name": "Плов", "price": 150}, headers=admin).json()["item_id"]
+    client.post("/orders/create", json={"item_id": item_id, "quantity": 2}, headers=student)
+    OrderStatsService(InMemoryOrderRepository(storage)).refresh(datetime.now(UTC).date())
+
+    response = client.get("/orders/stats", params={"days": 1}, headers=admin)
+
+    assert response.status_code == 200
+    [today] = response.json()
+    assert (today["day"], today["orders"], today["revenue"]) == (datetime.now(UTC).date().isoformat(), 1, 300)

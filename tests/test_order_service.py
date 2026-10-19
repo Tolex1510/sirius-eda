@@ -3,7 +3,7 @@ import pytest
 from app.domain.entities import MenuItem, OrderStatus, Role, User
 from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
 from app.modules.orders.repository import InMemoryOrderRepository
-from app.modules.orders.service import OrderService
+from app.modules.orders.service import OrderService, OrderStatsService
 from tests.conftest import RecordingNotifier, add_menu_item, add_user
 
 
@@ -147,3 +147,22 @@ def test_kitchen_sees_only_active_orders(service, storage):
     service.cancel_order(cancelled, actor=user)
 
     assert [o.id for o in service.get_kitchen_orders()] == [active]
+
+
+def test_stats_count_today_and_yesterday_without_cancelled(service, storage):
+    from datetime import UTC, datetime, timedelta
+
+    user = add_user(storage, balance=1000)
+    item = add_menu_item(storage, price=100)
+    kept = service.create_order(user.id, item.id, quantity=2)
+    service.cancel_order(service.create_order(user.id, item.id, quantity=1), actor=user)
+    old = service.create_order(user.id, item.id, quantity=1)
+    today = datetime.now(UTC).date()
+    storage.orders[old].created_at -= timedelta(days=1)
+
+    yesterday_stats, today_stats = OrderStatsService(InMemoryOrderRepository(storage)).refresh(today)
+
+    assert (yesterday_stats.day, yesterday_stats.orders, yesterday_stats.revenue) == (today - timedelta(days=1), 1, 100)
+    assert (today_stats.orders, today_stats.revenue) == (1, 200)
+    assert storage.orders[kept].status == OrderStatus.PROCESSING
+    assert [s.day for s in OrderStatsService(InMemoryOrderRepository(storage)).recent(7)] == [today, today - timedelta(days=1)]

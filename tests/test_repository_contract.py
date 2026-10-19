@@ -18,7 +18,7 @@ from app.core.cache import CacheAside
 from app.modules.menu.repository import CachedMenuRepository, InMemoryMenuRepository, SqlAlchemyMenuRepository
 from app.modules.menu.service import MenuService
 from app.modules.orders.repository import InMemoryOrderRepository, SqlAlchemyOrderRepository
-from app.modules.orders.service import OrderService
+from app.modules.orders.service import OrderService, OrderStatsService
 from app.modules.users.repository import InMemoryUserRepository, SqlAlchemyUserRepository
 from app.modules.users.service import UserService
 from tests.conftest import RecordingNotifier
@@ -80,6 +80,27 @@ def test_order_scenario_is_the_same_for_every_backend(repositories):
         orders.cancel_order(order_id, actor=user)
     assert user_repository.get_by_id(user.id).balance == 500
     assert user_repository.get_by_id(user.id).role == Role.STUDENT
+
+
+def test_daily_stats_are_the_same_for_every_backend(repositories):
+    from datetime import UTC, datetime
+
+    user_repository, menu_repository, order_repository = repositories
+    user = UserService(user_repository).register("student@sirius.ru", "password123")
+    user_repository.update_balance(user.id, 1000)
+    item = MenuService(menu_repository).create_item("Плов", 150)
+    orders = OrderService(order_repository, RecordingNotifier())
+    orders.create_order(user.id, item.id, quantity=3)
+    orders.cancel_order(orders.create_order(user.id, item.id, quantity=1), actor=user)
+    stats = OrderStatsService(order_repository)
+    today = datetime.now(UTC).date()
+
+    stats.refresh(today)
+    stats.refresh(today)
+
+    [today_stats, yesterday_stats] = stats.recent(7)
+    assert (today_stats.day, today_stats.orders, today_stats.revenue) == (today, 1, 450)
+    assert yesterday_stats.orders == 0
 
 
 def test_menu_categories_are_the_same_for_every_backend(repositories):

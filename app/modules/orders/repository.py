@@ -4,15 +4,23 @@
 """
 from abc import ABC, abstractmethod
 from dataclasses import replace
+from datetime import UTC, date, datetime, time, timedelta
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import short_transactions
-from app.domain.entities import MenuItem, Order, OrderStatus, User
+from app.domain.entities import DailyOrderStats, MenuItem, Order, OrderStatus, User
 from app.memory_storage import InMemoryStorage
 from app.models import MenuItem as MenuItemModel
 from app.models import Order as OrderModel
+from app.models import OrderStats as OrderStatsModel
 from app.models import User as UserModel
+
+
+def day_bounds(day: date) -> tuple[datetime, datetime]:
+    start = datetime.combine(day, time.min, tzinfo=UTC)
+    return start, start + timedelta(days=1)
 
 
 class OrderRepository(ABC):
@@ -46,6 +54,14 @@ class OrderRepository(ABC):
         Переводит заказ из processing в cancelled и возвращает total_cost на баланс
         одной транзакцией. False, если заказ уже не в processing.
         """
+
+    @abstractmethod
+    def refresh_daily_stats(self, day: date) -> DailyOrderStats:
+        """Пересчитывает и сохраняет сводку за день."""
+
+    @abstractmethod
+    def list_daily_stats(self, days: int) -> list[DailyOrderStats]:
+        """Последние сводки, новые первыми."""
 
 
 @short_transactions
@@ -104,6 +120,25 @@ class SqlAlchemyOrderRepository(OrderRepository):
         self.db.commit()
         return True
 
+    def refresh_daily_stats(self, day: date) -> DailyOrderStats:
+        start, end = day_bounds(day)
+        orders, revenue = (
+            self.db.query(func.count(OrderModel.id), func.coalesce(func.sum(OrderModel.total_cost), 0.0))
+            .filter(
+                OrderModel.created_at >= start,
+                OrderModel.created_at < end,
+                OrderModel.status != OrderStatus.CANCELLED,
+            )
+            .one()
+        )
+        stats = self.db.merge(OrderStatsModel(day=day, orders=orders, revenue=revenue, updated_at=datetime.now(UTC)))
+        self.db.commit()
+        return stats.to_entity()
+
+    def list_daily_stats(self, days: int) -> list[DailyOrderStats]:
+        rows = self.db.query(OrderStatsModel).order_by(OrderStatsModel.day.desc()).limit(days)
+        return [row.to_entity() for row in rows]
+
 
 class InMemoryOrderRepository(OrderRepository):
     """Хранит данные в памяти процесса. Используется в тестах и без СУБД."""
@@ -138,6 +173,7 @@ class InMemoryOrderRepository(OrderRepository):
             quantity=quantity,
             status=OrderStatus.PROCESSING,
             total_cost=total_cost,
+            created_at=datetime.now(UTC),
         )
         self.storage.users[user_id].balance = new_balance
         return order_id
@@ -149,3 +185,21 @@ class InMemoryOrderRepository(OrderRepository):
         stored.status = OrderStatus.CANCELLED
         self.storage.users[order.user_id].balance += order.total_cost
         return True
+
+    def refresh_daily_stats(self, day: date) -> DailyOrderStats:
+        start, end = day_bounds(day)
+        counted = [
+            o for o in self.storage.orders.values()
+            if o.created_at and start <= o.created_at < end and o.status != OrderStatus.CANCELLED
+        ]
+        stats = DailyOrderStats(
+            day=day,
+            orders=len(counted),
+            revenue=sum(o.total_cost for o in counted),
+            updated_at=datetime.now(UTC),
+        )
+        self.storage.order_stats[day] = stats
+        return replace(stats)
+
+    def list_daily_stats(self, days: int) -> list[DailyOrderStats]:
+        return [replace(s) for _, s in sorted(self.storage.order_stats.items(), reverse=True)[:days]]

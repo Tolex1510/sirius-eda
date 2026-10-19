@@ -2,7 +2,9 @@
 Слой бизнес-логики модуля заказов (круги 1 и 2: Entities и Use Cases).
 Импорты fastapi и sqlalchemy здесь запрещены.
 """
-from app.domain.entities import Order, OrderStatus, Role, User
+from datetime import date, timedelta
+
+from app.domain.entities import DailyOrderStats, Order, OrderStatus, Role, User
 from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
 from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
@@ -64,3 +66,17 @@ class OrderService:
 
     def get_kitchen_orders(self) -> list[Order]:
         return self.repository.list_orders_by_status(KITCHEN_STATUSES)
+
+
+class OrderStatsService:
+    """Сводка заказов по дням. Пересчёт запускает Celery Beat, чтение доступно администратору."""
+
+    def __init__(self, repository: OrderRepository):
+        self.repository = repository
+
+    def refresh(self, today: date) -> list[DailyOrderStats]:
+        # Вчерашний день тоже: заказ, отменённый после полуночи, меняет вчерашнюю сводку.
+        return [self.repository.refresh_daily_stats(day) for day in (today - timedelta(days=1), today)]
+
+    def recent(self, days: int) -> list[DailyOrderStats]:
+        return self.repository.list_daily_stats(days)

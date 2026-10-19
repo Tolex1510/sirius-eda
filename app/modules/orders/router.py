@@ -3,7 +3,7 @@
 Принимает HTTP-запрос, выполняет техническую валидацию,
 вызывает сервис и переводит исключения в HTTP-статусы.
 """
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.core.dependencies import get_current_user, require_role
 from app.dependencies import get_order_notifier, get_order_repository
@@ -12,7 +12,7 @@ from app.domain.exceptions import DomainError
 from app.http_errors import to_http_exception
 from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
-from app.modules.orders.service import OrderService
+from app.modules.orders.service import OrderService, OrderStatsService
 from app.schemas import OrderCreate
 
 router = APIRouter()
@@ -58,6 +58,16 @@ def my_orders(
     service: OrderService = Depends(get_order_service),
 ):
     return service.list_user_orders(current_user)
+
+
+@router.get("/stats")
+def order_stats(
+    days: int = Query(default=7, ge=1, le=90),
+    _: User = Depends(require_role(Role.ADMIN)),
+    repository: OrderRepository = Depends(get_order_repository),
+):
+    """Сводка по дням. Пересчитывается раз в минуту задачей Celery Beat."""
+    return OrderStatsService(repository).recent(days)
 
 
 @router.post("/{order_id}/cancel")

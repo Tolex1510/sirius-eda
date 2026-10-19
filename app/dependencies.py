@@ -24,7 +24,7 @@ from app.modules.menu.repository import (
     MenuRepository,
     SqlAlchemyMenuRepository,
 )
-from app.modules.orders.notifier import InlineOrderNotifier, OrderNotifier
+from app.modules.orders.notifier import CeleryOrderNotifier, InlineOrderNotifier, OrderNotifier
 from app.modules.orders.repository import InMemoryOrderRepository, OrderRepository, SqlAlchemyOrderRepository
 from app.modules.users.repository import InMemoryUserRepository, SqlAlchemyUserRepository, UserRepository
 
@@ -77,12 +77,18 @@ async def get_menu_repository() -> AsyncIterator[MenuRepository]:
 
 
 async def get_order_repository() -> AsyncIterator[OrderRepository]:
-    with _repository_scope(SqlAlchemyOrderRepository, InMemoryOrderRepository) as repository:
+    with order_repository_scope() as repository:
         yield repository
 
 
+def order_repository_scope():
+    return _repository_scope(SqlAlchemyOrderRepository, InMemoryOrderRepository)
+
+
 def get_order_notifier() -> OrderNotifier:
-    return InlineOrderNotifier()
+    if settings.ORDER_TASKS_MODE == "sync":
+        return InlineOrderNotifier()
+    return CeleryOrderNotifier()
 
 
 async def get_delivery_repository() -> AsyncIterator[DeliveryRepository]:
