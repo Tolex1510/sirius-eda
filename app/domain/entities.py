@@ -24,9 +24,15 @@ class OrderStatus:
 
 class DeliveryStatus:
     PENDING = "pending"
+    # Курьер назначен и идёт на кухню.
     IN_PROGRESS = "in_progress"
+    # Курьер забрал заказ и везёт его.
+    ON_THE_WAY = "on_the_way"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
+
+    ACTIVE = (IN_PROGRESS, ON_THE_WAY)
+    FINAL = (COMPLETED, CANCELLED)
 
 
 @dataclass

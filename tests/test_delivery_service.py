@@ -132,3 +132,41 @@ def test_my_deliveries(service, storage, paid_order, customer, courier):
 
     assert [d.id for d in service.list_my_deliveries(courier)] == [mine.id]
     assert [d.id for d in service.list_my_deliveries(customer)] == [mine.id]
+
+
+def test_pick_up_moves_delivery_on_the_way(service, storage, paid_order, courier):
+    delivery = add_delivery(storage, paid_order.id, courier.id, DeliveryStatus.IN_PROGRESS)
+
+    assert service.pick_up(delivery.id, actor=courier).status == DeliveryStatus.ON_THE_WAY
+    assert storage.deliveries[delivery.id].status == DeliveryStatus.ON_THE_WAY
+
+
+def test_pick_up_twice_is_rejected(service, storage, paid_order, courier):
+    delivery = add_delivery(storage, paid_order.id, courier.id, DeliveryStatus.ON_THE_WAY)
+
+    with pytest.raises(BusinessRuleError, match="Забрать можно только"):
+        service.pick_up(delivery.id, actor=courier)
+
+
+def test_pick_up_foreign_delivery_is_forbidden(service, storage, paid_order, courier):
+    delivery = add_delivery(storage, paid_order.id, courier.id, DeliveryStatus.IN_PROGRESS)
+
+    with pytest.raises(AccessDeniedError):
+        service.pick_up(delivery.id, actor=add_user(storage, role=Role.COURIER))
+
+
+def test_courier_on_the_way_is_busy(service, storage, paid_order, courier):
+    add_delivery(storage, paid_order.id, courier.id, DeliveryStatus.ON_THE_WAY)
+    other_order = add_order(storage, add_user(storage).id, add_menu_item(storage).id, OrderStatus.PAID)
+
+    with pytest.raises(BusinessRuleError, match="уже есть активная доставка"):
+        service.assign_courier(other_order.id, courier.id, actor=courier)
+
+
+def test_delivery_on_the_way_can_be_completed(service, storage, paid_order, courier):
+    delivery = add_delivery(storage, paid_order.id, courier.id, DeliveryStatus.ON_THE_WAY)
+
+    service.complete_delivery(delivery.id, actor=courier)
+
+    assert storage.deliveries[delivery.id].status == DeliveryStatus.COMPLETED
+    assert storage.orders[paid_order.id].status == OrderStatus.DELIVERED

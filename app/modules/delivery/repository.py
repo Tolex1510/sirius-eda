@@ -41,6 +41,9 @@ class DeliveryRepository(ABC):
         """Создаёт доставку и возвращает её идентификатор."""
 
     @abstractmethod
+    def save_status(self, delivery: Delivery) -> None: ...
+
+    @abstractmethod
     def save_completion(self, delivery: Delivery, order: Order | None) -> None:
         """Сохраняет новые статусы доставки и заказа одной транзакцией."""
 
@@ -61,7 +64,7 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
     def get_active_delivery_by_courier(self, courier_id: int) -> Delivery | None:
         active = self.db.query(DeliveryModel).filter(
             DeliveryModel.courier_id == courier_id,
-            DeliveryModel.status == DeliveryStatus.IN_PROGRESS,
+            DeliveryModel.status.in_(DeliveryStatus.ACTIVE),
         ).first()
         return active.to_entity() if active else None
 
@@ -89,6 +92,10 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
         self.db.refresh(new_delivery)
         return new_delivery.id
 
+    def save_status(self, delivery: Delivery) -> None:
+        self.db.query(DeliveryModel).filter(DeliveryModel.id == delivery.id).update({"status": delivery.status})
+        self.db.commit()
+
     def save_completion(self, delivery: Delivery, order: Order | None) -> None:
         row = self.db.query(DeliveryModel).filter(DeliveryModel.id == delivery.id).one()
         row.status = delivery.status
@@ -114,7 +121,7 @@ class InMemoryDeliveryRepository(DeliveryRepository):
 
     def get_active_delivery_by_courier(self, courier_id: int) -> Delivery | None:
         for delivery in self.storage.deliveries.values():
-            if delivery.courier_id == courier_id and delivery.status == DeliveryStatus.IN_PROGRESS:
+            if delivery.courier_id == courier_id and delivery.status in DeliveryStatus.ACTIVE:
                 return replace(delivery)
         return None
 
@@ -141,6 +148,9 @@ class InMemoryDeliveryRepository(DeliveryRepository):
             status=status,
         )
         return delivery_id
+
+    def save_status(self, delivery: Delivery) -> None:
+        self.storage.deliveries[delivery.id].status = delivery.status
 
     def save_completion(self, delivery: Delivery, order: Order | None) -> None:
         self.storage.deliveries[delivery.id] = replace(delivery)

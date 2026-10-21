@@ -55,6 +55,22 @@ class DeliveryService:
             return self.repository.list_by_courier(actor.id)
         return self.repository.list_by_customer(actor.id)
 
+    def pick_up(self, delivery_id: int, actor: User) -> Delivery:
+        """Курьер забрал заказ на кухне и везёт его."""
+        delivery = self.repository.get_by_id(delivery_id)
+        if not delivery:
+            raise NotFoundError("Доставка не найдена")
+
+        if actor.role != Role.ADMIN and delivery.courier_id != actor.id:
+            raise AccessDeniedError("Забрать можно только свой заказ")
+
+        if delivery.status != DeliveryStatus.IN_PROGRESS:
+            raise BusinessRuleError("Забрать можно только заказ, на который курьер назначен")
+
+        delivery.status = DeliveryStatus.ON_THE_WAY
+        self.repository.save_status(delivery)
+        return delivery
+
     def complete_delivery(self, delivery_id: int, actor: User) -> None:
         delivery = self.repository.get_by_id(delivery_id)
         if not delivery:
