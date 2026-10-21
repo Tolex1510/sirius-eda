@@ -6,6 +6,7 @@
 * Лабораторная работа № 3: аутентификация, авторизация, защита от IDOR, вход через Google.
 * Лабораторная работа № 4: кеширование меню на Redis, замеры нагрузки.
 * Лабораторная работа № 5: PDF, email и SMS в фоне на Celery, ретраи, DLQ, Flower, Celery Beat.
+* Лабораторная работа № 6: доставка вынесена в gRPC-микросервис, стрим статусов и чат с курьером.
 
 ## Запуск
 
@@ -19,6 +20,7 @@ docker compose up -d db redis     # если порты заняты: DB_PORT=54
 alembic upgrade head
 python -m app.cli create-user --email admin@sirius.ru --role admin
 python -m app.cli seed-menu       # 12 разделов по 25 блюд для нагрузочных замеров
+python -m delivery_service          # сервис доставки на gRPC, в отдельном терминале
 uvicorn app.main:app --reload
 celery -A app.core.celery_app worker --loglevel=info   # фоновые задачи заказов, в отдельном терминале
 celery -A app.core.celery_app beat --loglevel=info     # периодические задачи
@@ -41,6 +43,218 @@ alembic upgrade head
 ```bash
 pytest
 ```
+
+## Лабораторная работа № 6: доставка в gRPC-микросервис
+
+Выполнено на 10 баллов: модуль `delivery` вынесен в отдельный процесс на gRPC, монолит вызывает его через клиент,
+обработаны `UNAVAILABLE` и таймауты, есть Server Streaming `TrackDelivery` и Bidirectional Streaming `ChatWithCourier`.
+
+![Архитектура](docs/lab6/architecture.png)
+
+Сводка для защиты: [`docs/lab6/DEFENSE.md`](docs/lab6/DEFENSE.md). Итоги с выводами: [`docs/lab6/result.md`](docs/lab6/result.md).
+
+### Результаты
+
+`GET /delivery/{id}`, 500 последовательных запросов после 20 прогревочных, `scripts/delivery_probe.py`:
+
+| Путь | Медиана | 95-й перцентиль |
+|---|---|---|
+| HTTP, доставка внутри монолита, `DELIVERY_BACKEND=local` | 9,0 мс | 15,1 мс |
+| HTTP, монолит вызывает gRPC-сервис | 12,8 мс | 23,0 мс |
+| gRPC напрямую, без монолита | 6,8 мс | 9,4 мс |
+
+![Задержка](docs/lab6/latency.png)
+
+Сетевой вызов добавил около 4 мс. В них входят HTTP/2 до сервиса, выпуск и проверка внутреннего токена
+и повторное чтение пользователя из БД. Это цена отдельного процесса: каждая граница сервиса стоит миллисекунды.
+
+Сервис доставки остановлен, монолит работает:
+
+| Запрос | Ответ |
+|---|---|
+| `POST /delivery/assign` | 503 за 8 мс, `Retry-After: 5` |
+| `GET /delivery/4` | 503 за 0,33 с: чтение повторяется 3 раза |
+| `GET /delivery/my` | 503 за 0,29 с |
+| Тот же `GET` после запуска сервиса | 200 за 63 мс, монолит не перезапускали |
+
+### Как устроено
+
+```text
+Клиент ──HTTP──► delivery/router.py ──► DeliveryGateway (ABC)
+                                            ├─ GrpcDeliveryGateway ──gRPC :50051──► delivery_service
+                                            └─ LocalDeliveryGateway   прежний код в процессе монолита
+
+delivery_service: DeliveryServicer ──► DeliveryService ──► SqlAlchemyDeliveryRepository ──► PostgreSQL
+```
+
+```mermaid
+sequenceDiagram
+    participant C as Клиент
+    participant M as Монолит
+    participant S as Сервис доставки
+    participant DB as PostgreSQL
+
+    C->>M: PATCH /delivery/5/pickup, JWT пользователя
+    M->>M: проверка JWT и роли
+    M->>S: PickUpOrder(5), внутренний JWT на 1 минуту, таймаут 2 с
+    S->>DB: пользователь, роль, блокировка
+    S->>DB: доставка 5, status = on_the_way
+    S-->>M: Delivery
+    S-->>S: StatusBoard.changed(): разбудить стримы TrackDelivery
+    M-->>C: 200
+```
+
+Роутер не знает про gRPC. Он зовёт `DeliveryGateway`, а реализацию выбирает `app/dependencies.py` по `DELIVERY_BACKEND`.
+Бизнес-правила остались в `DeliveryService`, его же использует микросервис. `DeliveryServicer` только переводит
+сообщения protobuf в вызовы сервиса и доменные ошибки в коды gRPC.
+
+### Что сделано
+
+| Требование | Где |
+|---|---|
+| Контракт | `proto/delivery.proto`: 5 unary-методов, `TrackDelivery`, `ChatWithCourier` |
+| Сгенерированный код | `delivery_pb2.py`, `delivery_pb2_grpc.py`, `delivery_pb2.pyi`, генерация `scripts/gen_proto.sh` |
+| gRPC-сервер | пакет `delivery_service`, запуск `python -m delivery_service` |
+| Клиент в монолите | `app/modules/delivery/grpc_client.py`, `GrpcDeliveryGateway` |
+| Переключатель Strangler Fig | `DELIVERY_BACKEND=grpc\|local`, `app/modules/delivery/gateway.py` |
+| `UNAVAILABLE` и таймауты | `to_domain_error` в `grpc_client.py`, `call` в `router.py` |
+| Server Streaming | `TrackDelivery`, SSE `GET /delivery/{id}/track`, `python -m app.cli track-delivery` |
+| Bidirectional Streaming | `ChatWithCourier`, `python -m app.cli delivery-chat` |
+| Новый статус «курьер забрал заказ» | `on_the_way`, `PATCH /delivery/{id}/pickup` |
+| Тесты | `tests/test_delivery_grpc.py`, 22 теста на настоящем gRPC-сервере |
+
+### Ошибки
+
+| В сервисе | Код gRPC | В монолите | HTTP |
+|---|---|---|---|
+| `NotFoundError` | `NOT_FOUND` | `NotFoundError` | 404 |
+| `AccessDeniedError` | `PERMISSION_DENIED` | `AccessDeniedError` | 403 |
+| другие правила, например заказ не оплачен | `FAILED_PRECONDITION` | `BusinessRuleError` | 400 |
+| нет или просрочен внутренний токен | `UNAUTHENTICATED` | `AuthenticationError` | 401 |
+| непредвиденное исключение | `INTERNAL`, текст без деталей | `DeliveryUnavailableError` | 503 |
+| сервис не запущен | `UNAVAILABLE` | `DeliveryUnavailableError` | 503, `Retry-After: 5` |
+| не ответил за 2 с | `DEADLINE_EXCEEDED` | `DeliveryTimeoutError` | 504 |
+
+**Таймаут** у каждого вызова, `DELIVERY_GRPC_TIMEOUT=2`. Без него зависший сервис держал бы поток монолита до разрыва TCP.
+
+**Повторы только для чтения.** `GetDelivery`, `ListMyDeliveries` и `TrackDelivery` повторяются при `UNAVAILABLE`
+до 3 раз с растущей паузой от 0,1 с. Повторы заданы в service config канала, а не циклом в коде.
+`AssignCourier` и `CompleteDelivery` не повторяются: если ответ потерялся после записи, повтор выполнил бы действие дважды.
+
+**Один канал на процесс.** Канал gRPC держит соединение HTTP/2 и сам переподключается после падения сервиса.
+Открывать его на каждый запрос, как в методичке, значит платить за TCP-рукопожатие каждый раз. Канал закрывается при остановке монолита.
+
+**Сервис не верит монолиту на слово.** Монолит передаёт в метаданных `authorization` внутренний JWT
+с типом `internal` и сроком 1 минута. Сервис проверяет подпись и читает роль и блокировку пользователя из БД.
+Пользовательский токен не подойдёт: у него другой тип. Порт по умолчанию слушает только `127.0.0.1`.
+
+### Стримы
+
+**`TrackDelivery`.** Сервис сразу отдаёт текущий статус, затем каждое изменение, и закрывает стрим на `completed`.
+Изменение из этого же процесса будит стрим мгновенно через `StatusBoard`. Раз в 2 секунды стрим перечитывает БД,
+чтобы увидеть изменения из других процессов, например из монолита в режиме `local`.
+
+```bash
+python -m app.cli track-delivery --delivery-id 5 --user-id 9
+curl -N -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8000/delivery/5/track   # тот же стрим как SSE
+```
+
+```text
+10:51:30  доставка 5: in_progress
+10:51:32  доставка 5: on_the_way
+10:51:34  доставка 5: completed
+```
+
+**`ChatWithCourier`.** Писать могут те, кто видит доставку: заказчик, курьер, администратор.
+Первое сообщение подключает к комнате доставки. Каждый участник получает чужие и свои сообщения,
+а новый участник ещё и последние 20. Автора и время ставит сервер, подделать их клиент не может.
+Чтение входящих идёт в отдельном потоке, ответы отдаёт поток вызова.
+
+```bash
+python -m app.cli delivery-chat --delivery-id 5 --user-id 9    # заказчик
+python -m app.cli delivery-chat --delivery-id 5 --user-id 60   # курьер, второй терминал
+```
+
+```text
+[10:51:43] вы: Где мой заказ?
+[10:51:45] courier 60: Буду через 5 минут, позвоню в домофон
+```
+
+Посторонний получает `Нет доступа к чужой доставке`.
+
+### Как запустить
+
+```bash
+docker compose up -d db redis
+python -m delivery_service                  # терминал 1, gRPC :50051
+uvicorn app.main:app                        # терминал 2, HTTP :8000
+DELIVERY_BACKEND=local uvicorn app.main:app # откат на прежний код без сервиса
+```
+
+Пересобрать код после правки контракта:
+
+```bash
+scripts/gen_proto.sh
+```
+
+Повторить замеры:
+
+```bash
+PYTHONPATH=. python scripts/delivery_probe.py http http://127.0.0.1:8000 5 9 grpc_http
+PYTHONPATH=. python scripts/delivery_probe.py grpc localhost:50051       5 9 grpc_direct
+DELIVERY_BACKEND=local uvicorn app.main:app   # затем probe http с меткой local_http
+python scripts/plot_delivery.py
+```
+
+### Отличия от методички
+
+* **Роутер зовёт абстракцию `DeliveryGateway`**, а не gRPC-клиент. Переключатель `DELIVERY_BACKEND` делает
+  Strangler Fig обратимым: при проблемах доставка возвращается в монолит без деплоя кода.
+* **Пакет `delivery_service`** вместо одного файла `delivery_server.py`: сервер, servicer и стримы раздельно.
+* **Бизнес-правила не скопированы в сервер.** Servicer зовёт тот же `DeliveryService`, что был в монолите.
+* **`GetDelivery` принимает `delivery_id`**, как и прежний HTTP-эндпоинт. Добавлены `PickUpOrder` и `ListMyDeliveries`.
+* **Код генерируется скриптом**, тест сверяет закоммиченные файлы со свежей генерацией.
+* **Один канал на процесс**, повторы только для чтения, внутренний JWT. Причины выше.
+* **Статус `on_the_way`.** Без него стриму нечего показывать между назначением и доставкой.
+* **SSE-мост** `GET /delivery/{id}/track`: браузер не умеет gRPC, а стрим нужен клиенту.
+
+### Ответы на контрольные вопросы
+
+**1. Зачем выносить delivery в отдельный сервис?**
+У доставки свой ритм: курьеры, геолокация, чаты и долгие соединения. Отдельный процесс масштабируется
+и деплоится независимо. Падение или нагрузка в доставке не кладёт меню и заказы.
+Команда доставки меняет свой сервис, не трогая монолит. Цена: сеть, новые виды отказов, второй процесс в эксплуатации.
+
+**2. Почему gRPC, а не REST?**
+Строгий контракт в `.proto`: клиент и сервер генерируются из одного файла, несовместимое изменение видно сразу.
+Бинарный protobuf компактнее JSON. HTTP/2 держит одно соединение на много вызовов и даёт стримы в обе стороны,
+которые в REST пришлось бы собирать из SSE и WebSocket. Минус: браузер напрямую gRPC не вызовет, нужен мост.
+
+**3. Что будет, если сервис недоступен?**
+Вызов падает с `UNAVAILABLE`, при зависании с `DEADLINE_EXCEEDED` через 2 с. Клиент переводит их в
+`DeliveryUnavailableError` и `DeliveryTimeoutError`, роутер отвечает 503 с `Retry-After` и 504.
+Остальной монолит работает. Чтения повторяются 3 раза, записи нет. Сервис поднялся, канал переподключился сам.
+
+**4. Почему у delivery должна быть своя БД?**
+Общая БД связывает сервисы через схему: переименование колонки в `orders` ломает доставку, а деплой
+по отдельности перестаёт быть независимым. Здесь сервис читает `orders` и `users` и пишет `orders.status = delivered`,
+то есть меняет чужие данные. Транзакции, блокировки и нагрузка тоже общие. В правильной схеме сервис хранит
+только `deliveries`, данные о заказе получает в запросе или из событий, а статус заказа меняет монолит по событию.
+
+**5. Чем Server Streaming отличается от Unary?**
+Unary: один запрос и один ответ, как `GetDelivery`. Server Streaming: один запрос и поток ответов
+по одному соединению, пока сервер его не закроет. `TrackDelivery` отдаёт статус при каждом изменении.
+Опрос через unary раз в секунду давал бы задержку и лишние запросы, когда ничего не меняется.
+
+**6. Что такое Strangler Fig?**
+Постепенная замена монолита: вырезается один модуль, вызовы перенаправляются в новый сервис,
+монолит худеет. Здесь `DeliveryGateway` и есть точка перенаправления. Старая реализация осталась
+за `DELIVERY_BACKEND=local`, её удаляют, когда сервис проверен в работе.
+
+**7. Роль gRPC-клиента в монолите.**
+Это адаптер к внешней системе, такой же, как репозиторий к БД. Он знает про каналы, stub, коды gRPC и метаданные
+и переводит их в доменные сущности и исключения. Поэтому он в инфраструктуре, а роутер и домен про gRPC не знают.
+`tests/test_architecture.py` запрещает импорт `grpc` во внутренних слоях. Замена gRPC на что-то другое меняет один файл.
 
 ## Лабораторная работа № 5: фоновые задачи на Celery
 

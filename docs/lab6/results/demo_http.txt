@@ -1,0 +1,5 @@
+$ curl -X POST /orders/create   -> order_id=5047
+$ psql: update orders set status='paid' where id=5047
+$ curl -X POST /delivery/assign  -> {"status":"success","delivery_id":5} HTTP 200
+$ curl -X PATCH /delivery/5/pickup   -> {"id":5,"order_id":5047,"courier_id":60,"status":"on_the_way"} HTTP 200
+$ curl -X PATCH /delivery/5/complete -> {"status":"success"} HTTP 200

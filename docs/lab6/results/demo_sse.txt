@@ -1,0 +1,9 @@
+event: status
+data: {"delivery_id": 5, "courier_id": 60, "status": "in_progress"}
+
+event: status
+data: {"delivery_id": 5, "courier_id": 60, "status": "on_the_way"}
+
+event: status
+data: {"delivery_id": 5, "courier_id": 60, "status": "completed"}
+

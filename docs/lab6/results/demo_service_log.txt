@@ -1,0 +1,12 @@
+2026-10-21 10:50:47,095 delivery_service INFO GetDelivery OK 5.4 ms
+2026-10-21 10:50:47,102 delivery_service INFO GetDelivery OK 5.2 ms
+2026-10-21 10:50:47,108 delivery_service INFO GetDelivery OK 4.9 ms
+2026-10-21 10:51:28,918 delivery_service INFO AssignCourier OK 24.2 ms
+2026-10-21 10:51:28,953 delivery_service INFO ListMyDeliveries OK 11.6 ms
+2026-10-21 10:51:30,421 delivery_service INFO TrackDelivery OK 5.7 ms
+2026-10-21 10:51:30,637 delivery_service INFO TrackDelivery OK 7.1 ms
+2026-10-21 10:51:32,670 delivery_service INFO PickUpOrder OK 12.3 ms
+2026-10-21 10:51:34,748 delivery_service INFO CompleteDelivery OK 40.3 ms
+2026-10-21 10:51:42,282 delivery_service INFO ChatWithCourier OK 8.1 ms
+2026-10-21 10:51:42,325 delivery_service INFO ChatWithCourier OK 5.8 ms
+2026-10-21 10:51:49,573 delivery_service INFO ChatWithCourier PERMISSION_DENIED 11.9 ms

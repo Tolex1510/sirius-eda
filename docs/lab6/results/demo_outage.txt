@@ -1,0 +1,9 @@
+# Сервис доставки остановлен, монолит работает
+$ curl -X POST /delivery/assign   -> HTTP 503 за 0,008 с  {"detail":"Сервис доставки недоступен"}
+$ curl /delivery/4                -> HTTP 503 за 0,33 с   чтение, 3 попытки по retryPolicy
+$ curl /delivery/my               -> HTTP 503 за 0,29 с   чтение, 3 попытки по retryPolicy
+  retry-after: 5
+
+# Сервис запущен снова, монолит не перезапускали
+$ curl /delivery/4                -> HTTP 200 за 63 мс    канал переподключился сам
+$ curl /delivery/4                -> HTTP 200 за 11 мс
