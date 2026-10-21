@@ -7,15 +7,19 @@
     python -m app.cli load-users --count 50 > tokens.txt
     python -m app.cli dlq-list
     python -m app.cli dlq-replay
+    python -m app.cli track-delivery --delivery-id 1 --user-id 2
+    python -m app.cli delivery-chat --delivery-id 1 --user-id 2
 """
 import argparse
+from datetime import datetime
 import getpass
 import secrets
+import sys
 
 from app.core.jwt import create_access_token
 
 from app.dependencies import menu_repository_scope, user_repository_scope
-from app.domain.entities import Role
+from app.domain.entities import Role, User
 from app.domain.exceptions import DomainError
 from app.modules.menu.service import MenuService
 from app.modules.users.service import UserService
@@ -80,6 +84,42 @@ def dlq_replay() -> None:
     print(f"Возвращено в очередь: {replay_dead_letters()}")
 
 
+def load_user(user_id: int) -> User:
+    with user_repository_scope() as repository:
+        user = repository.get_by_id(user_id)
+    if not user:
+        raise SystemExit(f"Пользователь {user_id} не найден")
+    return user
+
+
+def track_delivery(delivery_id: int, user_id: int) -> None:
+    """Подписка на Server Streaming TrackDelivery микросервиса доставки."""
+    from app.modules.delivery.gateway import DeliveryUnavailableError
+    from app.modules.delivery.grpc_client import delivery_grpc_gateway
+
+    try:
+        for delivery in delivery_grpc_gateway().track(delivery_id, load_user(user_id)):
+            print(f"{datetime.now():%H:%M:%S}  доставка {delivery.id}: {delivery.status}", flush=True)
+    except (DomainError, DeliveryUnavailableError) as e:
+        raise SystemExit(f"Ошибка: {e}")
+
+
+def delivery_chat(delivery_id: int, user_id: int) -> None:
+    """Bidirectional Streaming ChatWithCourier: строки из stdin уходят в чат, ответы печатаются сразу."""
+    from app.modules.delivery.gateway import DeliveryUnavailableError
+    from app.modules.delivery.grpc_client import delivery_grpc_gateway
+
+    user = load_user(user_id)
+    print(f"Чат доставки {delivery_id}, вы {user.email} ({user.role}). Enter отправляет, Ctrl+D выходит.", flush=True)
+    outgoing = (line.rstrip("\n") for line in sys.stdin)
+    try:
+        for message in delivery_grpc_gateway().chat(delivery_id, user, outgoing):
+            who = "вы" if message.author_id == user.id else f"{message.author_role} {message.author_id}"
+            print(f"[{message.sent_at.astimezone():%H:%M:%S}] {who}: {message.text}", flush=True)
+    except (DomainError, DeliveryUnavailableError) as e:
+        raise SystemExit(f"Ошибка: {e}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -92,6 +132,11 @@ def main() -> None:
     load.add_argument("--count", type=int, default=50)
     commands.add_parser("dlq-list", help="задачи в Dead Letter Queue")
     commands.add_parser("dlq-replay", help="вернуть задачи из DLQ в рабочую очередь")
+    for name, help_text in (("track-delivery", "следить за статусом доставки через gRPC-стрим"),
+                            ("delivery-chat", "чат заказчика и курьера через gRPC")):
+        command = commands.add_parser(name, help=help_text)
+        command.add_argument("--delivery-id", type=int, required=True)
+        command.add_argument("--user-id", type=int, required=True, help="от чьего имени")
 
     args = parser.parse_args()
     if args.command == "create-user":
@@ -104,6 +149,10 @@ def main() -> None:
         dlq_list()
     elif args.command == "dlq-replay":
         dlq_replay()
+    elif args.command == "track-delivery":
+        track_delivery(args.delivery_id, args.user_id)
+    elif args.command == "delivery-chat":
+        delivery_chat(args.delivery_id, args.user_id)
 
 
 if __name__ == "__main__":

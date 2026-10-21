@@ -1,10 +1,10 @@
-"""Правило зависимостей: слой бизнес-логики не знает о веб-фреймворке, ORM, кеше и брокере."""
+"""Правило зависимостей: слой бизнес-логики не знает о веб-фреймворке, ORM, кеше, брокере и сети."""
 import ast
 from pathlib import Path
 
 import pytest
 
-FORBIDDEN = {"fastapi", "sqlalchemy", "starlette", "redis", "celery", "kombu"}
+FORBIDDEN = {"fastapi", "sqlalchemy", "starlette", "redis", "celery", "kombu", "grpc"}
 SERVICES = sorted(Path(__file__).parent.parent.joinpath("app", "modules").glob("*/service.py"))
 
 

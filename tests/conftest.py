@@ -88,7 +88,9 @@ def client(storage, notifier):
     from app.core.rate_limit import get_redis
     from app.main import app
     from app.modules.auth.repository import InMemoryAuthRepository
+    from app.modules.delivery.gateway import LocalDeliveryGateway
     from app.modules.delivery.repository import InMemoryDeliveryRepository
+    from app.modules.delivery.service import DeliveryService
     from app.modules.menu.repository import InMemoryMenuRepository
     from app.modules.orders.repository import InMemoryOrderRepository
     from app.modules.users.repository import InMemoryUserRepository
@@ -100,6 +102,7 @@ def client(storage, notifier):
         dependencies.get_order_repository: lambda: InMemoryOrderRepository(storage),
         dependencies.get_order_notifier: lambda: notifier,
         dependencies.get_delivery_repository: lambda: InMemoryDeliveryRepository(storage),
+        dependencies.get_delivery_gateway: lambda: LocalDeliveryGateway(DeliveryService(InMemoryDeliveryRepository(storage))),
         dependencies.get_auth_repository: lambda: InMemoryAuthRepository(storage),
         get_redis: lambda: redis,
     }

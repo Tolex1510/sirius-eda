@@ -13,6 +13,9 @@ from app.core.config import settings
 ALGORITHM = "HS256"
 ACCESS = "access"
 REFRESH = "refresh"
+# Монолит вызывает внутренние сервисы от имени пользователя. Отдельный тип:
+# такой токен не примет публичный API, а пользовательский не примет сервис.
+INTERNAL = "internal"
 
 
 class InvalidTokenError(Exception):
@@ -34,6 +37,11 @@ def _encode(user_id: int, token_type: str, ttl: timedelta) -> str:
 
 def create_access_token(user_id: int) -> str:
     return _encode(user_id, ACCESS, timedelta(minutes=settings.ACCESS_TOKEN_TTL_MINUTES))
+
+
+def create_internal_token(user_id: int) -> str:
+    # Сервис проверяет токен в начале вызова, поэтому минуты хватает даже долгому стриму.
+    return _encode(user_id, INTERNAL, timedelta(minutes=1))
 
 
 def create_refresh_token(user_id: int) -> tuple[str, datetime]:

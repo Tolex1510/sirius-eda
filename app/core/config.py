@@ -25,6 +25,15 @@ class Settings(BaseSettings):
     FAKE_EMAIL_FAIL_EVERY: int = Field(default=5, ge=0)
     FAKE_SMS_FLAKY_EVERY: int = Field(default=3, ge=0)
 
+    # Доставка: grpc ходит в микросервис, local выполняет старый код монолита.
+    # local оставлен по паттерну Strangler Fig: откат без деплоя, если сервис подвёл.
+    DELIVERY_BACKEND: Literal["grpc", "local"] = "grpc"
+    DELIVERY_GRPC_TARGET: str = "localhost:50051"
+    # Канал без TLS, поэтому по умолчанию сервис слушает только локальный интерфейс.
+    DELIVERY_GRPC_BIND: str = "127.0.0.1:50051"
+    # Сколько монолит ждёт ответа сервиса. Обычный вызов занимает миллисекунды.
+    DELIVERY_GRPC_TIMEOUT: float = Field(default=2.0, gt=0)
+
     ACCESS_TOKEN_TTL_MINUTES: int = 15
     REFRESH_TOKEN_TTL_DAYS: int = 7
     # Стоимость bcrypt. 12 для продакшена, в тестах понижается ради скорости.

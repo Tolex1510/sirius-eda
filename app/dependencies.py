@@ -13,11 +13,14 @@ from app.core.redis import get_redis
 from app.database import SessionLocal
 from app.memory_storage import InMemoryStorage
 from app.modules.auth.repository import AuthRepository, InMemoryAuthRepository, SqlAlchemyAuthRepository
+from app.modules.delivery.gateway import DeliveryGateway, LocalDeliveryGateway
+from app.modules.delivery.grpc_client import delivery_grpc_gateway
 from app.modules.delivery.repository import (
     DeliveryRepository,
     InMemoryDeliveryRepository,
     SqlAlchemyDeliveryRepository,
 )
+from app.modules.delivery.service import DeliveryService
 from app.modules.menu.repository import (
     CachedMenuRepository,
     InMemoryMenuRepository,
@@ -94,6 +97,15 @@ def get_order_notifier() -> OrderNotifier:
 async def get_delivery_repository() -> AsyncIterator[DeliveryRepository]:
     with _repository_scope(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository) as repository:
         yield repository
+
+
+async def get_delivery_gateway() -> AsyncIterator[DeliveryGateway]:
+    """Strangler Fig: доставка в микросервисе, прежний код монолита остаётся запасным путём."""
+    if settings.DELIVERY_BACKEND == "grpc":
+        yield delivery_grpc_gateway()
+        return
+    with _repository_scope(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository) as repository:
+        yield LocalDeliveryGateway(DeliveryService(repository))
 
 
 async def get_auth_repository() -> AsyncIterator[AuthRepository]:

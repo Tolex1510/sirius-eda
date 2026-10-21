@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.dependencies import warm_up_menu_cache
+from app.modules.delivery.grpc_client import close_delivery_channel
 from app.modules.auth.router import router as auth_router
 from app.modules.delivery.router import router as delivery_router
 from app.modules.menu.router import router as menu_router
@@ -24,6 +25,7 @@ async def lifespan(_: FastAPI):
     # Прогрев кеша: первые запросы после старта сразу попадают в Redis, а не в PostgreSQL.
     await run_in_threadpool(warm_up_menu_cache)
     yield
+    close_delivery_channel()
 
 
 # Swagger раскрывает структуру API, поэтому в продакшене (DEBUG=false) он выключен.
