@@ -58,7 +58,8 @@ def replay_dead_letters() -> int:
             except queue.Empty:
                 break
             letter = message.payload
-            celery_app.send_task(letter["task"], args=letter["args"], kwargs=letter["kwargs"])
+            # send_task не смотрит на task_ignore_result и без флага ждал бы Redis как хранилище результатов.
+            celery_app.send_task(letter["task"], args=letter["args"], kwargs=letter["kwargs"], ignore_result=True)
             message.ack()
             replayed += 1
         queue.close()
