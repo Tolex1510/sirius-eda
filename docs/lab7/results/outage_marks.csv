@@ -1,0 +1,4 @@
+event,seconds
+rabbitmq_stopped,2.58
+rabbitmq_started,17.97
+all_finished,28.82

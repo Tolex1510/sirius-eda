@@ -1,0 +1,39 @@
+# PostgreSQL остановлен. Заказ 5052 оплачен до остановки, consumer'ы получают OrderPaid
+14:08:09,851 kitchen order.paid 0d152311 attempt 1 failed
+14:08:10,906 kitchen order.paid 0d152311 attempt 2 failed
+14:08:12,962 kitchen order.paid 0d152311 attempt 3 failed
+14:08:17,025 kitchen order.paid 0d152311 attempt 4 failed, moved to DLQ
+14:07:49,682 delivery order.paid 0d152311 attempt 1 failed
+14:07:50,750 delivery order.paid 0d152311 attempt 2 failed
+14:07:52,825 delivery order.paid 0d152311 attempt 3 failed
+14:07:56,923 delivery order.paid 0d152311 attempt 4 failed, moved to DLQ
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: Connection refused
+
+# PostgreSQL запущен
+$ python -m app.cli events-dlq
+kitchen_dlq: 3
+  - dbe7b2cad58748a9a3a281603070a004 rejected: {"event_type": "order.paid", "order_id": "abc"}
+  - 7ab588886af04b1a9840281fc4458db4 rejected: not-json
+  order.paid 0d152311-4066-450e-86c6-7124aa6651e7 delivery_limit: {"amount": 110.0, "event_id": "0d152311-4066-450e-86c6-7124aa6651e7", "ord
+delivery_dlq: 3
+  - - rejected: not-json
+  - - rejected: {"event_type": "order.paid", "order_id": "abc"}
+  order.paid 0d152311-4066-450e-86c6-7124aa6651e7 delivery_limit: {"amount": 110.0, "event_id": "0d152311-4066-450e-86c6-7124aa6651e7", "ord
+orders_dlq: 0
+
+$ python -m app.cli events-dlq-replay --queue kitchen
+Возвращено в kitchen_queue: 1, битых оставлено в DLQ: 2
+$ python -m app.cli events-dlq-replay --queue delivery
+Возвращено в delivery_queue: 1, битых оставлено в DLQ: 2
+14:10:59,866 delivery order.paid 0d152311 order 5052: delivery 9, courier 61 118.8 ms
+14:10:58,157 kitchen order.paid 0d152311 order 5052 queued as ticket 4 120.7 ms
+# Кухня по заказу 5052: queued
+# Доставка по заказу 5052: 9 курьер 61 in_progress
+
+$ python -m app.cli events-dlq
+kitchen_dlq: 2
+delivery_dlq: 2
+orders_dlq: 0
+
+# Первая попытка доставки в 14:07:49 упала до остановки БД: "server closed the connection unexpectedly".
+# В пуле осталось соединение, разорванное прошлым рестартом PostgreSQL. После этого включён pool_pre_ping.

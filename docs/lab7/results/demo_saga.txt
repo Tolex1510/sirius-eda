@@ -1,0 +1,40 @@
+# Баланс студента 9 до: 9989650
+$ POST /orders/create  -> order_id=5049
+$ POST /orders/5049/pay  -> {"status":"success","order_id":5049,"order_status":"paid"} HTTP 200 за 0.045554 с
+$ POST /orders/create  -> order_id=5050
+# Баланс после оформления заказа 5050: 9989360
+$ POST /orders/5050/pay  -> {"status":"success","order_id":5050,"order_status":"paid"} HTTP 200 за 0.031726 с
+# Баланс после саги: 9989460
+
+# Заказы
+5049|paid|190
+5050|cancelled|100
+# Доставки
+7|5049|60|in_progress
+# Очередь кухни
+5049|queued
+5050|cancelled
+# Outbox
+order.paid|5049|t
+order.paid|5050|t
+delivery.failed|5050|t
+order.cancelled|5050|t
+# Inbox
+kitchen|order.paid
+delivery|order.paid
+kitchen|order.paid
+delivery|order.paid
+orders|delivery.failed
+kitchen|order.cancelled
+
+# Логи процессов, время из логов
+14:02:20,032 outbox published 1 events, oldest waited 65 ms
+14:02:20,141 events kitchen order.paid fea13809 order 5049 queued as ticket 1 119.0 ms
+14:02:20,158 events delivery order.paid fea13809 order 5049: delivery 7, courier 60 139.4 ms
+14:02:21,927 outbox published 1 events, oldest waited 49 ms
+14:02:21,937 events kitchen order.paid 17f88349 order 5050 queued as ticket 2 17.8 ms
+14:02:21,944 events delivery order.paid 17f88349 order 5050: Нет свободного курьера, DeliveryFailed published 25.2 ms
+14:02:21,959 outbox published 1 events, oldest waited 24 ms
+14:02:22,051 events orders delivery.failed cf5d280b order 5050 cancelled, refunded 100.00 to user 9 95.9 ms
+14:02:22,073 outbox published 1 events, oldest waited 48 ms
+14:02:22,084 events kitchen order.cancelled c30b7a59 order 5050 removed from queue 14.9 ms

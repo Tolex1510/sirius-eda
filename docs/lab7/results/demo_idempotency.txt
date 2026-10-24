@@ -1,0 +1,16 @@
+# То же событие OrderPaid заказа 5049, тот же event_id, три раза через Management API
+{"amount": 190.0, "event_id": "fea13809-51d2-41a0-be03-adc3f9a691f7", "order_id": 5049, "event_type": "order.paid", "customer_id": 9, "occurred_at": "2026-10-24T11:02:19.967446+00:00"}
+$ publish #1 -> {"routed":true}
+$ publish #2 -> {"routed":true}
+$ publish #3 -> {"routed":true}
+
+# Записей в очереди кухни по заказу 5049: 1
+# Доставок по заказу 5049: 1
+# Лог кухни
+14:02:40,508 kitchen order.paid fea13809 duplicate, skipped
+14:02:40,626 kitchen order.paid fea13809 duplicate, skipped
+14:02:40,686 kitchen order.paid fea13809 duplicate, skipped
+# Лог доставки
+14:02:40,504 delivery order.paid fea13809 duplicate, skipped
+14:02:40,624 delivery order.paid fea13809 duplicate, skipped
+14:02:40,681 delivery order.paid fea13809 duplicate, skipped

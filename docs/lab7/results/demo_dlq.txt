@@ -1,0 +1,19 @@
+# Битые сообщения в exchange sirius_events с ключом order.paid
+$ publish 'not-json' -> {"routed":true}
+$ publish '{"event_type": "order.paid", "order_id": "abc"}' -> {"routed":true}
+
+# Лог кухни
+14:02:53,633 kitchen rejected message to DLQ: Expecting value: line 1 column 1 (char 0)
+14:02:53,769 kitchen rejected message to DLQ: Нет поля event_id
+# Лог доставки
+14:02:53,628 delivery rejected message to DLQ: Expecting value: line 1 column 1 (char 0)
+14:02:53,763 delivery rejected message to DLQ: Нет поля event_id
+
+$ python -m app.cli events-dlq
+kitchen_dlq: 2
+  - - rejected: not-json
+  - - rejected: {"event_type": "order.paid", "order_id": "abc"}
+delivery_dlq: 2
+  - - rejected: not-json
+  - - rejected: {"event_type": "order.paid", "order_id": "abc"}
+orders_dlq: 0

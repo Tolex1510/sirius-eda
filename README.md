@@ -7,6 +7,7 @@
 * Лабораторная работа № 4: кеширование меню на Redis, замеры нагрузки.
 * Лабораторная работа № 5: PDF, email и SMS в фоне на Celery, ретраи, DLQ, Flower, Celery Beat.
 * Лабораторная работа № 6: доставка вынесена в gRPC-микросервис, стрим статусов и чат с курьером.
+* Лабораторная работа № 7: событие OrderPaid через RabbitMQ, Transactional Outbox, DLQ, сага с возвратом денег.
 
 ## Запуск
 
@@ -16,11 +17,15 @@ source .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
 
 cp .env.example .env              # затем задать SECRET_KEY
-docker compose up -d db redis     # если порты заняты: DB_PORT=5433 REDIS_PORT=6380 docker compose up -d db redis
+docker compose up -d db redis rabbitmq   # если порты заняты: DB_PORT=5433 REDIS_PORT=6380 docker compose up -d
 alembic upgrade head
 python -m app.cli create-user --email admin@sirius.ru --role admin
 python -m app.cli seed-menu       # 12 разделов по 25 блюд для нагрузочных замеров
 python -m delivery_service          # сервис доставки на gRPC, в отдельном терминале
+python -m app.workers.outbox_relay  # события из outbox в RabbitMQ, в отдельном терминале
+python -m app.workers.kitchen_consumer   # consumer'ы событий, каждый в своём терминале
+python -m delivery_service.worker
+python -m app.workers.orders_consumer
 uvicorn app.main:app --reload
 celery -A app.core.celery_app worker --loglevel=info   # фоновые задачи заказов, в отдельном терминале
 celery -A app.core.celery_app beat --loglevel=info     # периодические задачи
@@ -43,6 +48,265 @@ alembic upgrade head
 ```bash
 pytest
 ```
+
+## Лабораторная работа № 7: event-driven архитектура
+
+Выполнено на 10 баллов: оплата публикует событие `OrderPaid`, кухня и доставка получают его независимо,
+получатели идемпотентны, битые и падающие сообщения уходят в DLQ, сага возвращает деньги, если курьера нет.
+Для 10 баллов сделаны два варианта из трёх: Transactional Outbox и интеграционные тесты consumer'ов на настоящем RabbitMQ.
+
+![Архитектура](docs/lab7/architecture.png)
+
+Сводка для защиты: [`docs/lab7/DEFENSE.md`](docs/lab7/DEFENSE.md). Итоги с выводами: [`docs/lab7/result.md`](docs/lab7/result.md).
+
+### Результаты
+
+200 заказов подряд, 10 свободных курьеров, `scripts/event_probe.py`. Время считается от записи `OrderPaid` в outbox:
+
+| Шаг | Медиана | 95-й перцентиль |
+|---|---|---|
+| `POST /orders/{id}/pay` отвечает | 18 мс | 31 мс |
+| Событие ушло в RabbitMQ | 19 мс | 31 мс |
+| Кухня поставила заказ в очередь | 30 мс | 51 мс |
+| Доставка назначила курьера или опубликовала отказ | 41 мс | 66 мс |
+| Сага: деньги вернулись, заказ снят с кухни | 100 мс | 170 мс |
+
+Курьер назначен на 10 заказов, остальные 190 сага отменила и вернула за них деньги.
+
+![Задержка](docs/lab7/latency.png)
+
+Синие столбцы показывают тот же замер, но релей опрашивает outbox раз в секунду. Каждый переход через outbox стоит до секунды,
+а у саги таких переходов три. Поэтому релей слушает `NOTIFY` от PostgreSQL и просыпается сразу после COMMIT.
+
+RabbitMQ остановлен на 15 секунд, за это время оплачено 50 заказов:
+
+| Метрика | Значение |
+|---|---|
+| Оплата, медиана | 14 мс, ответ 200 |
+| Событий ждали в outbox | 50 |
+| RabbitMQ загружался после старта контейнера | около 9 с |
+| Все 50 заказов прошли все шаги после подключения к брокеру | за 2 с |
+| Потеряно событий | 0 |
+
+![Отказ RabbitMQ](docs/lab7/outage.png)
+
+### Как устроено
+
+```text
+POST /orders/{id}/pay ──► OrderService.pay_order ──► UPDATE orders + INSERT outbox_events, один COMMIT
+                                                                        │ NOTIFY
+                                                                        ▼
+                         RabbitMQ ◄── publish, publisher confirms ── релей outbox
+                    exchange sirius_events, topic
+          ┌───────────────────┼─────────────────────┐
+     order.paid          order.paid           delivery.failed
+     order.cancelled          │                     │
+          ▼                   ▼                     ▼
+    kitchen_queue       delivery_queue        orders_queue          quorum, 4 доставки, затем *_dlq
+          ▼                   ▼                     ▼
+       кухня       доставка: курьер или      заказы: отмена,
+                   DeliveryFailed в outbox   возврат, OrderCancelled в outbox
+```
+
+```mermaid
+sequenceDiagram
+    participant C as Клиент
+    participant O as Заказы
+    participant DB as PostgreSQL
+    participant R as Релей
+    participant MQ as RabbitMQ
+    participant K as Кухня
+    participant D as Доставка
+
+    C->>O: POST /orders/5050/pay
+    O->>DB: status = paid, OrderPaid в outbox, COMMIT
+    O-->>C: 200 за 18 мс
+    DB-->>R: NOTIFY
+    R->>MQ: order.paid
+    MQ->>K: order.paid: заказ в очередь кухни
+    MQ->>D: order.paid: свободных курьеров нет
+    D->>DB: DeliveryFailed в outbox и отметка, COMMIT
+    R->>MQ: delivery.failed
+    MQ->>O: delivery.failed
+    O->>DB: cancelled, возврат денег, OrderCancelled в outbox, COMMIT
+    R->>MQ: order.cancelled
+    MQ->>K: order.cancelled: заказ снят с очереди
+```
+
+`OrderService` не знает ни про RabbitMQ, ни про кухню с доставкой. Он фиксирует факт оплаты, а событие попадает в outbox
+той же транзакцией. `service.py` всех модулей не импортирует `aio_pika`, это проверяет `tests/test_architecture.py`.
+
+### Что сделано
+
+| Требование | Где |
+|---|---|
+| RabbitMQ в docker-compose | сервис `rabbitmq`, веб-интерфейс http://localhost:15672, логин и пароль `sirius` |
+| Подключение и топология | `app/core/rabbitmq.py` |
+| Событие `OrderPaid` при оплате | `OrderService.pay_order`, `POST /orders/{id}/pay` |
+| Доменные события | `app/domain/events.py`: `OrderPaid`, `DeliveryFailed`, `OrderCancelled` |
+| Общий цикл consumer'а | `app/workers/consumer.py` |
+| Consumer кухни | `app/workers/kitchen_consumer.py`, модуль `app/modules/kitchen`, `GET /kitchen/tickets` |
+| Consumer доставки | `delivery_service/worker.py`, `DeliveryService.dispatch` |
+| Идемпотентность | таблица `processed_events`, `app/outbox.py` |
+| DLQ | `sirius_dlx` и `*_dlq`, разбор `python -m app.cli events-dlq` и `events-dlq-replay` |
+| Сага | `DeliveryFailed` из доставки, `OrderService.compensate_failed_delivery`, `app/workers/orders_consumer.py` |
+| Transactional Outbox | таблица `outbox_events`, `app/workers/outbox_relay.py` |
+| Интеграционные тесты | `tests/test_events_rabbitmq.py`, 6 тестов на настоящем брокере |
+| Тесты без брокера | `tests/test_events.py`, 44 теста, репозитории в памяти и на SQLite |
+
+### Идемпотентность
+
+RabbitMQ гарантирует доставку хотя бы один раз. Сообщение приходит повторно, если consumer упал до подтверждения,
+если релей отправил событие и упал до отметки в outbox, если сообщение вернули из DLQ.
+
+Каждый получатель ведёт отметки в `processed_events` с ключом `(consumer, event_id)`. Отметка пишется в той же транзакции,
+что и результат: билет кухни, доставка или возврат денег. Повторная доставка видит отметку и подтверждается без действий.
+Две параллельные копии упираются в первичный ключ, вторая откатывается.
+
+Ключ включает получателя. В методичке ключом служит только `event_id`. Но одно событие `OrderPaid` обрабатывают и кухня, и доставка,
+а БД у них общая. С ключом из методички кухня записала бы отметку, и доставка пропустила бы событие.
+
+Вторая линия защиты в самих данных:
+- один билет кухни на заказ, `UNIQUE (order_id)`;
+- одна живая доставка на заказ, частичный уникальный индекс;
+- возврат денег только из статуса `paid` условием в `UPDATE`.
+
+Даже новое событие с другим `event_id` не создаст дубль.
+
+### DLQ и ретраи
+
+Рабочие очереди quorum, с `x-delivery-limit: 3`. RabbitMQ сам считает доставки и после четвёртой неудачной
+перекладывает сообщение в `sirius_dlx`. У классической очереди такого счётчика нет: сообщение, которое падает всегда, крутилось бы вечно.
+
+| Ошибка | Что делает consumer | Итог |
+|---|---|---|
+| Не JSON, нет поля, неверный тип | `reject(requeue=False)` | сразу в DLQ, `reason: rejected` |
+| Исключение, например БД недоступна | пауза 1, 2, 4 с, `nack(requeue=True)` | после 4 доставок в DLQ, `reason: delivery_limit` |
+| Событие уже обработано | `ack` | лог `duplicate, skipped` |
+
+```bash
+python -m app.cli events-dlq                         # что лежит в DLQ и почему
+python -m app.cli events-dlq-replay --queue kitchen  # вернуть в очередь кухни после починки
+```
+
+Replay возвращает сообщение в очередь одного получателя, а не в exchange: остальные получатели его уже обработали.
+Битые сообщения остаются в DLQ, повтор их не исправит.
+
+### Сага
+
+Хореография: координатора нет, каждый шаг реагирует на событие и публикует следующее.
+
+1. Заказы: `paid` и `OrderPaid`.
+2. Доставка ищет свободного курьера: роль courier, не заблокирован, без активной доставки.
+   `SELECT ... FOR UPDATE SKIP LOCKED` не даст двум одновременным заказам одного курьера.
+   Курьера нет: `DeliveryFailed`.
+3. Заказы: `paid` в `cancelled`, `total_cost` на баланс, `OrderCancelled`. Всё одной транзакцией.
+4. Кухня снимает заказ с очереди. Если отмена пришла раньше оплаты, кухня запоминает отмену, и опоздавший `OrderPaid` заказ не поставит.
+
+Каждый шаг пишет следующее событие в outbox, поэтому компенсация тоже не теряется при падении брокера.
+
+### Transactional Outbox
+
+Как в методичке, публикация в RabbitMQ прямо из `pay_order` даёт два плохих исхода.
+Брокер лежит: заказ оплачен, а кухня о нём не узнает. Или запрос падает с 500 после того, как деньги уже списаны.
+Публикация до COMMIT тоже плоха: при откате транзакции событие об оплате, которой нет, уже ушло.
+
+Здесь `pay_order` пишет статус и событие в одной транзакции. Релей читает неотправленные события по порядку,
+публикует их с подтверждением брокера и только потом ставит `published_at`. Падение между публикацией и отметкой
+даст повтор, а не потерю, повтор отсеет `processed_events`.
+
+```bash
+python -m app.cli outbox-status   # сколько событий ждёт отправки
+```
+
+### Как запустить
+
+```bash
+docker compose up -d db redis rabbitmq
+alembic upgrade head
+uvicorn app.main:app                          # терминал 1
+python -m app.workers.outbox_relay            # терминал 2
+python -m app.workers.kitchen_consumer        # терминал 3
+python -m delivery_service.worker             # терминал 4
+python -m app.workers.orders_consumer         # терминал 5
+python -m delivery_service                    # терминал 6, gRPC из лабораторной № 6, для /delivery
+```
+
+Тесты. Интеграционные пропускаются, если RabbitMQ не запущен:
+
+```bash
+pytest tests/test_events.py tests/test_events_rabbitmq.py -v
+```
+
+Повторить замеры:
+
+```bash
+PYTHONPATH=. python scripts/event_probe.py latency http://127.0.0.1:8000 notify
+python -m app.workers.outbox_relay --poll-only   # вместо обычного релея, затем
+PYTHONPATH=. python scripts/event_probe.py latency http://127.0.0.1:8000 poll
+PYTHONPATH=. python scripts/event_probe.py outage  http://127.0.0.1:8000 outage
+python scripts/plot_events.py
+```
+
+### Отличия от методички
+
+* **Transactional Outbox вместо публикации из сервиса.** `OrderService` не импортирует брокер и не ждёт его.
+* **Оплата подтверждает списание.** Деньги списываются при оформлении, как в прошлых работах. `pay` переводит заказ в `paid` и рождает событие.
+* **Ключ идемпотентности `(consumer, event_id)`**, отметка в одной транзакции с результатом. Причины выше.
+* **Quorum-очереди с лимитом доставок.** В методичке `message.process()` при любой ошибке сразу отклоняет сообщение:
+  секундный сбой БД отправил бы событие в DLQ без единого повтора. У очереди доставки DLQ там нет совсем.
+* **Топологию объявляет каждый процесс.** Отдельный `dlq_setup.py` не нужен, а релей не отправит событие в exchange без очередей.
+* **Доставка сама назначает курьера** по событию. Ручное `POST /delivery/assign` осталось, но вторую доставку на заказ не создаст.
+* **Кухня стала модулем** с очередью `kitchen_tickets` и эндпоинтом `GET /kitchen/tickets`.
+* **Consumer доставки в пакете микросервиса**, `delivery_service/worker.py`, а не в корне проекта.
+
+### Найдено при проверке
+
+* **Replay из DLQ крутил битые сообщения по кругу.** Битое сообщение возвращалось в DLQ и снова попадало в replay.
+  Теперь replay берёт только то, что лежало в DLQ на старте, и пропускает битые.
+* **После рестарта PostgreSQL первый запрос падал с 500.** В пуле оставались разорванные соединения.
+  Consumer доставки на этом потратил попытку. Включён `pool_pre_ping`.
+* **После рестарта RabbitMQ consumer'ы ждали 5 секунд.** Интервал переподключения aio-pika по умолчанию 5 с, поставлено 2 с.
+
+### Ответы на контрольные вопросы
+
+**1. Зачем событие, а не прямой вызов кухни и доставки по gRPC?**
+При прямом вызове заказы ждут обоих и падают вместе с любым из них. Новый получатель, например бонусы, требует правки `OrderService`.
+С событием заказы фиксируют факт и не знают, кто на него подписан. Кухня и доставка работают в своём темпе,
+лежащий получатель просто читает очередь позже. Цена: результат появляется не сразу, а через десятки миллисекунд.
+
+**2. Exchange и Queue.**
+Exchange принимает сообщения и раскладывает их по правилам, сам ничего не хранит. Queue хранит сообщения, пока их не заберёт consumer.
+Здесь один topic exchange `sirius_events` и по очереди на получателя. Привязки по ключу решают, кто что получает:
+кухне `order.paid` и `order.cancelled`, доставке `order.paid`, заказам `delivery.failed`.
+
+**3. Идемпотентность и как она сделана.**
+Повторная обработка даёт тот же результат, что и одна. Отметка `(consumer, event_id)` в `processed_events`
+пишется одной транзакцией с результатом. Ещё уникальные ключи в данных и условие на статус в `UPDATE` возврата денег.
+Показ: три копии одного события дают один билет кухни и одну доставку.
+
+**4. Почему At-Least-Once, а не Exactly-Once?**
+Подтверждение может потеряться в сети. Брокер не знает, обработал ли consumer сообщение до обрыва, и должен выбрать:
+доставить снова или рискнуть потерей. Exactly-once через сеть без общей транзакции с получателем недостижим.
+Поэтому брокер доставляет повторно, а получатель отсеивает дубли сам.
+
+**5. Что такое DLQ и зачем она нужна?**
+Очередь для сообщений, которые не удалось обработать. Без неё битое сообщение возвращается в очередь снова и снова,
+тратит ресурсы и мешает остальным. В DLQ оно ждёт разбора: причина видна в `x-death`, после исправления сообщение возвращается `events-dlq-replay`.
+
+**6. Consumer упал посреди обработки.**
+Сообщение не подтверждено, RabbitMQ вернёт его в очередь после разрыва соединения. Транзакция в БД не закоммичена и откатится.
+Повторная обработка пройдёт с нуля. Если упал после COMMIT, но до `ack`, повтор увидит отметку в `processed_events` и подтвердит без действий.
+
+**7. Событие и команда.**
+Команда просит сделать: «назначь курьера на заказ 42», у неё один адресат, и она может быть отклонена.
+Событие сообщает о свершившемся: «заказ 42 оплачен», в прошедшем времени, получателей сколько угодно, отменить его нельзя.
+Здесь `POST /delivery/assign` это команда, `OrderPaid`, `DeliveryFailed`, `OrderCancelled` это события.
+
+**8. Как сага решает проблему распределённых транзакций?**
+Одной транзакции на заказы, доставку и кухню нет: это разные сервисы. Сага разбивает процесс на локальные транзакции,
+каждая публикует событие для следующего шага. При провале шага выполняются компенсации: отмена заказа и возврат денег.
+Система приходит к согласованному состоянию не мгновенно, а через события, зато ни один сервис не держит блокировки другого.
 
 ## Лабораторная работа № 6: доставка в gRPC-микросервис
 

@@ -1,0 +1,10 @@
+# Релей во время остановки RabbitMQ: оплаты идут, события копятся в outbox
+14:19:18,682 relay paused (ChannelInvalidStateError: <aio_pika.channel.Channel object at 0x7f320440ee90> closed), 1 events wait in outbox, retry in 2 
+14:19:20,687 relay paused (AMQPConnectionError: Multiple exceptions: [Errno 111] Connect call failed ('::1', 5672, 0, 0), [Errno 111] Connect call fai
+...
+14:19:40,766 relay paused (AMQPConnectionError: Server connection reset: ConnectionResetError(104, 'Connection reset by peer')), 50 events wait in out
+14:19:42,797 connected to RabbitMQ, relaying outbox
+14:19:43,026 published 50 events, oldest waited 24358 ms
+14:19:43,756 published 1 events, oldest waited 54 ms
+14:19:43,792 published 2 events, oldest waited 50 ms
+# Дальше по 1-8 событий: компенсации саги для 39 заказов без курьера
