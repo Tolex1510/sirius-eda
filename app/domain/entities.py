@@ -98,6 +98,20 @@ class Delivery:
     status: str
 
 
+class KitchenTicketStatus:
+    QUEUED = "queued"
+    CANCELLED = "cancelled"
+
+
+@dataclass
+class KitchenTicket:
+    """Заказ в очереди кухни. Появляется по событию OrderPaid."""
+    id: int
+    order_id: int
+    status: str
+    created_at: datetime | None = None
+
+
 @dataclass
 class RefreshTokenRecord:
     id: int

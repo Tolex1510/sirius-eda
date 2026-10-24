@@ -18,7 +18,9 @@ def database_url() -> URL:
     return url
 
 
-engine = create_engine(database_url())
+# pre_ping проверяет соединение перед выдачей из пула. Без него после рестарта PostgreSQL
+# первый запрос на каждом старом соединении падает с 500, а consumer тратит попытку.
+engine = create_engine(database_url(), pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

@@ -23,3 +23,7 @@ class AccessDeniedError(DomainError):
 
 class BusinessRuleError(DomainError):
     pass
+
+
+class AlreadyProcessedError(DomainError):
+    """Событие уже обработано этим получателем: повторная доставка, действие не повторяется."""

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-FORBIDDEN = {"fastapi", "sqlalchemy", "starlette", "redis", "celery", "kombu", "grpc"}
+FORBIDDEN = {"fastapi", "sqlalchemy", "starlette", "redis", "celery", "kombu", "grpc", "aio_pika", "aiormq", "pika"}
 SERVICES = sorted(Path(__file__).parent.parent.joinpath("app", "modules").glob("*/service.py"))
 
 
@@ -20,7 +20,7 @@ def imported_packages(path: Path) -> set[str]:
 
 
 def test_all_modules_have_service():
-    assert {p.parent.name for p in SERVICES} == {"auth", "users", "menu", "orders", "delivery"}
+    assert {p.parent.name for p in SERVICES} == {"auth", "users", "menu", "orders", "delivery", "kitchen"}
 
 
 @pytest.mark.parametrize("path", SERVICES, ids=lambda p: p.parent.name)

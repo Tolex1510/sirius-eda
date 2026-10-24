@@ -7,7 +7,10 @@ from dataclasses import dataclass, field
 from datetime import date
 from itertools import count
 
-from app.domain.entities import Category, DailyOrderStats, Delivery, MenuItem, Order, RefreshTokenRecord, User
+from app.domain.entities import (
+    Category, DailyOrderStats, Delivery, KitchenTicket, MenuItem, Order, RefreshTokenRecord, User,
+)
+from app.domain.events import Event, Receipt
 
 
 @dataclass
@@ -21,6 +24,10 @@ class InMemoryStorage:
     refresh_tokens: dict[int, RefreshTokenRecord] = field(default_factory=dict)
     # (provider, subject) -> user_id
     external_accounts: dict[tuple[str, str], int] = field(default_factory=dict)
+    kitchen_tickets: dict[int, KitchenTicket] = field(default_factory=dict)
+    # Transactional Outbox и Inbox: события к отправке и отметки об обработанных.
+    outbox: list[Event] = field(default_factory=list)
+    receipts: set[Receipt] = field(default_factory=set)
     _ids: dict[str, count] = field(default_factory=dict)
 
     def next_id(self, table: str) -> int:

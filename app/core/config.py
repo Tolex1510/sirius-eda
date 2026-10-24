@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     # Сколько монолит ждёт ответа сервиса. Обычный вызов занимает миллисекунды.
     DELIVERY_GRPC_TIMEOUT: float = Field(default=2.0, gt=0)
 
+    # Брокер событий. Публикует в него только релей outbox, запрос оплаты брокера не ждёт.
+    RABBITMQ_URL: str = "amqp://sirius:sirius@localhost:5672/"
+
     ACCESS_TOKEN_TTL_MINUTES: int = 15
     REFRESH_TOKEN_TTL_DAYS: int = 7
     # Стоимость bcrypt. 12 для продакшена, в тестах понижается ради скорости.

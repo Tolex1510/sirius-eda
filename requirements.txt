@@ -16,3 +16,4 @@ flower>=2.0
 grpcio>=1.84
 protobuf>=7.35
 httpx>=0.27
+aio-pika>=9.5

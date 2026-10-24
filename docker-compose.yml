@@ -15,5 +15,19 @@ services:
     ports:
       - "${REDIS_PORT:-6379}:6379"
 
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    # Имя узла RabbitMQ берётся из hostname, по нему назван каталог с очередями.
+    # Постоянное имя сохраняет очереди и сообщения при пересоздании контейнера.
+    hostname: rabbitmq
+    # От root entrypoint создаёт .erlang.cookie, который потом не может прочитать сам RabbitMQ.
+    user: "999:999"
+    environment:
+      RABBITMQ_DEFAULT_USER: sirius
+      RABBITMQ_DEFAULT_PASS: sirius
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_UI_PORT:-15672}:15672"
+
 volumes:
   pg_data:

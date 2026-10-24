@@ -4,14 +4,19 @@
 from abc import ABC, abstractmethod
 from dataclasses import replace
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import short_transactions
-from app.domain.entities import Delivery, DeliveryStatus, Order, User
+from app.domain.entities import Delivery, DeliveryStatus, Order, Role, User
+from app.domain.events import DeliveryFailed, Receipt
+from app.domain.exceptions import AlreadyProcessedError
 from app.memory_storage import InMemoryStorage
 from app.models import Delivery as DeliveryModel
 from app.models import Order as OrderModel
+from app.models import Role as RoleModel
 from app.models import User as UserModel
+from app.outbox import add_receipt, add_to_outbox, commit_once, has_receipt
 
 
 class DeliveryRepository(ABC):
@@ -46,6 +51,24 @@ class DeliveryRepository(ABC):
     @abstractmethod
     def save_completion(self, delivery: Delivery, order: Order | None) -> None:
         """Сохраняет новые статусы доставки и заказа одной транзакцией."""
+
+    @abstractmethod
+    def get_by_order(self, order_id: int) -> Delivery | None:
+        """Неотменённая доставка заказа."""
+
+    @abstractmethod
+    def is_processed(self, receipt: Receipt) -> bool: ...
+
+    @abstractmethod
+    def assign_free_courier(self, order_id: int, receipt: Receipt) -> Delivery | None:
+        """
+        Находит свободного курьера, создаёт доставку и пишет отметку об обработке одной транзакцией.
+        None, если свободных курьеров нет: тогда не пишется ничего. Повтор отметки: AlreadyProcessedError.
+        """
+
+    @abstractmethod
+    def record_failure(self, event: DeliveryFailed, receipt: Receipt) -> None:
+        """Событие о провале в outbox и отметка об обработке одной транзакцией."""
 
 
 @short_transactions
@@ -104,6 +127,44 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
             order_row.status = order.status
         self.db.commit()
 
+    def get_by_order(self, order_id: int) -> Delivery | None:
+        row = self.db.query(DeliveryModel).filter(
+            DeliveryModel.order_id == order_id,
+            DeliveryModel.status != DeliveryStatus.CANCELLED,
+        ).first()
+        return row.to_entity() if row else None
+
+    def is_processed(self, receipt: Receipt) -> bool:
+        return has_receipt(self.db, receipt)
+
+    def assign_free_courier(self, order_id: int, receipt: Receipt) -> Delivery | None:
+        busy = select(DeliveryModel.courier_id).where(
+            DeliveryModel.status.in_(DeliveryStatus.ACTIVE),
+            DeliveryModel.courier_id.is_not(None),
+        )
+        # SKIP LOCKED: два заказа, оплаченные одновременно, не получат одного курьера,
+        # второй возьмёт следующего свободного.
+        courier = (
+            self.db.query(UserModel)
+            .join(RoleModel, RoleModel.id == UserModel.role_id)
+            .filter(RoleModel.name == Role.COURIER, UserModel.is_blocked.is_(False), UserModel.id.not_in(busy))
+            .order_by(UserModel.id)
+            .with_for_update(of=UserModel, skip_locked=True)
+            .first()
+        )
+        if not courier:
+            return None
+        delivery = DeliveryModel(order_id=order_id, courier_id=courier.id, status=DeliveryStatus.IN_PROGRESS)
+        self.db.add(delivery)
+        add_receipt(self.db, receipt)
+        commit_once(self.db)
+        return delivery.to_entity()
+
+    def record_failure(self, event: DeliveryFailed, receipt: Receipt) -> None:
+        add_to_outbox(self.db, event)
+        add_receipt(self.db, receipt)
+        commit_once(self.db)
+
 
 class InMemoryDeliveryRepository(DeliveryRepository):
     """Хранит данные в памяти процесса. Используется в тестах и без СУБД."""
@@ -156,3 +217,33 @@ class InMemoryDeliveryRepository(DeliveryRepository):
         self.storage.deliveries[delivery.id] = replace(delivery)
         if order:
             self.storage.orders[order.id] = replace(order)
+
+    def get_by_order(self, order_id: int) -> Delivery | None:
+        for delivery in self.storage.deliveries.values():
+            if delivery.order_id == order_id and delivery.status != DeliveryStatus.CANCELLED:
+                return replace(delivery)
+        return None
+
+    def is_processed(self, receipt: Receipt) -> bool:
+        return receipt in self.storage.receipts
+
+    def _receive(self, receipt: Receipt) -> None:
+        if receipt in self.storage.receipts:
+            raise AlreadyProcessedError("Событие уже обработано")
+        self.storage.receipts.add(receipt)
+
+    def assign_free_courier(self, order_id: int, receipt: Receipt) -> Delivery | None:
+        busy = {d.courier_id for d in self.storage.deliveries.values() if d.status in DeliveryStatus.ACTIVE}
+        free = sorted(
+            u.id for u in self.storage.users.values()
+            if u.role == Role.COURIER and not u.is_blocked and u.id not in busy
+        )
+        if not free:
+            return None
+        self._receive(receipt)
+        delivery_id = self.create(order_id, free[0], DeliveryStatus.IN_PROGRESS)
+        return replace(self.storage.deliveries[delivery_id])
+
+    def record_failure(self, event: DeliveryFailed, receipt: Receipt) -> None:
+        self._receive(receipt)
+        self.storage.outbox.append(event)

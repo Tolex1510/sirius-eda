@@ -5,7 +5,8 @@
 from datetime import date, timedelta
 
 from app.domain.entities import DailyOrderStats, Order, OrderStatus, Role, User
-from app.domain.exceptions import AccessDeniedError, BusinessRuleError, NotFoundError
+from app.domain.events import DeliveryFailed, OrderCancelled, OrderPaid, Receipt
+from app.domain.exceptions import AccessDeniedError, AlreadyProcessedError, BusinessRuleError, NotFoundError
 from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
 
@@ -60,6 +61,43 @@ class OrderService:
 
         order.status = OrderStatus.CANCELLED
         return order
+
+    def pay_order(self, order_id: int, actor: User) -> Order:
+        """
+        Подтверждает оплату: деньги списаны при оформлении, здесь заказ переходит в paid.
+        Кухня и доставка узнают об этом из события OrderPaid, сервис о них не знает.
+        """
+        order = self.repository.get_order(order_id)
+        if not order:
+            raise NotFoundError("Заказ не найден")
+
+        if order.user_id != actor.id and actor.role != Role.ADMIN:
+            raise AccessDeniedError("Нет доступа к чужому заказу")
+
+        event = OrderPaid(order_id=order.id, customer_id=order.user_id, amount=order.total_cost)
+        # Статус и событие сохраняются одной транзакцией: оплаченный заказ без события невозможен.
+        if order.status != OrderStatus.PROCESSING or not self.repository.mark_paid(order, event):
+            raise BusinessRuleError("Оплатить можно только заказ в обработке")
+
+        order.status = OrderStatus.PAID
+        return order
+
+    def compensate_failed_delivery(self, event: DeliveryFailed, receipt: Receipt) -> OrderCancelled | None:
+        """
+        Компенсирующий шаг саги: доставку создать не удалось, заказ отменяется, деньги возвращаются.
+        None, если отменять нечего: заказ уже отменён или не оплачен.
+        """
+        if self.repository.is_processed(receipt):
+            raise AlreadyProcessedError("Событие уже обработано")
+
+        order = self.repository.get_order(event.order_id)
+        if not order or order.status != OrderStatus.PAID:
+            return None
+
+        cancelled = OrderCancelled(
+            order_id=order.id, customer_id=order.user_id, refund=order.total_cost, reason=event.reason
+        )
+        return cancelled if self.repository.cancel_paid_and_refund(order, cancelled, receipt) else None
 
     def list_user_orders(self, actor: User) -> list[Order]:
         return self.repository.list_orders_by_user(actor.id)

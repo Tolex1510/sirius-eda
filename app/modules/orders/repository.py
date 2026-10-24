@@ -11,11 +11,14 @@ from sqlalchemy.orm import Session
 
 from app.database import short_transactions
 from app.domain.entities import DailyOrderStats, MenuItem, Order, OrderStatus, User
+from app.domain.events import OrderCancelled, OrderPaid, Receipt
+from app.domain.exceptions import AlreadyProcessedError
 from app.memory_storage import InMemoryStorage
 from app.models import MenuItem as MenuItemModel
 from app.models import Order as OrderModel
 from app.models import OrderStats as OrderStatsModel
 from app.models import User as UserModel
+from app.outbox import add_receipt, add_to_outbox, commit_once, has_receipt
 
 
 def day_bounds(day: date) -> tuple[datetime, datetime]:
@@ -53,6 +56,24 @@ class OrderRepository(ABC):
         """
         Переводит заказ из processing в cancelled и возвращает total_cost на баланс
         одной транзакцией. False, если заказ уже не в processing.
+        """
+
+    @abstractmethod
+    def mark_paid(self, order: Order, event: OrderPaid) -> bool:
+        """
+        Переводит заказ из processing в paid и кладёт событие в outbox одной транзакцией.
+        False, если заказ уже не в processing.
+        """
+
+    @abstractmethod
+    def is_processed(self, receipt: Receipt) -> bool: ...
+
+    @abstractmethod
+    def cancel_paid_and_refund(self, order: Order, event: OrderCancelled, receipt: Receipt) -> bool:
+        """
+        Компенсация саги одной транзакцией: paid в cancelled, возврат total_cost, событие в outbox
+        и отметка об обработке. False, если заказ уже не в paid: тогда пишется только отметка.
+        Повтор отметки: AlreadyProcessedError.
         """
 
     @abstractmethod
@@ -120,6 +141,37 @@ class SqlAlchemyOrderRepository(OrderRepository):
         self.db.commit()
         return True
 
+    def mark_paid(self, order: Order, event: OrderPaid) -> bool:
+        updated = (
+            self.db.query(OrderModel)
+            .filter(OrderModel.id == order.id, OrderModel.status == OrderStatus.PROCESSING)
+            .update({"status": OrderStatus.PAID})
+        )
+        if updated != 1:
+            self.db.rollback()
+            return False
+        add_to_outbox(self.db, event)
+        self.db.commit()
+        return True
+
+    def is_processed(self, receipt: Receipt) -> bool:
+        return has_receipt(self.db, receipt)
+
+    def cancel_paid_and_refund(self, order: Order, event: OrderCancelled, receipt: Receipt) -> bool:
+        updated = (
+            self.db.query(OrderModel)
+            .filter(OrderModel.id == order.id, OrderModel.status == OrderStatus.PAID)
+            .update({"status": OrderStatus.CANCELLED})
+        )
+        if updated == 1:
+            self.db.query(UserModel).filter(UserModel.id == order.user_id).update(
+                {"balance": UserModel.balance + order.total_cost}
+            )
+            add_to_outbox(self.db, event)
+        add_receipt(self.db, receipt)
+        commit_once(self.db)
+        return updated == 1
+
     def refresh_daily_stats(self, day: date) -> DailyOrderStats:
         start, end = day_bounds(day)
         orders, revenue = (
@@ -184,6 +236,29 @@ class InMemoryOrderRepository(OrderRepository):
             return False
         stored.status = OrderStatus.CANCELLED
         self.storage.users[order.user_id].balance += order.total_cost
+        return True
+
+    def mark_paid(self, order: Order, event: OrderPaid) -> bool:
+        stored = self.storage.orders[order.id]
+        if stored.status != OrderStatus.PROCESSING:
+            return False
+        stored.status = OrderStatus.PAID
+        self.storage.outbox.append(event)
+        return True
+
+    def is_processed(self, receipt: Receipt) -> bool:
+        return receipt in self.storage.receipts
+
+    def cancel_paid_and_refund(self, order: Order, event: OrderCancelled, receipt: Receipt) -> bool:
+        if receipt in self.storage.receipts:
+            raise AlreadyProcessedError("Событие уже обработано")
+        self.storage.receipts.add(receipt)
+        stored = self.storage.orders[order.id]
+        if stored.status != OrderStatus.PAID:
+            return False
+        stored.status = OrderStatus.CANCELLED
+        self.storage.users[order.user_id].balance += order.total_cost
+        self.storage.outbox.append(event)
         return True
 
     def refresh_daily_stats(self, day: date) -> DailyOrderStats:

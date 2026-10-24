@@ -3,7 +3,11 @@
 """
 from datetime import UTC, datetime
 
-from sqlalchemy import Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
+from sqlalchemy import (
+    JSON, BigInteger, Boolean, Column, Date, DateTime, Float, ForeignKey, Index, Integer, PrimaryKeyConstraint, String,
+    UniqueConstraint, func, text,
+)
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.domain import entities
@@ -134,6 +138,13 @@ class OrderStats(Base):
 
 class Delivery(Base):
     __tablename__ = "deliveries"
+    # Доставку создают и сервис по событию OrderPaid, и курьер вручную: второй живой доставки на заказ быть не должно.
+    __table_args__ = (
+        Index(
+            "uq_deliveries_order_id_active", "order_id", unique=True,
+            postgresql_where=text("status <> 'cancelled'"), sqlite_where=text("status <> 'cancelled'"),
+        ),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey("orders.id"))
@@ -175,3 +186,54 @@ class ExternalAccount(Base):
     subject = Column(String(255), nullable=False)
     email = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+class KitchenTicket(Base):
+    """Заказ в очереди кухни. Один на заказ: повторное событие OrderPaid не создаст второй."""
+    __tablename__ = "kitchen_tickets"
+
+    id = Column(Integer, primary_key=True)
+    order_id = Column(Integer, ForeignKey("orders.id", ondelete="CASCADE"), nullable=False, unique=True)
+    status = Column(String(20), nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC))
+    updated_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC))
+
+    def to_entity(self) -> entities.KitchenTicket:
+        return entities.KitchenTicket(id=self.id, order_id=self.order_id, status=self.status, created_at=self.created_at)
+
+
+class OutboxEvent(Base):
+    """
+    Transactional Outbox: событие пишется в одной транзакции с изменением данных.
+    В RabbitMQ его отправляет отдельный процесс, app/workers/outbox_relay.py.
+    """
+    __tablename__ = "outbox_events"
+    __table_args__ = (
+        # Релей ищет только неотправленные, а их единицы среди всей истории.
+        Index(
+            "ix_outbox_events_pending", "id",
+            postgresql_where=text("published_at IS NULL"), sqlite_where=text("published_at IS NULL"),
+        ),
+    )
+
+    id = Column(BigInteger().with_variant(Integer, "sqlite"), primary_key=True)
+    event_id = Column(String(36), nullable=False, unique=True)
+    routing_key = Column(String(100), nullable=False)
+    payload = Column(JSON().with_variant(JSONB(), "postgresql"), nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC))
+    published_at = Column(DateTime(timezone=True), nullable=True)
+    attempts = Column(Integer, nullable=False, default=0)
+    last_error = Column(String(500), nullable=True)
+
+
+class ProcessedEvent(Base):
+    """
+    Inbox: какие события получатель уже обработал. Ключ включает получателя:
+    одно событие OrderPaid обрабатывают и кухня, и доставка, а БД у них общая.
+    """
+    __tablename__ = "processed_events"
+    __table_args__ = (PrimaryKeyConstraint("consumer", "event_id"),)
+
+    consumer = Column(String(50), nullable=False)
+    event_id = Column(String(36), nullable=False)
+    processed_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC), index=True)

@@ -9,9 +9,13 @@
     python -m app.cli dlq-replay
     python -m app.cli track-delivery --delivery-id 1 --user-id 2
     python -m app.cli delivery-chat --delivery-id 1 --user-id 2
+    python -m app.cli outbox-status
+    python -m app.cli events-dlq
+    python -m app.cli events-dlq-replay --queue kitchen
 """
 import argparse
-from datetime import datetime
+import asyncio
+from datetime import UTC, datetime
 import getpass
 import secrets
 import sys
@@ -120,6 +124,32 @@ def delivery_chat(delivery_id: int, user_id: int) -> None:
         raise SystemExit(f"Ошибка: {e}")
 
 
+def outbox_status() -> None:
+    from app.outbox import OutboxStore
+
+    pending, oldest = OutboxStore().pending()
+    age = f", самое старое ждёт {(datetime.now(UTC) - oldest).total_seconds():.0f} с" if oldest else ""
+    print(f"Неотправленных событий: {pending}{age}")
+
+
+def events_dlq() -> None:
+    from app.workers.dead_letters import list_dead_letters
+
+    for queue, letters in asyncio.run(list_dead_letters()).items():
+        print(f"{queue}: {len(letters)}")
+        for letter in letters:
+            print(f"  {letter.event_type or '-'} {letter.message_id or '-'} {letter.reason}: {letter.body}")
+
+
+def events_dlq_replay(queue: str) -> None:
+    from app.core.rabbitmq import QUEUES
+    from app.workers.dead_letters import replay_dead_letters
+
+    spec = next(spec for spec in QUEUES if spec.name == queue)
+    replayed, kept = asyncio.run(replay_dead_letters(spec))
+    print(f"Возвращено в {queue}_queue: {replayed}, битых оставлено в DLQ: {kept}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -138,6 +168,11 @@ def main() -> None:
         command.add_argument("--delivery-id", type=int, required=True)
         command.add_argument("--user-id", type=int, required=True, help="от чьего имени")
 
+    commands.add_parser("outbox-status", help="сколько событий ждёт отправки в RabbitMQ")
+    commands.add_parser("events-dlq", help="сообщения в DLQ consumer'ов событий")
+    replay = commands.add_parser("events-dlq-replay", help="вернуть сообщения из DLQ в очередь получателя")
+    replay.add_argument("--queue", required=True, choices=("kitchen", "delivery", "orders"))
+
     args = parser.parse_args()
     if args.command == "create-user":
         create_user(args.email, args.role)
@@ -153,6 +188,12 @@ def main() -> None:
         track_delivery(args.delivery_id, args.user_id)
     elif args.command == "delivery-chat":
         delivery_chat(args.delivery_id, args.user_id)
+    elif args.command == "outbox-status":
+        outbox_status()
+    elif args.command == "events-dlq":
+        events_dlq()
+    elif args.command == "events-dlq-replay":
+        events_dlq_replay(args.queue)
 
 
 if __name__ == "__main__":

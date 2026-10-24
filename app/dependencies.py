@@ -21,6 +21,7 @@ from app.modules.delivery.repository import (
     SqlAlchemyDeliveryRepository,
 )
 from app.modules.delivery.service import DeliveryService
+from app.modules.kitchen.repository import InMemoryKitchenRepository, KitchenRepository, SqlAlchemyKitchenRepository
 from app.modules.menu.repository import (
     CachedMenuRepository,
     InMemoryMenuRepository,
@@ -106,6 +107,19 @@ async def get_delivery_gateway() -> AsyncIterator[DeliveryGateway]:
         return
     with _repository_scope(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository) as repository:
         yield LocalDeliveryGateway(DeliveryService(repository))
+
+
+def kitchen_repository_scope():
+    return _repository_scope(SqlAlchemyKitchenRepository, InMemoryKitchenRepository)
+
+
+def delivery_repository_scope():
+    return _repository_scope(SqlAlchemyDeliveryRepository, InMemoryDeliveryRepository)
+
+
+async def get_kitchen_repository() -> AsyncIterator[KitchenRepository]:
+    with kitchen_repository_scope() as repository:
+        yield repository
 
 
 async def get_auth_repository() -> AsyncIterator[AuthRepository]:
