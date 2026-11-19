@@ -1,0 +1,107 @@
+ kB)
+2026-11-19T13:10:00.4361880Z Using cached wcwidth-0.9.4-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (785 kB)
+2026-11-19T13:10:00.4372964Z Using cached websocket_client-1.9.2-py3-none-any.whl (95 kB)
+2026-11-19T13:10:00.4382658Z Using cached websockets-17.4-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (226 kB)
+2026-11-19T13:10:00.4395300Z Using cached werkzeug-3.1.9-py3-none-any.whl (228 kB)
+2026-11-19T13:10:00.4403806Z Using cached brotli-1.2.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.4 MB)
+2026-11-19T13:10:00.4416894Z Using cached humanize-4.17.0-py3-none-any.whl (133 kB)
+2026-11-19T13:10:00.4426508Z Using cached mako-1.4.3-py3-none-any.whl (80 kB)
+2026-11-19T13:10:00.4436022Z Using cached pytz-2026.6-py2.py3-none-any.whl (506 kB)
+2026-11-19T13:10:00.4446764Z Using cached tzlocal-5.4.5-py3-none-any.whl (18 kB)
+2026-11-19T13:10:00.4455939Z Using cached wsproto-1.3.2-py3-none-any.whl (24 kB)
+2026-11-19T13:10:00.4465335Z Using cached yarl-1.25.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (117 kB)
+2026-11-19T13:10:00.4474925Z Using cached multidict-7.2.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (516 kB)
+2026-11-19T13:10:00.4485613Z Using cached propcache-0.5.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (250 kB)
+2026-11-19T13:10:00.4495248Z Using cached zope_event-6.2-py3-none-any.whl (6.5 kB)
+2026-11-19T13:10:00.4505251Z Using cached zope_interface-8.7-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl (284 kB)
+2026-11-19T13:10:01.0813816Z Installing collected packages: sortedcontainers, pytz, brotli, zope.interface, zope.event, wrapt, websockets, websocket-client, wcwidth, vine, uvloop, urllib3, tzlocal, typing-extensions, tornado, structlog, six, setuptools, redis, pyzmq, pyyaml, python-multipart, python-dotenv, pyparsing, pyjwt, pygments, psycopg2-binary, psutil, protobuf, propcache, prometheus-client, pluggy, pillow, pamqp, packaging, opentelemetry-util-http, numpy, multidict, msgpack, markupsafe, lupa, kiwisolver, itsdangerous, iniconfig, idna, humanize, httptools, h11, greenlet, fonttools, dnspython, cycler, coverage, configargparse, click, charset_normalizer, certifi, blinker, billiard, bidict, bcrypt, asgiref, annotated-types, annotated-doc, yarl, wsproto, werkzeug, uvicorn, typing-inspection, sqlalchemy, sentry-sdk, requests, python-dateutil, pytest, pydantic-core, prompt_toolkit, pgvector, opentelemetry-proto, opentelemetry-api, Mako, jinja2, httpcore, grpcio, googleapis-common-protos, gevent, fakeredis, email-validator, contourpy, click-plugins, click-didyoumean, anyio, amqp, watchfiles, starlette, simple-websocket, pytest-cov, pydantic, opentelemetry-semantic-conventions, opentelemetry-exporter-otlp-proto-common, matplotlib, kombu, httpx, grpcio-tools, geventhttpclient, flask, click-repl, alembic, aiormq, python-engineio, pydantic-settings, prometheus-fastapi-instrumentator, opentelemetry-sdk, opentelemetry-instrumentation, flask-login, flask-cors, fastapi, celery, aio-pika, python-socketio, opentelemetry-instrumentation-sqlalchemy, opentelemetry-instrumentation-asgi, opentelemetry-exporter-otlp-common, flower, opentelemetry-instrumentation-fastapi, opentelemetry-exporter-otlp-proto-grpc, locust
+2026-11-19T13:10:20.2222419Z 
+2026-11-19T13:10:20.2299910Z Successfully installed Mako-1.4.3 aio-pika-10.2.3 aiormq-7.2.5 alembic-1.20.1 amqp-5.4.2 annotated-doc-0.0.7 annotated-types-0.8.0 anyio-4.16.0 asgiref-3.13.0 bcrypt-5.0.0 bidict-0.24.1 billiard-4.3.2 blinker-1.9.0 brotli-1.2.1 celery-5.7.0 certifi-2026.10.23 charset_normalizer-3.5.2 click-8.5.1 click-didyoumean-0.3.1 click-plugins-1.1.1.2 click-repl-0.4.1 configargparse-1.10.1 contourpy-1.4.0 coverage-7.17.3 cycler-0.12.1 dnspython-2.9.2 email-validator-2.4.0 fakeredis-2.40.0 fastapi-0.141.1 flask-3.1.3 flask-cors-6.0.5 flask-login-0.6.3 flower-2.2.0 fonttools-4.68.0 gevent-26.9.0 geventhttpclient-2.6.2 googleapis-common-protos-1.76.0 greenlet-3.5.6 grpcio-1.85.3 grpcio-tools-1.85.3 h11-0.16.0 httpcore-1.0.9 httptools-0.9.0 httpx-0.28.1 humanize-4.17.0 idna-3.20 iniconfig-2.3.1 itsdangerous-2.2.0 jinja2-3.1.6 kiwisolver-1.5.1 kombu-5.7.0 locust-2.47.0 lupa-2.8 markupsafe-3.0.4 matplotlib-3.11.2 msgpack-1.2.4 multidict-7.2.1 numpy-2.5.5 opentelemetry-api-1.45.2 opentelemetry-exporter-otlp-common-0.66b2 opentelemetry-exporter-otlp-proto-common-1.45.2 opentelemetry-exporter-otlp-proto-grpc-1.45.2 opentelemetry-instrumentation-0.66b2 opentelemetry-instrumentation-asgi-0.66b2 opentelemetry-instrumentation-fastapi-0.66b2 opentelemetry-instrumentation-sqlalchemy-0.66b2 opentelemetry-proto-1.45.2 opentelemetry-sdk-1.45.2 opentelemetry-semantic-conventions-0.66b2 opentelemetry-util-http-0.66b2 packaging-26.3 pamqp-5.0.0 pgvector-0.4.2 pillow-13.0.0 pluggy-1.7.0 prometheus-client-0.26.0 prometheus-fastapi-instrumentator-8.1.0 prompt_toolkit-3.0.53 propcache-0.5.4 protobuf-7.36.2 psutil-7.2.2 psycopg2-binary-2.9.13 pydantic-2.14.4 pydantic-core-2.50.5 pydantic-settings-2.16.3 pygments-2.21.0 pyjwt-2.15.1 pyparsing-3.3.3 pytest-9.2.0 pytest-cov-7.1.0 python-dateutil-2.9.0.post0 python-dotenv-1.2.4 python-engineio-4.15.1 python-multipart-0.0.34 python-socketio-5.18.1 pytz-2026.6 pyyaml-6.0.3 pyzmq-27.3.0 redis-8.1.0 requests-2.34.2 sentry-sdk-2.75.0 setuptools-84.2.1 simple-websocket-1.1.0 six-1.17.0 sortedcontainers-2.4.0 sqlalchemy-2.0.58 starlette-1.10.0 structlog-26.1.0 tornado-6.6.1 typing-extensions-4.16.0 typing-inspection-0.4.5 tzlocal-5.4.5 urllib3-2.8.0 uvicorn-0.54.0 uvloop-0.23.0 vine-5.1.0 watchfiles-1.3.0 wcwidth-0.9.4 websocket-client-1.9.2 websockets-17.4 werkzeug-3.1.9 wrapt-2.5.2 wsproto-1.3.2 yarl-1.25.1 zope.event-6.2 zope.interface-8.7
+2026-11-19T13:10:20.8918940Z ##[group]Run pytest -q --ignore=tests/integration --ignore=tests/contracts --cov=app --cov-report=xml
+2026-11-19T13:10:20.8919527Z [36;1mpytest -q --ignore=tests/integration --ignore=tests/contracts --cov=app --cov-report=xml[0m
+2026-11-19T13:10:20.8966025Z shell: /usr/bin/bash -e {0}
+2026-11-19T13:10:20.8966234Z env:
+2026-11-19T13:10:20.8966464Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-19T13:10:20.8966836Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+2026-11-19T13:10:20.8967175Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-19T13:10:20.8967478Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-19T13:10:20.8967775Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+2026-11-19T13:10:20.8968072Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+2026-11-19T13:10:20.8968331Z ##[endgroup]
+2026-11-19T13:10:27.9283648Z .............................................s.................F........ [ 19%]
+2026-11-19T13:10:29.2182715Z ............F........................................................... [ 39%]
+2026-11-19T13:10:30.1598001Z ..........ssssss........................................................ [ 58%]
+2026-11-19T13:10:32.0906313Z ................................................................s....... [ 78%]
+2026-11-19T13:10:34.2224234Z ........................................................................ [ 98%]
+2026-11-19T13:10:35.5096408Z .......                                                                  [100%]
+2026-11-19T13:10:35.5097256Z =================================== FAILURES ===================================
+2026-11-19T13:10:35.5098104Z _____________________________ test_ci_failure_demo _____________________________
+2026-11-19T13:10:35.5098634Z 
+2026-11-19T13:10:35.5098901Z     def test_ci_failure_demo():
+2026-11-19T13:10:35.5099323Z >       assert 1 == 2
+2026-11-19T13:10:35.5099693Z E       assert 1 == 2
+2026-11-19T13:10:35.5099964Z 
+2026-11-19T13:10:35.5100294Z tests/test_ci_failure_demo.py:2: AssertionError
+2026-11-19T13:10:35.5100898Z _____________________ test_generated_code_matches_contract _____________________
+2026-11-19T13:10:35.5101354Z 
+2026-11-19T13:10:35.5101794Z tmp_path = PosixPath('/tmp/pytest-of-runner/pytest-0/test_generated_code_matches_co0')
+2026-11-19T13:10:35.5102339Z 
+2026-11-19T13:10:35.5102623Z     def test_generated_code_matches_contract(tmp_path):
+2026-11-19T13:10:35.5103310Z         subprocess.run(["bash", str(ROOT / "scripts/gen_proto.sh"), str(tmp_path)], check=True,
+2026-11-19T13:10:35.5104260Z                        env={"PATH": str(Path(sys.executable).parent) + ":/usr/bin:/bin"})
+2026-11-19T13:10:35.5104805Z     
+2026-11-19T13:10:35.5105291Z         for name in ("delivery_pb2.py", "delivery_pb2_grpc.py", "delivery_pb2.pyi"):
+2026-11-19T13:10:35.5106590Z >           assert (tmp_path / name).read_text() == (ROOT / name).read_text(), f"{name} устарел: запустите scripts/gen_proto.sh"
+2026-11-19T13:10:35.5107575Z E           AssertionError: delivery_pb2_grpc.py устарел: запустите scripts/gen_proto.sh
+2026-11-19T13:10:35.5108317Z E           assert '# Generated ...ethod=True)\n' == '# Generated ...ethod=True)\n'
+2026-11-19T13:10:35.5108863Z E             
+2026-11-19T13:10:35.5109781Z E             Skipping 232 identical leading characters in diff, use -v to show
+2026-11-19T13:10:35.5110492Z E             Skipping 13777 identical trailing characters in diff, use -v to show
+2026-11-19T13:10:35.5111054Z E             - ION = '1.84.0'
+2026-11-19T13:10:35.5111455Z E             ?           ^ ^
+2026-11-19T13:10:35.5111838Z E             + ION = '1.85.3'
+2026-11-19T13:10:35.5112225Z E             ?           ^ ^
+2026-11-19T13:10:35.5112603Z E               GRPC_VE
+2026-11-19T13:10:35.5112888Z 
+2026-11-19T13:10:35.5113155Z tests/test_delivery_grpc.py:334: AssertionError
+2026-11-19T13:10:35.5113869Z =============================== warnings summary ===============================
+2026-11-19T13:10:35.5114870Z ../../../../../opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/fastapi/testclient.py:1
+2026-11-19T13:10:35.5116228Z   /opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+2026-11-19T13:10:35.5117497Z     from starlette.testclient import TestClient as TestClient  # noqa
+2026-11-19T13:10:35.5117946Z 
+2026-11-19T13:10:35.5118345Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-11-19T13:10:35.5118998Z ================================ tests coverage ================================
+2026-11-19T13:10:35.5119617Z _______________ coverage: platform linux, python 3.12.16-final-0 _______________
+2026-11-19T13:10:35.5120085Z 
+2026-11-19T13:10:35.5120338Z Coverage XML written to file coverage.xml
+2026-11-19T13:10:35.5120844Z =========================== short test summary info ============================
+2026-11-19T13:10:35.5121553Z FAILED tests/test_ci_failure_demo.py::test_ci_failure_demo - assert 1 == 2
+2026-11-19T13:10:35.5122740Z FAILED tests/test_delivery_grpc.py::test_generated_code_matches_contract - AssertionError: delivery_pb2_grpc.py устарел: запустите scripts/gen_proto.sh
+2026-11-19T13:10:35.5123899Z assert '# Generated ...ethod=True)\n' == '# Generated ...ethod=True)\n'
+2026-11-19T13:10:35.5124427Z   
+2026-11-19T13:10:35.5124869Z   Skipping 232 identical leading characters in diff, use -v to show
+2026-11-19T13:10:35.5125505Z   Skipping 13777 identical trailing characters in diff, use -v to show
+2026-11-19T13:10:35.5126042Z   - ION = '1.84.0'
+2026-11-19T13:10:35.5126392Z   ?           ^ ^
+2026-11-19T13:10:35.5126729Z   + ION = '1.85.3'
+2026-11-19T13:10:35.5127067Z   ?           ^ ^
+2026-11-19T13:10:35.5127400Z     GRPC_VE
+2026-11-19T13:10:35.5127793Z 2 failed, 357 passed, 8 skipped, 1 warning in 10.48s
+2026-11-19T13:10:36.1455245Z ##[error]Process completed with exit code 1.
+2026-11-19T13:10:36.1576227Z Post job cleanup.
+2026-11-19T13:10:36.2375314Z [command]/usr/bin/git version
+2026-11-19T13:10:36.2435146Z git version 2.56.1
+2026-11-19T13:10:36.2516540Z Temporarily overriding HOME='/home/runner/work/_temp/b8cd017e-a887-475f-9cbc-dbb233151c0c' before making global git config changes
+2026-11-19T13:10:36.2527346Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-19T13:10:36.2528420Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sirius-eda/sirius-eda
+2026-11-19T13:10:36.2595242Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-19T13:10:36.2654792Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-19T13:10:36.3075479Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-19T13:10:36.3140330Z http.https://github.com/.extraheader
+2026-11-19T13:10:36.3186311Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-19T13:10:36.3202657Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-19T13:10:36.3598805Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T13:10:36.3671902Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-19T13:10:36.4113122Z Cleaning up orphan processes
+2026-11-19T13:10:36.4436551Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

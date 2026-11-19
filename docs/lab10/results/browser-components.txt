@@ -1,0 +1,14 @@
+
+> sirius-food-web@0.1.0 test:e2e
+> playwright test components.spec.ts
+
+
+Running 3 tests using 1 worker
+
+(node:26) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/components.spec.ts:150:1 › components keep registration, checkout, orders, chat and courier operations connected (8.0s)
+  ✓  2 e2e/components.spec.ts:220:1 › menu error retry and checkout modal still work on a mobile screen (1.5s)
+  ✓  3 e2e/components.spec.ts:243:1 › name search and wish selection stay separate (1.2s)
+
+  3 passed (12.6s)

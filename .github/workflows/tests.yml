@@ -2,7 +2,12 @@ name: tests
 
 on:
   push:
+    branches: [main]
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   tests:
@@ -28,7 +33,7 @@ jobs:
           POSTGRES_DB: sirius_food
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U sirius"
+          --health-cmd "pg_isready -U sirius -d sirius_food"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
