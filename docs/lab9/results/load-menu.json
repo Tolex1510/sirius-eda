@@ -1,0 +1,20 @@
+{
+  "started_utc": "2026-11-18T08:13:28.043862+00:00",
+  "finished_utc": "2026-11-18T08:14:28.032569+00:00",
+  "endpoint": "http://localhost:8080/api/menu/items",
+  "target_rps": 20,
+  "workers": 20,
+  "requests": 1200,
+  "duration_seconds": 59.99,
+  "actual_rps": 20.0,
+  "statuses": {
+    "200": 1200
+  },
+  "latency_ms": {
+    "mean": 53.5,
+    "p50": 18.45,
+    "p95": 178.36,
+    "p99": 917.21,
+    "max": 1004.45
+  }
+}

@@ -55,3 +55,25 @@ def requeue_lost_order_tasks() -> int:
     if requeued:
         logger.warning("Requeued %s lost order tasks", requeued)
     return requeued
+
+
+@celery_app.task
+def reconcile_payments():
+    from app.modules.payments.dependencies import payment_service
+    from app.tasks.payments import sync_payment
+    pending = payment_service().repository.pending()
+    for payment in pending:
+        sync_payment.delay(payment.id)
+    return {"queued": len(pending)}
+
+
+@celery_app.task
+def index_assistant_knowledge():
+    from app.modules.assistant.router import assistant_service
+    from app.modules.assistant.contracts import ModelUnavailable
+    service = assistant_service()
+    try:
+        return {"indexed": service.repository.index(service.model)}
+    except ModelUnavailable:
+        logger.info("Assistant index postponed: Ollama is not available")
+        return {"postponed": True}

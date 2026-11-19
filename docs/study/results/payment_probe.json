@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-02T13:49:02.587120+00:00",
+  "host": "http://localhost:8080",
+  "provider": "demo",
+  "note": "Локальный HTTP/БД стенд. Это не замер производительности ЮKassa.",
+  "duplicates": {
+    "requests": 100,
+    "successful": 100,
+    "distinct_payment_ids": 1,
+    "median_ms": 1050.92,
+    "p95_ms": 1297.95,
+    "statuses": {
+      "200": 100
+    }
+  },
+  "independent": {
+    "requests": 100,
+    "successful": 100,
+    "distinct_payment_ids": 100,
+    "median_ms": 1762.31,
+    "p95_ms": 3072.56,
+    "statuses": {
+      "200": 100
+    }
+  }
+}

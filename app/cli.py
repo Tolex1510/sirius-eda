@@ -171,7 +171,7 @@ def main() -> None:
     commands.add_parser("outbox-status", help="сколько событий ждёт отправки в RabbitMQ")
     commands.add_parser("events-dlq", help="сообщения в DLQ consumer'ов событий")
     replay = commands.add_parser("events-dlq-replay", help="вернуть сообщения из DLQ в очередь получателя")
-    replay.add_argument("--queue", required=True, choices=("kitchen", "delivery", "orders"))
+    replay.add_argument("--queue", required=True, choices=("kitchen", "delivery", "orders", "payments"))
 
     args = parser.parse_args()
     if args.command == "create-user":

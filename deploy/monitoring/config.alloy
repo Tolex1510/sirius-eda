@@ -1,0 +1,39 @@
+logging {
+  level = "warn"
+}
+
+discovery.docker "sirius" {
+  host = "unix:///var/run/docker.sock"
+  refresh_interval = "5s"
+  filter {
+    name = "label"
+    values = ["com.docker.compose.project=" + sys.env("COMPOSE_PROJECT")]
+  }
+}
+
+discovery.relabel "logs" {
+  targets = discovery.docker.sirius.targets
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    regex = "api|webhook-proxy|kitchen|delivery|orders|payments|outbox"
+    action = "keep"
+  }
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label = "service"
+  }
+}
+
+loki.source.docker "sirius" {
+  host = "unix:///var/run/docker.sock"
+  targets = discovery.relabel.logs.output
+  labels = {app = "sirius-eda"}
+  relabel_rules = discovery.relabel.logs.rules
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

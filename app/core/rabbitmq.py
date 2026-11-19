@@ -12,7 +12,6 @@ from datetime import datetime
 import aio_pika
 from aio_pika import DeliveryMode, ExchangeType
 from aio_pika.abc import AbstractChannel, AbstractExchange, AbstractRobustConnection
-
 from app.core.config import settings
 from app.domain.events import DeliveryFailed, OrderCancelled, OrderPaid
 
@@ -32,7 +31,8 @@ class QueueSpec:
 KITCHEN = QueueSpec("kitchen", (OrderPaid.ROUTING_KEY, OrderCancelled.ROUTING_KEY))
 DELIVERY = QueueSpec("delivery", (OrderPaid.ROUTING_KEY,))
 ORDERS = QueueSpec("orders", (DeliveryFailed.ROUTING_KEY,))
-QUEUES = (KITCHEN, DELIVERY, ORDERS)
+PAYMENTS = QueueSpec("payments", (OrderCancelled.ROUTING_KEY,))
+QUEUES = (KITCHEN, DELIVERY, ORDERS, PAYMENTS)
 
 
 @dataclass(frozen=True)
@@ -91,7 +91,14 @@ async def connect(url: str | None = None) -> AbstractRobustConnection:
             await asyncio.sleep(CONNECT_RETRY_SECONDS)
 
 
-def event_message(event_id: str, routing_key: str, payload: dict, occurred_at: datetime) -> aio_pika.Message:
+def event_message(
+    event_id: str, routing_key: str, payload: dict, occurred_at: datetime,
+    trace_headers: dict[str, str] | None = None,
+) -> aio_pika.Message:
+    headers = dict(trace_headers or {})
+    correlation_id = payload.get("correlation_id")
+    if correlation_id:
+        headers["X-Correlation-ID"] = correlation_id
     return aio_pika.Message(
         body=json.dumps(payload, ensure_ascii=False).encode(),
         content_type="application/json",
@@ -100,4 +107,5 @@ def event_message(event_id: str, routing_key: str, payload: dict, occurred_at: d
         timestamp=occurred_at,
         # Сообщение пишется на диск и переживает рестарт брокера.
         delivery_mode=DeliveryMode.PERSISTENT,
+        headers=headers,
     )

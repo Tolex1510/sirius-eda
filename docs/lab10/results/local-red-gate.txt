@@ -1,0 +1,14 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________________________ test_deliberately_broken ___________________________
+
+    def test_deliberately_broken():
+>       assert 1 == 2
+E       assert 1 == 2
+
+/tmp/sirius-ci-red-86794tdb/test_deliberately_broken.py:2: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../../../tmp/sirius-ci-red-86794tdb/test_deliberately_broken.py::test_deliberately_broken
+1 failed in 0.04s
+
+pytest exit code: 1

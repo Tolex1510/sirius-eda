@@ -35,9 +35,6 @@ class DeliveryService:
         if courier.role != Role.COURIER:
             raise BusinessRuleError("Назначить можно только пользователя с ролью courier")
 
-        if self.repository.get_active_delivery_by_courier(courier_id):
-            raise BusinessRuleError("У курьера уже есть активная доставка")
-
         if self.repository.get_by_order(order_id):
             raise BusinessRuleError("У заказа уже есть доставка")
 
@@ -49,7 +46,7 @@ class DeliveryService:
 
     def dispatch(self, event: OrderPaid, receipt: Receipt) -> Delivery | DeliveryFailed | None:
         """
-        Реакция на оплату: назначает свободного курьера. Свободных нет: шаг саги, событие DeliveryFailed,
+        Реакция на оплату: назначает наименее загруженного курьера. Курьеров нет: шаг саги, событие DeliveryFailed,
         по которому модуль заказов отменит заказ и вернёт деньги.
         None, если доставка не нужна: заказ уже отменён или курьер назначен вручную.
         """
@@ -64,7 +61,9 @@ class DeliveryService:
         if delivery:
             return delivery
 
-        failed = DeliveryFailed(order_id=order.id, reason="Нет свободного курьера")
+        failed = DeliveryFailed(
+            order_id=order.id, reason="Нет свободного курьера", correlation_id=event.correlation_id,
+        )
         self.repository.record_failure(failed, receipt)
         return failed
 

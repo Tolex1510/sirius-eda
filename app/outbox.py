@@ -13,15 +13,23 @@ from app.database import SessionLocal
 from app.domain.events import Event, Receipt
 from app.domain.exceptions import AlreadyProcessedError
 from app.models import OutboxEvent, ProcessedEvent
+from app.core.observability import correlation_id_from_context, current_traceparent
 
 NOTIFY_CHANNEL = "outbox_events"
 
 
 def add_to_outbox(db: Session, event: Event) -> None:
+    payload = event.to_payload()
+    correlation_id = event.correlation_id or correlation_id_from_context()
+    traceparent = current_traceparent()
+    if correlation_id:
+        payload["correlation_id"] = correlation_id
+    if traceparent:
+        payload["traceparent"] = traceparent
     db.add(OutboxEvent(
         event_id=event.event_id,
         routing_key=event.ROUTING_KEY,
-        payload=event.to_payload(),
+        payload=payload,
         created_at=event.occurred_at,
         attempts=0,
     ))

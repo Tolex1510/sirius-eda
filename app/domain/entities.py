@@ -2,7 +2,7 @@
 Бизнес-сущности предметной области «Сириус.Еда» (круг 1 модели Мартина).
 Не зависят ни от ORM, ни от веб-фреймворка.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
 
 
@@ -54,6 +54,13 @@ class MenuItem:
     price: float
     is_available: bool
     category_id: int | None = None
+    image_url: str | None = None
+    description: str = ""
+    ingredients: list[str] = field(default_factory=list)
+    dietary_tags: list[str] = field(default_factory=list)
+    portion_value: int | None = None
+    portion_unit: str | None = None
+    is_archived: bool = False
 
 
 @dataclass
@@ -79,6 +86,8 @@ class Order:
     status: str
     total_cost: float = 0.0
     created_at: datetime | None = None
+    payment_source: str = "internal_balance"
+    correlation_id: str | None = None
 
 
 @dataclass

@@ -11,6 +11,7 @@ from typing import Any
 
 from redis import Redis, RedisError
 from redis.exceptions import LockError
+from app.core.observability import cache_operations
 
 logger = logging.getLogger(__name__)
 
@@ -45,9 +46,12 @@ class CacheAside:
         try:
             cached = self.redis.get(key)
             if cached is not None:
+                cache_operations.labels(result="hit").inc()
                 return json.loads(cached)
+            cache_operations.labels(result="miss").inc()
             return self._load_once(key, ttl, load)
         except RedisError:
+            cache_operations.labels(result="error").inc()
             logger.warning("Redis unavailable, reading %s from database", key, exc_info=True)
             return load()
 

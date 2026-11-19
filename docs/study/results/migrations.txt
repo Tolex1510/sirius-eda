@@ -1,0 +1,80 @@
+ Container sirius-practice-api-run-59c11b20319d Creating 
+ Container sirius-practice-api-run-59c11b20319d Created 
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001, initial schema
+INFO  [alembic.runtime.migration] Running upgrade 0001 -> 0002, add password_hash, roles, refresh_tokens
+INFO  [alembic.runtime.migration] Running upgrade 0002 -> 0003, add orders total_cost
+INFO  [alembic.runtime.migration] Running upgrade 0003 -> 0004, add external_accounts
+INFO  [alembic.runtime.migration] Running upgrade 0004 -> 0005, add menu categories
+INFO  [alembic.runtime.migration] Running upgrade 0005 -> 0006, add task_logs, order_stats and orders.created_at
+INFO  [alembic.runtime.migration] Running upgrade 0006 -> 0007, add outbox_events, processed_events, kitchen_tickets
+INFO  [alembic.runtime.migration] Running upgrade 0007 -> 0008, Decimal amounts, explicit payment source, persistent payment intentions.
+INFO  [alembic.runtime.migration] Running upgrade 0008 -> 0009, Public pgvector index and user-scoped conversation history.
+INFO  [alembic.runtime.migration] Running upgrade 0009 -> 0010, Flag exhausted provider checks for explicit operator review.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.schemas
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.tables
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.types
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.constraints
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.defaults
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.comments
+INFO  [alembic.ddl.postgresql] Detected sequence named 'menu_items_id_seq' as owned by integer column 'menu_items(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'refresh_tokens_id_seq' as owned by integer column 'refresh_tokens(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'users_id_seq' as owned by integer column 'users(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'external_accounts_id_seq' as owned by integer column 'external_accounts(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'deliveries_id_seq' as owned by integer column 'deliveries(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'outbox_events_id_seq' as owned by integer column 'outbox_events(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'roles_id_seq' as owned by integer column 'roles(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'categories_id_seq' as owned by integer column 'categories(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'task_logs_id_seq' as owned by integer column 'task_logs(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'orders_id_seq' as owned by integer column 'orders(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'kitchen_tickets_id_seq' as owned by integer column 'kitchen_tickets(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'chat_messages_id_seq' as owned by integer column 'chat_messages(id)', assuming SERIAL and omitting
+No new upgrade operations detected.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 0010 -> 0009, Flag exhausted provider checks for explicit operator review.
+INFO  [alembic.runtime.migration] Running downgrade 0009 -> 0008, Public pgvector index and user-scoped conversation history.
+INFO  [alembic.runtime.migration] Running downgrade 0008 -> 0007, Decimal amounts, explicit payment source, persistent payment intentions.
+INFO  [alembic.runtime.migration] Running downgrade 0007 -> 0006, add outbox_events, processed_events, kitchen_tickets
+INFO  [alembic.runtime.migration] Running downgrade 0006 -> 0005, add task_logs, order_stats and orders.created_at
+INFO  [alembic.runtime.migration] Running downgrade 0005 -> 0004, add menu categories
+INFO  [alembic.runtime.migration] Running downgrade 0004 -> 0003, add external_accounts
+INFO  [alembic.runtime.migration] Running downgrade 0003 -> 0002, add orders total_cost
+INFO  [alembic.runtime.migration] Running downgrade 0002 -> 0001, add password_hash, roles, refresh_tokens
+INFO  [alembic.runtime.migration] Running downgrade 0001 -> , initial schema
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001, initial schema
+INFO  [alembic.runtime.migration] Running upgrade 0001 -> 0002, add password_hash, roles, refresh_tokens
+INFO  [alembic.runtime.migration] Running upgrade 0002 -> 0003, add orders total_cost
+INFO  [alembic.runtime.migration] Running upgrade 0003 -> 0004, add external_accounts
+INFO  [alembic.runtime.migration] Running upgrade 0004 -> 0005, add menu categories
+INFO  [alembic.runtime.migration] Running upgrade 0005 -> 0006, add task_logs, order_stats and orders.created_at
+INFO  [alembic.runtime.migration] Running upgrade 0006 -> 0007, add outbox_events, processed_events, kitchen_tickets
+INFO  [alembic.runtime.migration] Running upgrade 0007 -> 0008, Decimal amounts, explicit payment source, persistent payment intentions.
+INFO  [alembic.runtime.migration] Running upgrade 0008 -> 0009, Public pgvector index and user-scoped conversation history.
+INFO  [alembic.runtime.migration] Running upgrade 0009 -> 0010, Flag exhausted provider checks for explicit operator review.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.schemas
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.tables
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.types
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.constraints
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.defaults
+INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.comments
+INFO  [alembic.ddl.postgresql] Detected sequence named 'users_id_seq' as owned by integer column 'users(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'kitchen_tickets_id_seq' as owned by integer column 'kitchen_tickets(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'deliveries_id_seq' as owned by integer column 'deliveries(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'task_logs_id_seq' as owned by integer column 'task_logs(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'roles_id_seq' as owned by integer column 'roles(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'orders_id_seq' as owned by integer column 'orders(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'categories_id_seq' as owned by integer column 'categories(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'external_accounts_id_seq' as owned by integer column 'external_accounts(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'outbox_events_id_seq' as owned by integer column 'outbox_events(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'chat_messages_id_seq' as owned by integer column 'chat_messages(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'menu_items_id_seq' as owned by integer column 'menu_items(id)', assuming SERIAL and omitting
+INFO  [alembic.ddl.postgresql] Detected sequence named 'refresh_tokens_id_seq' as owned by integer column 'refresh_tokens(id)', assuming SERIAL and omitting
+No new upgrade operations detected.

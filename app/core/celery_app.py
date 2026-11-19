@@ -15,7 +15,7 @@ celery_app = Celery(
     "sirius_food",
     broker=settings.REDIS_URL,
     backend=settings.REDIS_URL,
-    include=["app.tasks.orders", "app.tasks.maintenance"],
+    include=["app.tasks.orders", "app.tasks.maintenance", "app.tasks.payments"],
 )
 
 DEFAULT_QUEUE = Queue("default", Exchange("default"), routing_key="default")
@@ -53,6 +53,8 @@ celery_app.conf.update(
     worker_send_task_events=True,
     task_send_sent_event=True,
     beat_schedule={
+        "index-assistant": {"task": "app.tasks.maintenance.index_assistant_knowledge", "schedule": 300.0},
+        "reconcile-payments": {"task": "app.tasks.maintenance.reconcile_payments", "schedule": 15.0},
         "refresh-order-stats": {
             "task": "app.tasks.maintenance.refresh_order_stats",
             "schedule": 60.0,

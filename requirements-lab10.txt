@@ -1,0 +1,6 @@
+-r requirements-dev.txt
+pytest-cov>=6,<8
+testcontainers[postgres]>=4.14,<5
+pact-python>=3,<4
+mutmut>=3,<4
+psutil>=5.9

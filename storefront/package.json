@@ -1,0 +1,29 @@
+{
+  "name": "sirius-food-storefront",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1 --port 3001",
+    "build": "next build",
+    "start": "node scripts/start.mjs",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "node scripts/verify.mjs",
+    "test:isr": "node scripts/verify.mjs --isr-only",
+    "test:handoff": "node scripts/verify-handoff.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "lucide-react": "^0.468.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "~5.9.3",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4",
+    "@playwright/test": "^1.64.1"
+  }
+}

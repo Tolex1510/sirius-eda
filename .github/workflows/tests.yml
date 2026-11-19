@@ -13,15 +13,15 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements.txt -r requirements-dev.txt
-      # Тесты работают на in-memory репозиториях и fakeredis, сервисы не нужны.
-      - run: pytest -q
+      - run: pip install -r requirements.txt -r requirements-dev.txt pytest-cov
+      # Быстрые тесты не поднимают сервисы; PostgreSQL/Pact проверяются отдельной job.
+      - run: pytest -q --ignore=tests/integration --ignore=tests/contracts --cov=app --cov-report=xml
 
   migrations:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: pgvector/pgvector:pg16
         env:
           POSTGRES_USER: sirius
           POSTGRES_PASSWORD: sirius
@@ -47,3 +47,85 @@ jobs:
       - run: alembic check
       - run: alembic downgrade base
       - run: alembic upgrade head
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci --prefix frontend
+      - run: npm run build --prefix frontend
+
+  browser:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ci-only-secret-key-with-more-than-32-characters
+      DEMO_PASSWORD: ci-demo-password-only
+      OLLAMA_URL: http://127.0.0.1:1
+      PAYMENT_PROVIDER: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: cp .env.example .env
+      - run: npm ci --prefix frontend
+      - run: npx --prefix frontend playwright install --with-deps chromium
+      - run: docker compose -p sirius-ci up -d --build --wait --wait-timeout 240
+      - run: npm run test:e2e --prefix frontend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-results
+          path: frontend/test-results/
+      - run: docker compose -p sirius-ci logs --tail=100
+        if: failure()
+      - run: docker compose -p sirius-ci down
+        if: always()
+
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PACT_DO_NOT_TRACK: "true"
+      SENTRY_DSN: ""
+      OTEL_EXPORTER_OTLP_ENDPOINT: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt -r requirements-lab10.txt
+      - run: pytest tests/integration tests/contracts -v --junitxml=docs/lab10/results/ci-integration.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lab10-integration-and-pacts
+          path: |
+            docs/lab10/results/ci-integration.xml
+            docs/lab10/pacts/
+
+  mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt -r requirements-lab10.txt
+      - run: python scripts/lab10_mutation.py
+      - run: python scripts/lab10_mutation_gate.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lab10-mutation-before-after
+          path: docs/lab10/results/mutation-*

@@ -3,7 +3,7 @@
 
     python -m delivery_service
 """
-import logging
+import structlog
 import signal
 from collections.abc import Iterator
 from concurrent import futures
@@ -13,11 +13,12 @@ import grpc
 
 import delivery_pb2_grpc
 from app.core.config import settings
+from app.core.observability import configure_worker
 from app.database import SessionLocal
 from app.modules.delivery.repository import DeliveryRepository, SqlAlchemyDeliveryRepository
 from delivery_service.servicer import DeliveryServicer
 
-logger = logging.getLogger("delivery_service")
+logger = structlog.get_logger("delivery_service")
 
 # Стрим занимает поток на всё время подписки, поэтому потоков больше, чем ядер.
 MAX_WORKERS = 32
@@ -42,14 +43,14 @@ def build_server(servicer: DeliveryServicer, address: str) -> tuple[grpc.Server,
 
 
 def serve() -> None:
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
+    configure_worker("sirius-delivery-grpc")
     server, _ = build_server(DeliveryServicer(sql_repository), settings.DELIVERY_GRPC_BIND)
     server.start()
-    logger.info("Delivery gRPC server listening on %s", settings.DELIVERY_GRPC_BIND)
+    logger.info("delivery_grpc_started", address=settings.DELIVERY_GRPC_BIND)
     # SIGTERM от systemd или Docker: новые вызовы отклоняются, начатые получают время закончить.
     signal.signal(signal.SIGTERM, lambda *_: server.stop(SHUTDOWN_GRACE_SECONDS))
     try:
         server.wait_for_termination()
     except KeyboardInterrupt:
         server.stop(SHUTDOWN_GRACE_SECONDS).wait()
-    logger.info("Delivery gRPC server stopped")
+    logger.info("delivery_grpc_stopped")

@@ -45,7 +45,10 @@ class OrderRepository(ABC):
     def list_orders_by_status(self, statuses: tuple[str, ...]) -> list[Order]: ...
 
     @abstractmethod
-    def save_order(self, user_id: int, item_id: int, quantity: int, total_cost: float, new_balance: float) -> int:
+    def save_order(
+        self, user_id: int, item_id: int, quantity: int, total_cost: float, new_balance: float,
+        correlation_id: str | None = None,
+    ) -> int:
         """
         Сохраняет заказ и новый баланс пользователя одной транзакцией.
         Возвращает идентификатор созданного заказа.
@@ -110,7 +113,10 @@ class SqlAlchemyOrderRepository(OrderRepository):
         rows = self.db.query(OrderModel).filter(OrderModel.status.in_(statuses)).order_by(OrderModel.id)
         return [row.to_entity() for row in rows]
 
-    def save_order(self, user_id: int, item_id: int, quantity: int, total_cost: float, new_balance: float) -> int:
+    def save_order(
+        self, user_id: int, item_id: int, quantity: int, total_cost: float, new_balance: float,
+        correlation_id: str | None = None,
+    ) -> int:
         user = self.db.query(UserModel).filter(UserModel.id == user_id).one()
         user.balance = new_balance
         new_order = OrderModel(
@@ -119,6 +125,7 @@ class SqlAlchemyOrderRepository(OrderRepository):
             quantity=quantity,
             status=OrderStatus.PROCESSING,
             total_cost=total_cost,
+            correlation_id=correlation_id,
         )
         self.db.add(new_order)
         self.db.commit()
@@ -163,7 +170,10 @@ class SqlAlchemyOrderRepository(OrderRepository):
             .filter(OrderModel.id == order.id, OrderModel.status == OrderStatus.PAID)
             .update({"status": OrderStatus.CANCELLED})
         )
-        if updated == 1:
+        if updated == 1 and order.payment_source == "gateway":
+            # Возврат инициирует платёжный consumer по OrderCancelled.
+            add_to_outbox(self.db, event)
+        elif updated == 1:
             self.db.query(UserModel).filter(UserModel.id == order.user_id).update(
                 {"balance": UserModel.balance + order.total_cost}
             )
@@ -216,7 +226,10 @@ class InMemoryOrderRepository(OrderRepository):
     def list_orders_by_status(self, statuses: tuple[str, ...]) -> list[Order]:
         return [replace(o) for o in self.storage.orders.values() if o.status in statuses]
 
-    def save_order(self, user_id: int, item_id: int, quantity: int, total_cost: float, new_balance: float) -> int:
+    def save_order(
+        self, user_id: int, item_id: int, quantity: int, total_cost: float, new_balance: float,
+        correlation_id: str | None = None,
+    ) -> int:
         order_id = self.storage.next_id("orders")
         self.storage.orders[order_id] = Order(
             id=order_id,
@@ -226,6 +239,7 @@ class InMemoryOrderRepository(OrderRepository):
             status=OrderStatus.PROCESSING,
             total_cost=total_cost,
             created_at=datetime.now(UTC),
+            correlation_id=correlation_id,
         )
         self.storage.users[user_id].balance = new_balance
         return order_id
@@ -235,7 +249,8 @@ class InMemoryOrderRepository(OrderRepository):
         if stored.status != OrderStatus.PROCESSING:
             return False
         stored.status = OrderStatus.CANCELLED
-        self.storage.users[order.user_id].balance += order.total_cost
+        if order.payment_source == "internal_balance":
+            self.storage.users[order.user_id].balance += order.total_cost
         return True
 
     def mark_paid(self, order: Order, event: OrderPaid) -> bool:
@@ -257,7 +272,8 @@ class InMemoryOrderRepository(OrderRepository):
         if stored.status != OrderStatus.PAID:
             return False
         stored.status = OrderStatus.CANCELLED
-        self.storage.users[order.user_id].balance += order.total_cost
+        if order.payment_source == "internal_balance":
+            self.storage.users[order.user_id].balance += order.total_cost
         self.storage.outbox.append(event)
         return True
 

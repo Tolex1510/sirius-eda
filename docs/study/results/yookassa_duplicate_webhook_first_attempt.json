@@ -1,0 +1,14 @@
+{
+  "provider": "yookassa",
+  "test_mode": true,
+  "order_id": 106,
+  "notification_http_statuses": [
+    503,
+    200,
+    200
+  ],
+  "order_paid_events_before": 1,
+  "order_paid_events_after": 1,
+  "payment_status": "succeeded",
+  "note": "Notifications replayed through public HTTPS endpoint; each status verified with YooKassa API."
+}

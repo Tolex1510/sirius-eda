@@ -1,0 +1,5 @@
+FROM node:24-alpine
+WORKDIR /tunnel
+RUN npm install --omit=dev --no-audit --no-fund localtunnel@2.0.2
+COPY webhook-localtunnel.cjs ./
+CMD ["node", "webhook-localtunnel.cjs"]

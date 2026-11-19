@@ -1,0 +1,91 @@
+# app.domain.money.x_money__mutmut_5: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -2,7 +2,7 @@
+     try:
+         result = Decimal(str(value))
+         if not result.is_finite():
+-            raise ValueError("Сумма должна быть конечным числом")
++            raise ValueError(None)
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+         raise ValueError("Некорректная сумма")
+
+# app.domain.money.x_money__mutmut_6: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -2,7 +2,7 @@
+     try:
+         result = Decimal(str(value))
+         if not result.is_finite():
+-            raise ValueError("Сумма должна быть конечным числом")
++            raise ValueError("XXСумма должна быть конечным числомXX")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+         raise ValueError("Некорректная сумма")
+
+# app.domain.money.x_money__mutmut_7: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -2,7 +2,7 @@
+     try:
+         result = Decimal(str(value))
+         if not result.is_finite():
+-            raise ValueError("Сумма должна быть конечным числом")
++            raise ValueError("сумма должна быть конечным числом")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+         raise ValueError("Некорректная сумма")
+
+# app.domain.money.x_money__mutmut_8: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -2,7 +2,7 @@
+     try:
+         result = Decimal(str(value))
+         if not result.is_finite():
+-            raise ValueError("Сумма должна быть конечным числом")
++            raise ValueError("СУММА ДОЛЖНА БЫТЬ КОНЕЧНЫМ ЧИСЛОМ")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+         raise ValueError("Некорректная сумма")
+
+# app.domain.money.x_money__mutmut_15: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -5,4 +5,4 @@
+             raise ValueError("Сумма должна быть конечным числом")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+-        raise ValueError("Некорректная сумма")
++        raise ValueError(None)
+
+# app.domain.money.x_money__mutmut_16: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -5,4 +5,4 @@
+             raise ValueError("Сумма должна быть конечным числом")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+-        raise ValueError("Некорректная сумма")
++        raise ValueError("XXНекорректная суммаXX")
+
+# app.domain.money.x_money__mutmut_17: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -5,4 +5,4 @@
+             raise ValueError("Сумма должна быть конечным числом")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+-        raise ValueError("Некорректная сумма")
++        raise ValueError("некорректная сумма")
+
+# app.domain.money.x_money__mutmut_18: survived
+--- app/domain/money.py
++++ app/domain/money.py
+@@ -5,4 +5,4 @@
+             raise ValueError("Сумма должна быть конечным числом")
+         return result.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+     except (InvalidOperation, TypeError):
+-        raise ValueError("Некорректная сумма")
++        raise ValueError("НЕКОРРЕКТНАЯ СУММА")

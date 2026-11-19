@@ -5,3 +5,22 @@ __pycache__/
 .env
 # Расписание Celery Beat, создаётся при запуске
 celerybeat-schedule*
+# Web client
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+playwright-report/
+test-results/
+.local/
+# SSR storefront
+storefront/node_modules/
+storefront/.next/
+storefront/.env*
+!storefront/.env.example
+storefront/*.tsbuildinfo
+
+# Mutation tool scratch workspace
+mutants/
+.mutmut-cache
+htmlcov/
+.coverage*

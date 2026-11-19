@@ -1,9 +1,10 @@
 """
 Транспортный слой модуля меню (круг 4: Frameworks & Drivers).
 """
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.core.dependencies import require_role
+from app.core.rate_limit import rate_limit
 from app.dependencies import get_menu_repository
 from app.domain.entities import Role, User
 from app.domain.exceptions import DomainError
@@ -32,6 +33,14 @@ menu_editor = require_role(Role.ADMIN, Role.COOK)
 
 # response_model включает сериализацию через pydantic-core. Без него FastAPI
 # обходит 300 блюд в jsonable_encoder на чистом Python, и это дороже чтения из кеша.
+@router.get("/search", dependencies=[Depends(rate_limit(20, 60, scope="menu-semantic"))])
+def semantic_menu_search(q: str = Query(min_length=2, max_length=240)):
+    from app.modules.menu.semantic import search_menu
+    from fastapi.encoders import jsonable_encoder
+    result=search_menu(q)
+    return {"mode":result["mode"],"explanation":result.get("explanation", {"constraints": [], "ranking": "Поиск по меню"}),"items":[MenuItemResponse.model_validate(jsonable_encoder(item)).model_dump() for item in result["items"]]}
+
+
 @router.get("/items", response_model=list[MenuItemResponse])
 def list_menu_items(service: MenuService = Depends(get_menu_service)):
     return service.list_items()
@@ -40,6 +49,14 @@ def list_menu_items(service: MenuService = Depends(get_menu_service)):
 @router.get("/categories", response_model=list[CategoryResponse])
 def list_categories(service: MenuService = Depends(get_menu_service)):
     return service.list_categories()
+
+
+@router.get("/items/{item_id}", response_model=MenuItemResponse)
+def get_menu_item(item_id: int, service: MenuService = Depends(get_menu_service)):
+    try:
+        return service.get_item(item_id)
+    except DomainError as e:
+        raise to_http_exception(e)
 
 
 @router.get("/categories/{category_id}", response_model=CategoryMenuResponse)

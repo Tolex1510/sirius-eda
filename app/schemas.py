@@ -59,6 +59,13 @@ class MenuItemResponse(BaseModel):
     is_available: bool
     category_id: int | None
 
+    image_url: str | None = None
+    description: str = ""
+    ingredients: list[str] = Field(default_factory=list)
+    dietary_tags: list[str] = Field(default_factory=list)
+    portion_value: int | None = None
+    portion_unit: str | None = None
+
 
 class CategoryResponse(BaseModel):
     id: int

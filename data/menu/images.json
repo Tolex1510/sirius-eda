@@ -1,0 +1,341 @@
+{
+  "kind": "generated_menu_photography",
+  "images": [
+    {
+      "slug": "syrniki-berry",
+      "url": "/menu-images/syrniki-berry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 60744
+    },
+    {
+      "slug": "oatmeal-apple",
+      "url": "/menu-images/oatmeal-apple.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 57900
+    },
+    {
+      "slug": "omelette-spinach",
+      "url": "/menu-images/omelette-spinach.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 59332
+    },
+    {
+      "slug": "rice-porridge",
+      "url": "/menu-images/rice-porridge.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 39936
+    },
+    {
+      "slug": "shakshuka",
+      "url": "/menu-images/shakshuka.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 87820
+    },
+    {
+      "slug": "pancakes-chicken",
+      "url": "/menu-images/pancakes-chicken.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 54214
+    },
+    {
+      "slug": "borscht-beef",
+      "url": "/menu-images/borscht-beef.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 65930
+    },
+    {
+      "slug": "chicken-noodle",
+      "url": "/menu-images/chicken-noodle.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 80188
+    },
+    {
+      "slug": "pumpkin-cream",
+      "url": "/menu-images/pumpkin-cream.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 46116
+    },
+    {
+      "slug": "lentil-tomato",
+      "url": "/menu-images/lentil-tomato.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 54970
+    },
+    {
+      "slug": "fish-soup",
+      "url": "/menu-images/fish-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 52736
+    },
+    {
+      "slug": "mushroom-barley",
+      "url": "/menu-images/mushroom-barley.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 56100
+    },
+    {
+      "slug": "greek",
+      "url": "/menu-images/greek.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 71270
+    },
+    {
+      "slug": "caesar-chicken",
+      "url": "/menu-images/caesar-chicken.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 69978
+    },
+    {
+      "slug": "beet-feta",
+      "url": "/menu-images/beet-feta.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 76888
+    },
+    {
+      "slug": "cabbage-carrot",
+      "url": "/menu-images/cabbage-carrot.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 53830
+    },
+    {
+      "slug": "bulgur-vegetables",
+      "url": "/menu-images/bulgur-vegetables.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 73688
+    },
+    {
+      "slug": "tuna-beans",
+      "url": "/menu-images/tuna-beans.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 64360
+    },
+    {
+      "slug": "chicken-teriyaki",
+      "url": "/menu-images/chicken-teriyaki.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 78528
+    },
+    {
+      "slug": "turkey-cutlet",
+      "url": "/menu-images/turkey-cutlet.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 51208
+    },
+    {
+      "slug": "beef-stroganoff",
+      "url": "/menu-images/beef-stroganoff.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 60554
+    },
+    {
+      "slug": "pollock-baked",
+      "url": "/menu-images/pollock-baked.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 62102
+    },
+    {
+      "slug": "chickpea-curry",
+      "url": "/menu-images/chickpea-curry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 61406
+    },
+    {
+      "slug": "potato-zrazy",
+      "url": "/menu-images/potato-zrazy.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 53128
+    },
+    {
+      "slug": "pasta-chicken",
+      "url": "/menu-images/pasta-chicken.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 64350
+    },
+    {
+      "slug": "spaghetti-tomato",
+      "url": "/menu-images/spaghetti-tomato.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 65734
+    },
+    {
+      "slug": "pasta-mushroom",
+      "url": "/menu-images/pasta-mushroom.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 57548
+    },
+    {
+      "slug": "udon-beef",
+      "url": "/menu-images/udon-beef.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 83328
+    },
+    {
+      "slug": "soba-tofu",
+      "url": "/menu-images/soba-tofu.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 81440
+    },
+    {
+      "slug": "rice-chicken-wok",
+      "url": "/menu-images/rice-chicken-wok.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 66958
+    },
+    {
+      "slug": "sandwich-turkey",
+      "url": "/menu-images/sandwich-turkey.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 85306
+    },
+    {
+      "slug": "wrap-falafel",
+      "url": "/menu-images/wrap-falafel.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 65548
+    },
+    {
+      "slug": "chicken-wrap",
+      "url": "/menu-images/chicken-wrap.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 44742
+    },
+    {
+      "slug": "cheese-toast",
+      "url": "/menu-images/cheese-toast.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 52278
+    },
+    {
+      "slug": "cabbage-pie",
+      "url": "/menu-images/cabbage-pie.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 45128
+    },
+    {
+      "slug": "potato-pie",
+      "url": "/menu-images/potato-pie.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 54180
+    },
+    {
+      "slug": "cottage-casserole",
+      "url": "/menu-images/cottage-casserole.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 45750
+    },
+    {
+      "slug": "apple-charlotte",
+      "url": "/menu-images/apple-charlotte.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 52180
+    },
+    {
+      "slug": "brownie",
+      "url": "/menu-images/brownie.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 57008
+    },
+    {
+      "slug": "berry-yogurt",
+      "url": "/menu-images/berry-yogurt.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 63948
+    },
+    {
+      "slug": "carrot-cake",
+      "url": "/menu-images/carrot-cake.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 63866
+    },
+    {
+      "slug": "baked-apple",
+      "url": "/menu-images/baked-apple.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 58510
+    },
+    {
+      "slug": "cranberry-mors",
+      "url": "/menu-images/cranberry-mors.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 45772
+    },
+    {
+      "slug": "dried-fruit-compote",
+      "url": "/menu-images/dried-fruit-compote.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 35266
+    },
+    {
+      "slug": "black-tea",
+      "url": "/menu-images/black-tea.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 19528
+    },
+    {
+      "slug": "cappuccino",
+      "url": "/menu-images/cappuccino.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 27274
+    },
+    {
+      "slug": "americano",
+      "url": "/menu-images/americano.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 33992
+    },
+    {
+      "slug": "sea-buckthorn-tea",
+      "url": "/menu-images/sea-buckthorn-tea.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 29782
+    }
+  ]
+}

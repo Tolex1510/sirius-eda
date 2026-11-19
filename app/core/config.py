@@ -37,6 +37,20 @@ class Settings(BaseSettings):
     # Брокер событий. Публикует в него только релей outbox, запрос оплаты брокера не ждёт.
     RABBITMQ_URL: str = "amqp://sirius:sirius@localhost:5672/"
 
+    PUBLIC_URL: str = "http://localhost:8080"
+    PAYMENT_PROVIDER: Literal["demo", "yookassa"] = "demo"
+    YOOKASSA_SHOP_ID: str = ""
+    YOOKASSA_SECRET_KEY: str = ""
+    OLLAMA_URL: str = "http://localhost:11434"
+    OLLAMA_HOST_HEADER: str = ""
+    OLLAMA_MODEL: str = "qwen2.5:3b-instruct-q5_K_M"
+    OLLAMA_EMBED_MODEL: str = "bge-m3:latest"
+    AI_TIMEOUT: float = Field(default=90, gt=0, le=180)
+
+    # Observability: Jaeger/Sentry подключаются опционально и не блокируют локальную разработку.
+    OTEL_EXPORTER_OTLP_ENDPOINT: str = ""
+    SENTRY_DSN: str = ""
+
     ACCESS_TOKEN_TTL_MINUTES: int = 15
     REFRESH_TOKEN_TTL_DAYS: int = 7
     # Стоимость bcrypt. 12 для продакшена, в тестах понижается ради скорости.

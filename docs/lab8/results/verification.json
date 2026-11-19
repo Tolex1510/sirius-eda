@@ -1,0 +1,74 @@
+{
+  "checked_at": "2026-11-10T11:05:37.837Z",
+  "mode": "Next.js production; real FastAPI with isolated in-memory repositories",
+  "checks": {
+    "ssr_html": true,
+    "dish_html_and_seo": true,
+    "missing_page_http": 404,
+    "csr_html_has_no_dishes": true,
+    "api_stopped_error": true,
+    "retry_after_api_restart": true,
+    "loading_visible": true,
+    "browser_no_errors": true,
+    "isr_immediate_old_price": true,
+    "isr_price_refreshed_after_ttl": true,
+    "spa_handoff_opens_selected_dish": true
+  },
+  "measurements": [
+    {
+      "path": "/menu",
+      "run": 1,
+      "dish_ms": 364.0999999977648,
+      "ttfb_ms": 6.300000000745058,
+      "fcp_ms": 464,
+      "browser_api_requests": 0
+    },
+    {
+      "path": "/menu",
+      "run": 2,
+      "dish_ms": 318.5,
+      "ttfb_ms": 7.900000002235174,
+      "fcp_ms": 384,
+      "browser_api_requests": 0
+    },
+    {
+      "path": "/menu",
+      "run": 3,
+      "dish_ms": 300.0999999977648,
+      "ttfb_ms": 10.5,
+      "fcp_ms": 348,
+      "browser_api_requests": 0
+    },
+    {
+      "path": "/menu-csr",
+      "run": 1,
+      "dish_ms": 1269.8999999985099,
+      "ttfb_ms": 6.699999999254942,
+      "fcp_ms": 336,
+      "browser_api_requests": 1
+    },
+    {
+      "path": "/menu-csr",
+      "run": 2,
+      "dish_ms": 1310.800000000745,
+      "ttfb_ms": 9.399999998509884,
+      "fcp_ms": 348,
+      "browser_api_requests": 1
+    },
+    {
+      "path": "/menu-csr",
+      "run": 3,
+      "dish_ms": 1264.6000000014901,
+      "ttfb_ms": 9.300000000745058,
+      "fcp_ms": 320,
+      "browser_api_requests": 1
+    }
+  ],
+  "conditions": {
+    "browser": "148.0.7778.96",
+    "network": "CDP, cache disabled; latency 80 ms; download 200000 B/s; upload 100000 B/s",
+    "api": "loopback, FastAPI memory repositories, 12 dishes",
+    "ssr": "Next ISR warm cache, 60-second revalidation",
+    "note": "FCP measures any first content; dish_ms measures DOM readiness of the first visible dish, not its exact paint. Local comparison, not a production SLA."
+  }
+}

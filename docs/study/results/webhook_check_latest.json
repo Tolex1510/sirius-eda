@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-11-03T09:41:11.624858+00:00",
+  "url": "https://bf4eed93c27bf5.lhr.life/api/payments/webhook",
+  "provider_origin_confirmed": true,
+  "latest_orders": [
+    109,
+    108,
+    106
+  ],
+  "note": "New provider notifications observed after dashboard URL update; free SSH URL remains temporary.",
+  "health": 200,
+  "webhook_invalid_payload": 422,
+  "provider_origin_evidence": "Two new AHC/2.1 requests correlated with new YooKassa order 109, both HTTP 200. No manual webhook replay in this check; request bodies are not logged, so individual event types cannot be established from access logs.",
+  "recent_proxy_notification_requests": [
+    "webhook-proxy-1  | 172.26.0.16 - - [03/Nov/2026:09:40:40 +0000] \"POST /api/payments/webhook HTTP/1.1\" 200 17 \"-\" \"AHC/2.1\" \"-\"",
+    "webhook-proxy-1  | 172.26.0.16 - - [03/Nov/2026:09:40:43 +0000] \"POST /api/payments/webhook HTTP/1.1\" 200 17 \"-\" \"AHC/2.1\" \"-\""
+  ],
+  "order_109": {
+    "payment": "succeeded",
+    "order": "cancelled",
+    "refund": "succeeded"
+  }
+}

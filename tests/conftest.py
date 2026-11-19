@@ -1,5 +1,9 @@
 import os
 
+# Tests never send telemetry to the developer account from .env.
+os.environ["SENTRY_DSN"] = ""
+os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"] = ""
+
 # Тесты не требуют ни PostgreSQL, ни Redis, ни файла .env.
 os.environ.setdefault("REPOSITORY_BACKEND", "memory")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-that-is-long-enough-for-hs256")

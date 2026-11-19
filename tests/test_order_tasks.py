@@ -252,3 +252,13 @@ def test_dead_letter_queue_is_not_consumed_by_workers():
     assert [queue.name for queue in celery_app.conf.task_queues] == ["default"]
     assert celery_app.conf.task_acks_late is True
     assert celery_app.conf.accept_content == ["json"]
+
+
+def test_unpaid_external_order_does_not_generate_receipt_or_recovery_tasks(db, provider_calls):
+    order_id = make_order(db, created_at=datetime.now(UTC) - timedelta(minutes=5))
+    db.query(Order).filter(Order.id == order_id).update({'payment_source': 'gateway'})
+    db.commit()
+    result = orders.generate_order_pdf.apply(args=[order_id]).get()
+    assert 'skipped' in result
+    assert provider_calls == []
+    assert TaskJournal(db).orders_without('receipt_pdf', datetime.now(UTC) - timedelta(hours=1), datetime.now(UTC)) == []

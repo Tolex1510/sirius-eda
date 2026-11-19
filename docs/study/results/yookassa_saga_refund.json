@@ -1,0 +1,23 @@
+{
+  "provider": "yookassa",
+  "test_mode": true,
+  "order_id": 108,
+  "amount": "290.00",
+  "order_status": "cancelled",
+  "payment_status_verified": "succeeded",
+  "refund_status_verified": "succeeded",
+  "same_refund_id": true,
+  "events": [
+    "order.paid",
+    "delivery.failed",
+    "order.cancelled"
+  ],
+  "consumers": [
+    "kitchen",
+    "delivery",
+    "orders",
+    "kitchen",
+    "payments"
+  ],
+  "verification": "Read-only GET of the existing test payment and refund; no new cancellation or refund initiated."
+}

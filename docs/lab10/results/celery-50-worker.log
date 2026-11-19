@@ -1,0 +1,500 @@
+ 
+ -------------- celery@archlinux v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Linux-7.2.14-arch1-1-x86_64-with-glibc2.44 2026-11-19 15:50:14
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         sirius_food:0x7f2f5b9f06e0
+- ** ---------- .> transport:   redis://localhost:32774/0
+- ** ---------- .> results:     redis://localhost:32774/0
+- *** --- * --- .> concurrency: 16 (thread)
+-- ******* ---- .> task events: ON
+--- ***** ----- 
+ -------------- [queues]
+                .> default          exchange=default(direct) key=default
+                
+
+{"event": "Connected to redis://localhost:32774/0", "logger": "celery.worker.consumer.connection", "level": "info", "timestamp": "2026-11-19T12:50:14.960350Z"}
+{"event": "celery@archlinux ready.", "logger": "celery.apps.worker", "level": "info", "timestamp": "2026-11-19T12:50:15.008261Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2b2d4791-d5b5-4500-a0e2-ffd0f78e49cf] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:17.867396Z"}
+{"event": "Task app.tasks.orders.send_order_email[18fe2ea4-3d4f-495b-b640-3547a8dff078] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:17.940305Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c4911497-63d5-4aa9-b307-b2574d9c3e77] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:17.961375Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[4268adcb-6110-4288-997c-3c1933ad90f2] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.029541Z"}
+{"event": "Task app.tasks.orders.send_order_email[554356c6-6be9-407e-a43d-2af676aed544] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.125665Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[947bbf50-133f-4dce-bc19-f9b6e6e6b626] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.187649Z"}
+{"event": "Task app.tasks.orders.send_order_email[3338c1f9-b46d-4ea3-a2d7-004ec4bab52d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.218662Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[04adbbe0-6087-4943-9c1b-c97023abc008] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.280066Z"}
+{"event": "Task app.tasks.orders.send_order_email[7d0f3cf5-8327-4d2b-bfe9-b148037256da] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.309473Z"}
+{"event": "Task app.tasks.orders.send_order_email[be87cbd6-1adf-42c7-97a4-2aab7e63b064] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.453577Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[829018ee-ec09-4262-b458-532b08a514df] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.517098Z"}
+{"event": "Task app.tasks.orders.send_order_email[43b019e1-7e57-46fd-90d6-aea39a2e6ce1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.560841Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9eb60efd-fb3d-458b-8ce4-0b0adece45df] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.633964Z"}
+{"event": "Task app.tasks.orders.send_order_email[c09330ed-15c3-4890-be1a-d6ef5a9e79a5] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.649843Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[20e965c3-06bf-44b5-8bed-26bde07e5671] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.714654Z"}
+{"event": "Task app.tasks.orders.send_order_email[e0de42dc-6e27-4cc5-83ff-caf04a18fce8] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:18.738828Z"}
+{"event": "Order 438 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.309628Z"}
+{"event": "Order 437 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.347196Z"}
+{"event": "Order 440 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.357893Z"}
+{"event": "Order 441 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.369600Z"}
+{"event": "Order 439 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.471678Z"}
+{"event": "Task app.tasks.orders.send_order_email[18fe2ea4-3d4f-495b-b640-3547a8dff078] succeeded in 1.547686818998045s: 'email for order 438: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.494010Z"}
+{"event": "Task app.tasks.orders.send_order_email[554356c6-6be9-407e-a43d-2af676aed544] succeeded in 1.3618510619999142s: 'email for order 437: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.496968Z"}
+{"event": "Task app.tasks.orders.send_order_email[7d0f3cf5-8327-4d2b-bfe9-b148037256da] succeeded in 1.2316905970001244s: 'email for order 441: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.548372Z"}
+{"event": "Task app.tasks.orders.send_order_email[3338c1f9-b46d-4ea3-a2d7-004ec4bab52d] succeeded in 1.3308535149990348s: 'email for order 440: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.550446Z"}
+{"event": "Task app.tasks.orders.send_order_email[be87cbd6-1adf-42c7-97a4-2aab7e63b064] succeeded in 1.1227804730006028s: 'email for order 439: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.577400Z"}
+{"event": "Order 443 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.585530Z"}
+{"event": "Task app.tasks.orders.send_order_email[43b019e1-7e57-46fd-90d6-aea39a2e6ce1] succeeded in 1.0970960070008005s: 'email for order 443: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.658926Z"}
+{"event": "Order 442 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.690583Z"}
+{"event": "Order 446 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:19.754340Z"}
+{"event": "Task app.tasks.orders.send_order_email[c09330ed-15c3-4890-be1a-d6ef5a9e79a5] succeeded in 1.1133197759991162s: 'email for order 442: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.764192Z"}
+{"event": "Task app.tasks.orders.send_order_email[e0de42dc-6e27-4cc5-83ff-caf04a18fce8] succeeded in 1.0559968610032229s: 'email for order 446: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:19.795827Z"}
+{"event": "Receipt PDF rendered for order 440", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.300351Z"}
+{"event": "Receipt PDF rendered for order 437", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.317878Z"}
+{"event": "Receipt PDF rendered for order 438", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.320727Z"}
+{"event": "Receipt PDF rendered for order 441", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.357009Z"}
+{"event": "Receipt PDF rendered for order 439", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.458951Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[4268adcb-6110-4288-997c-3c1933ad90f2] succeeded in 2.4398493740009144s: 'receipt_pdf for order 440: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.471277Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2b2d4791-d5b5-4500-a0e2-ffd0f78e49cf] succeeded in 2.639052255999559s: 'receipt_pdf for order 438: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.508506Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c4911497-63d5-4aa9-b307-b2574d9c3e77] succeeded in 2.560255088003032s: 'receipt_pdf for order 437: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.522710Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[947bbf50-133f-4dce-bc19-f9b6e6e6b626] succeeded in 2.3319828389976465s: 'receipt_pdf for order 441: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.529549Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[04adbbe0-6087-4943-9c1b-c97023abc008] succeeded in 2.2711158829988563s: 'receipt_pdf for order 439: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.561655Z"}
+{"event": "Receipt PDF rendered for order 443", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.570973Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[829018ee-ec09-4262-b458-532b08a514df] succeeded in 2.153024507999362s: 'receipt_pdf for order 443: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.671214Z"}
+{"event": "Receipt PDF rendered for order 442", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.690878Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9eb60efd-fb3d-458b-8ce4-0b0adece45df] succeeded in 2.098239368002396s: 'receipt_pdf for order 442: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.733006Z"}
+{"event": "Receipt PDF rendered for order 446", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:20.737259Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[20e965c3-06bf-44b5-8bed-26bde07e5671] succeeded in 2.066984876000788s: 'receipt_pdf for order 446: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:20.782421Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[5fde4126-2533-4e17-856d-612690904559] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.042420Z"}
+{"event": "Task app.tasks.orders.send_order_email[e8b398bb-633a-48c8-8e33-7bb58f922cdb] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.046603Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[f62dd546-5779-4997-b6f1-15e243c651b7] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.053156Z"}
+{"event": "Task app.tasks.orders.send_order_email[c332750f-f8f8-431b-9885-d5fe7353fb99] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.063394Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9beee250-8496-48ef-8dfc-cceed52dcaf3] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.073322Z"}
+{"event": "Task app.tasks.orders.send_order_email[2bc7a912-9bba-4045-99df-ae79f8611114] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.084175Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0c81fa73-3c49-4f78-8faf-01a1173b26a6] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.089725Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9f924b80-ba2c-4c32-b840-071236bede2d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.101810Z"}
+{"event": "Task app.tasks.orders.send_order_email[f312c0b0-e0e5-45e9-8602-b5b11fec02d0] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.111785Z"}
+{"event": "Task app.tasks.orders.send_order_email[29069150-c62e-422a-abf7-d891d4a1e933] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.123894Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[f9607f9e-63d1-4c3e-83e8-fa752a621759] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.132540Z"}
+{"event": "Task app.tasks.orders.send_order_email[3575582b-91fc-4b8b-9606-f57fa3b79ed2] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.143545Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9cc8b106-3691-4b97-961a-04beee755d2a] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.149428Z"}
+{"event": "Task app.tasks.orders.send_order_email[522bb9c0-a6ba-4fe6-862c-88221d7456e3] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.156239Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[7297dc15-2f32-4eac-9e6a-1729036cfc6e] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.164840Z"}
+{"event": "Task app.tasks.orders.send_order_email[2d355888-8119-4146-a319-7fa0a4b668d9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:21.177926Z"}
+{"event": "Order 444 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.081360Z"}
+{"event": "Order 445 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.086124Z"}
+{"event": "Task app.tasks.orders.send_order_email[e8b398bb-633a-48c8-8e33-7bb58f922cdb] succeeded in 1.0387600230023963s: 'email for order 444: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.087851Z"}
+{"event": "Task app.tasks.orders.send_order_email[c332750f-f8f8-431b-9885-d5fe7353fb99] succeeded in 1.0244816490012454s: 'email for order 445: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.092458Z"}
+{"event": "Order 449 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.121854Z"}
+{"event": "Task app.tasks.orders.send_order_email[2bc7a912-9bba-4045-99df-ae79f8611114] succeeded in 1.0401890719986113s: 'email for order 449: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.126400Z"}
+{"event": "Order 447 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.136785Z"}
+{"event": "Task app.tasks.orders.send_order_email[f312c0b0-e0e5-45e9-8602-b5b11fec02d0] succeeded in 1.0292195010006253s: 'email for order 447: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.144470Z"}
+{"event": "Order 451 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.147286Z"}
+{"event": "Task app.tasks.orders.send_order_email[29069150-c62e-422a-abf7-d891d4a1e933] succeeded in 1.025664337001217s: 'email for order 451: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.152324Z"}
+{"event": "Order 448 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.183233Z"}
+{"event": "Order 452 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.185136Z"}
+{"event": "Task app.tasks.orders.send_order_email[3575582b-91fc-4b8b-9606-f57fa3b79ed2] succeeded in 1.0405112049993477s: 'email for order 448: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.188909Z"}
+{"event": "Task app.tasks.orders.send_order_email[522bb9c0-a6ba-4fe6-862c-88221d7456e3] succeeded in 1.032593463001831s: 'email for order 452: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.190824Z"}
+{"event": "Order 454 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:22.195069Z"}
+{"event": "Task app.tasks.orders.send_order_email[2d355888-8119-4146-a319-7fa0a4b668d9] succeeded in 1.018517715001508s: 'email for order 454: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:22.199672Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a7637b6f-c5ea-447b-9fa4-574cac913944] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.062760Z"}
+{"event": "Task app.tasks.orders.send_order_email[ee428410-78cf-463a-ab75-fa7bfa0a67d4] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.068825Z"}
+{"event": "Receipt PDF rendered for order 444", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.082214Z"}
+{"event": "Receipt PDF rendered for order 445", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.087314Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[f93929a9-4b34-439c-aad3-c270d9a31945] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.099189Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[5fde4126-2533-4e17-856d-612690904559] succeeded in 2.0543613369991363s: 'receipt_pdf for order 444: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.102351Z"}
+{"event": "Receipt PDF rendered for order 449", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.104772Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[f62dd546-5779-4997-b6f1-15e243c651b7] succeeded in 2.0551811089972034s: 'receipt_pdf for order 445: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.109718Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9beee250-8496-48ef-8dfc-cceed52dcaf3] succeeded in 2.035830098000588s: 'receipt_pdf for order 449: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.114795Z"}
+{"event": "Task app.tasks.orders.send_order_email[2b00cae1-5612-4f0e-b720-3c5d414984bc] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.115253Z"}
+{"event": "Receipt PDF rendered for order 447", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.120333Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0c81fa73-3c49-4f78-8faf-01a1173b26a6] succeeded in 2.038271822999377s: 'receipt_pdf for order 447: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.129607Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9191ecc5-7f14-43eb-9401-32dc15e704b8] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.131107Z"}
+{"event": "Task app.tasks.orders.send_order_email[87970aac-3e41-4ba8-93a6-c9bf41b22596] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.138101Z"}
+{"event": "Receipt PDF rendered for order 451", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.141387Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[1224ed01-adbb-40e1-9289-ef42689980c9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.151340Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9f924b80-ba2c-4c32-b840-071236bede2d] succeeded in 2.0504175450005278s: 'receipt_pdf for order 451: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.153832Z"}
+{"event": "Task app.tasks.orders.send_order_email[a31bd264-f186-4d2c-894f-4c3077216c3c] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.158204Z"}
+{"event": "Receipt PDF rendered for order 448", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.159195Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[937de5d7-c4a9-41af-b379-169177de3000] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.169873Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[f9607f9e-63d1-4c3e-83e8-fa752a621759] succeeded in 2.0369134129978193s: 'receipt_pdf for order 448: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.173799Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[4bf5b60b-436d-4dfc-b78a-32776d2f8447] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.178934Z"}
+{"event": "Receipt PDF rendered for order 452", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.187792Z"}
+{"event": "Task app.tasks.orders.send_order_email[da1463e5-0228-43ec-b721-356298cb9b6d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.192997Z"}
+{"event": "Receipt PDF rendered for order 454", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:23.194733Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9cc8b106-3691-4b97-961a-04beee755d2a] succeeded in 2.048309138001059s: 'receipt_pdf for order 452: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.199792Z"}
+{"event": "Task app.tasks.orders.send_order_email[38353272-1c06-4594-8320-8365a5b6bd73] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.204610Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[7297dc15-2f32-4eac-9e6a-1729036cfc6e] succeeded in 2.041483175002213s: 'receipt_pdf for order 454: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:23.209388Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9e8ea0bf-8231-41e2-a251-5f15ed23cd4d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.213388Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[61fa6fdc-d3af-4b9c-932a-2729f7333da3] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.224454Z"}
+{"event": "Task app.tasks.orders.send_order_email[ce19c43a-0175-4c8c-ac24-f609d8af384b] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.231244Z"}
+{"event": "Task app.tasks.orders.send_order_email[67f93581-e7ac-42bc-975c-d906a4f57f38] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:23.240132Z"}
+{"event": "Order 453 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.115065Z"}
+{"event": "Task app.tasks.orders.send_order_email[ee428410-78cf-463a-ab75-fa7bfa0a67d4] succeeded in 1.0508108399990306s: 'email for order 453: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.121158Z"}
+{"event": "Order 450 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.144097Z"}
+{"event": "Task app.tasks.orders.send_order_email[2b00cae1-5612-4f0e-b720-3c5d414984bc] succeeded in 1.0315833330023452s: 'email for order 450: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.149752Z"}
+{"event": "Order 459 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.183773Z"}
+{"event": "Order 460 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.187884Z"}
+{"event": "Task app.tasks.orders.send_order_email[87970aac-3e41-4ba8-93a6-c9bf41b22596] succeeded in 1.0446425340014684s: 'email for order 459: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.189479Z"}
+{"event": "Task app.tasks.orders.send_order_email[a31bd264-f186-4d2c-894f-4c3077216c3c] succeeded in 1.0304070179990958s: 'email for order 460: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.191924Z"}
+{"event": "Order 462 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.224093Z"}
+{"event": "Task app.tasks.orders.send_order_email[da1463e5-0228-43ec-b721-356298cb9b6d] succeeded in 1.0316323779989034s: 'email for order 462: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.228754Z"}
+{"event": "Order 457 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.233725Z"}
+{"event": "Task app.tasks.orders.send_order_email[38353272-1c06-4594-8320-8365a5b6bd73] succeeded in 1.03084911300175s: 'email for order 457: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.238225Z"}
+{"event": "Order 456 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.253570Z"}
+{"event": "Order 458 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:24.258094Z"}
+{"event": "Task app.tasks.orders.send_order_email[ce19c43a-0175-4c8c-ac24-f609d8af384b] succeeded in 1.0279929779972008s: 'email for order 456: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.261047Z"}
+{"event": "Task app.tasks.orders.send_order_email[67f93581-e7ac-42bc-975c-d906a4f57f38] succeeded in 1.0221187220013235s: 'email for order 458: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:24.264673Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[44ee5ce1-3024-4c8c-8125-390dd9727342] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:24.969094Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[58e3e409-64ef-482e-84ff-b1e67c86881b] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:24.973364Z"}
+{"event": "Task app.tasks.orders.send_order_email[df686cdd-98b1-4baa-8776-127ee7cc0f66] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:24.978443Z"}
+{"event": "Task app.tasks.orders.send_order_email[849c6d1c-b83a-47c5-bebc-df6d9424e8ee] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:24.983410Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[518779a1-a9aa-4b3f-8e05-8d7d62ddd641] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:24.988991Z"}
+{"event": "Task app.tasks.orders.send_order_email[d1d7ab33-d6f6-4a8f-afee-51d59a00ca5a] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:24.994035Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[94d66e07-b6c4-41ad-a3ee-714ff858cb28] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:25.000187Z"}
+{"event": "Task app.tasks.orders.send_order_email[047c09d4-fa84-4fc5-887f-12fb12d527df] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:25.006110Z"}
+{"event": "Receipt PDF rendered for order 453", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.112241Z"}
+{"event": "Receipt PDF rendered for order 450", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.131924Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a7637b6f-c5ea-447b-9fa4-574cac913944] succeeded in 2.092562124002143s: 'receipt_pdf for order 453: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.157825Z"}
+{"event": "Receipt PDF rendered for order 459", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.164619Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[f93929a9-4b34-439c-aad3-c270d9a31945] succeeded in 2.0689169949982897s: 'receipt_pdf for order 450: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.171922Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9191ecc5-7f14-43eb-9401-32dc15e704b8] succeeded in 2.0397310289990855s: 'receipt_pdf for order 459: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.172474Z"}
+{"event": "Receipt PDF rendered for order 460", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.191844Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[1224ed01-adbb-40e1-9289-ef42689980c9] succeeded in 2.04227756399996s: 'receipt_pdf for order 460: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.197821Z"}
+{"event": "Receipt PDF rendered for order 462", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.204378Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[937de5d7-c4a9-41af-b379-169177de3000] succeeded in 2.035844381000061s: 'receipt_pdf for order 462: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.208137Z"}
+{"event": "Receipt PDF rendered for order 457", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.217215Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[4bf5b60b-436d-4dfc-b78a-32776d2f8447] succeeded in 2.0365017369986163s: 'receipt_pdf for order 457: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.221936Z"}
+{"event": "Receipt PDF rendered for order 458", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.243445Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[9e8ea0bf-8231-41e2-a251-5f15ed23cd4d] succeeded in 2.0327549219982757s: 'receipt_pdf for order 458: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.248603Z"}
+{"event": "Receipt PDF rendered for order 456", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:25.249084Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[61fa6fdc-d3af-4b9c-932a-2729f7333da3] succeeded in 2.0263278059974255s: 'receipt_pdf for order 456: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:25.252794Z"}
+{"event": "Order 463 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:26.049844Z"}
+{"event": "Order 455 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:26.051165Z"}
+{"event": "Order 464 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:26.059086Z"}
+{"event": "Order 461 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:26.060211Z"}
+{"event": "Task app.tasks.orders.send_order_email[d1d7ab33-d6f6-4a8f-afee-51d59a00ca5a] succeeded in 1.1072375949988782s: 'email for order 464: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:26.102459Z"}
+{"event": "Task app.tasks.orders.send_order_email[047c09d4-fa84-4fc5-887f-12fb12d527df] succeeded in 1.0951337619990227s: 'email for order 461: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:26.103042Z"}
+{"event": "Task app.tasks.orders.send_order_email[df686cdd-98b1-4baa-8776-127ee7cc0f66] succeeded in 1.1236102180009766s: 'email for order 455: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:26.103866Z"}
+{"event": "Task app.tasks.orders.send_order_email[849c6d1c-b83a-47c5-bebc-df6d9424e8ee] succeeded in 1.117421324001043s: 'email for order 463: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:26.104126Z"}
+{"event": "Receipt PDF rendered for order 455", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:27.021788Z"}
+{"event": "Receipt PDF rendered for order 464", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:27.040247Z"}
+{"event": "Receipt PDF rendered for order 463", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:27.049930Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[44ee5ce1-3024-4c8c-8125-390dd9727342] succeeded in 2.092126837000251s: 'receipt_pdf for order 455: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:27.062442Z"}
+{"event": "Receipt PDF rendered for order 461", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:27.064817Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[518779a1-a9aa-4b3f-8e05-8d7d62ddd641] succeeded in 2.0840951959980885s: 'receipt_pdf for order 464: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:27.075132Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[94d66e07-b6c4-41ad-a3ee-714ff858cb28] succeeded in 2.0746983790013473s: 'receipt_pdf for order 461: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:27.077251Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[58e3e409-64ef-482e-84ff-b1e67c86881b] succeeded in 2.1004335889992944s: 'receipt_pdf for order 463: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:27.078430Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c245b05c-65c8-4926-9e2f-cd32071475f9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.089146Z"}
+{"event": "Task app.tasks.orders.send_order_email[e9016b20-3f03-4cd5-895f-745fa315c284] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.097697Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[bac6a984-01ee-4b83-840a-ce7bee5865aa] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.106317Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[cd9982d8-b950-4f71-ba4f-28088c8d4a0c] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.113730Z"}
+{"event": "Task app.tasks.orders.send_order_email[d2cbb740-4ecb-49c7-8c13-3fd2eff1ca39] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.125388Z"}
+{"event": "Task app.tasks.orders.send_order_email[754d10c8-3a87-43a3-9827-bb3ed8c2faef] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.134462Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[36a4cac1-719c-4851-8d58-89868a8adc19] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.144602Z"}
+{"event": "Task app.tasks.orders.send_order_email[6c6bdd60-7248-4e23-a2d0-0bfa7e3b92f3] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.155470Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ff231d11-4283-45d1-96ba-fa48467ada16] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.165129Z"}
+{"event": "Task app.tasks.orders.send_order_email[c3f97f11-4bd4-4481-b52e-7bc3495437b1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.174571Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0112d117-45d5-42fc-b765-836b23975b19] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.184440Z"}
+{"event": "Task app.tasks.orders.send_order_email[81475504-b36b-477e-bb4a-2bdcba731963] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.193861Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c0b9b297-f5a0-41e3-9e61-acd2c35c2d12] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.205380Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[3924b906-a49d-4208-b21e-ec3609971080] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.215988Z"}
+{"event": "Task app.tasks.orders.send_order_email[747c6650-db65-46ed-b568-d4855bc5d000] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.228542Z"}
+{"event": "Task app.tasks.orders.send_order_email[7ccdd313-c824-486a-b976-536b51cee50e] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:27.237885Z"}
+{"event": "Order 465 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.133383Z"}
+{"event": "Order 467 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.152543Z"}
+{"event": "Task app.tasks.orders.send_order_email[e9016b20-3f03-4cd5-895f-745fa315c284] succeeded in 1.0568125729987514s: 'email for order 465: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.156133Z"}
+{"event": "Task app.tasks.orders.send_order_email[d2cbb740-4ecb-49c7-8c13-3fd2eff1ca39] succeeded in 1.0338846519989602s: 'email for order 467: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.162088Z"}
+{"event": "Order 468 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.169940Z"}
+{"event": "Task app.tasks.orders.send_order_email[754d10c8-3a87-43a3-9827-bb3ed8c2faef] succeeded in 1.0409574910008814s: 'email for order 468: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.177851Z"}
+{"event": "Order 469 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.203291Z"}
+{"event": "Task app.tasks.orders.send_order_email[6c6bdd60-7248-4e23-a2d0-0bfa7e3b92f3] succeeded in 1.0541206239977328s: 'email for order 469: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.212466Z"}
+{"event": "Order 470 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.227917Z"}
+{"event": "Task app.tasks.orders.send_order_email[c3f97f11-4bd4-4481-b52e-7bc3495437b1] succeeded in 1.062000292000448s: 'email for order 470: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.239735Z"}
+{"event": "Order 466 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.250216Z"}
+{"event": "Task app.tasks.orders.send_order_email[81475504-b36b-477e-bb4a-2bdcba731963] succeeded in 1.059490048999578s: 'email for order 466: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.257855Z"}
+{"event": "Order 472 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.261745Z"}
+{"event": "Order 471 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:28.265560Z"}
+{"event": "Task app.tasks.orders.send_order_email[747c6650-db65-46ed-b568-d4855bc5d000] succeeded in 1.036302236996562s: 'email for order 472: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.270471Z"}
+{"event": "Task app.tasks.orders.send_order_email[7ccdd313-c824-486a-b976-536b51cee50e] succeeded in 1.029924762002338s: 'email for order 471: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:28.274271Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0b1d61d2-8487-4c28-b134-0affc86ac4fc] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.104550Z"}
+{"event": "Task app.tasks.orders.send_order_email[d37e878d-fb9c-4103-a406-83108214de42] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.109643Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[d7407e15-5254-460c-8064-370bc7de3565] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.116049Z"}
+{"event": "Receipt PDF rendered for order 465", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.123261Z"}
+{"event": "Task app.tasks.orders.send_order_email[dc387444-ed97-4f51-87ec-d1f0db180496] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.129875Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a5976ecd-b537-49a1-871a-4945b3407379] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.141401Z"}
+{"event": "Receipt PDF rendered for order 467", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.148312Z"}
+{"event": "Receipt PDF rendered for order 468", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.155762Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ee610646-a031-4d03-9d00-f212dbd3cdbc] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.164246Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c245b05c-65c8-4926-9e2f-cd32071475f9] succeeded in 2.081867891996808s: 'receipt_pdf for order 465: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.172574Z"}
+{"event": "Receipt PDF rendered for order 469", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.179717Z"}
+{"event": "Task app.tasks.orders.send_order_email[e90ddb4e-556c-4b89-8103-c173693f8eaf] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.190590Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[36a4cac1-719c-4851-8d58-89868a8adc19] succeeded in 2.048876918001042s: 'receipt_pdf for order 469: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.197260Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6d8576c6-6098-485e-b51a-77de60c56066] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.207543Z"}
+{"event": "Receipt PDF rendered for order 470", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.226301Z"}
+{"event": "Task app.tasks.orders.send_order_email[9752fb64-27f2-482b-8655-b03bc0cff494] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.233175Z"}
+{"event": "Receipt PDF rendered for order 466", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.238741Z"}
+{"event": "Task app.tasks.orders.send_order_email[57f05cdb-91c0-41b4-b561-f25b6fd12043] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:29.247848Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ff231d11-4283-45d1-96ba-fa48467ada16] succeeded in 2.084878060999472s: 'receipt_pdf for order 470: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.257814Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[bac6a984-01ee-4b83-840a-ce7bee5865aa] succeeded in 2.1492850569993607s: 'receipt_pdf for order 467: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.258413Z"}
+{"event": "Receipt PDF rendered for order 472", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.276033Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0112d117-45d5-42fc-b765-836b23975b19] succeeded in 2.088870600997325s: 'receipt_pdf for order 466: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.277778Z"}
+{"event": "Receipt PDF rendered for order 471", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:29.297660Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[cd9982d8-b950-4f71-ba4f-28088c8d4a0c] succeeded in 2.1885222979981336s: 'receipt_pdf for order 468: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.304287Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c0b9b297-f5a0-41e3-9e61-acd2c35c2d12] succeeded in 2.096869273998891s: 'receipt_pdf for order 472: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.308089Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[3924b906-a49d-4208-b21e-ec3609971080] succeeded in 2.1202660070011916s: 'receipt_pdf for order 471: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:29.341958Z"}
+{"event": "Order 473 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:30.192871Z"}
+{"event": "Order 474 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:30.200181Z"}
+{"event": "Task app.tasks.orders.send_order_email[d37e878d-fb9c-4103-a406-83108214de42] succeeded in 1.1407448289974127s: 'email for order 473: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:30.254779Z"}
+{"event": "Task app.tasks.orders.send_order_email[dc387444-ed97-4f51-87ec-d1f0db180496] succeeded in 1.1239722589998564s: 'email for order 474: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:30.257885Z"}
+{"event": "Order 475 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:30.312972Z"}
+{"event": "Order 476 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:30.353214Z"}
+{"event": "Order 477 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:30.364990Z"}
+{"event": "Task app.tasks.orders.send_order_email[e90ddb4e-556c-4b89-8103-c173693f8eaf] succeeded in 1.1792711990019598s: 'email for order 475: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:30.381963Z"}
+{"event": "Task app.tasks.orders.send_order_email[9752fb64-27f2-482b-8655-b03bc0cff494] succeeded in 1.1530634019982244s: 'email for order 476: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:30.390996Z"}
+{"event": "Task app.tasks.orders.send_order_email[57f05cdb-91c0-41b4-b561-f25b6fd12043] succeeded in 1.124911566002993s: 'email for order 477: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:30.393360Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2a42dffb-267c-4c8d-ba88-7edeb909c93f] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.133068Z"}
+{"event": "Task app.tasks.orders.send_order_email[b08f03da-e389-40cb-aee8-271249ca3278] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.145326Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[473fc7d3-c26b-41fc-adaa-051bf4952f76] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.157333Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2d5e8e1c-3e63-439d-bdd2-c315426447ef] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.161534Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a743a216-48af-44be-8c4a-69db9a8d9542] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.174491Z"}
+{"event": "Receipt PDF rendered for order 474", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:31.191929Z"}
+{"event": "Task app.tasks.orders.send_order_email[a99cab41-b584-48a0-a7ed-d13befa5d5e1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.202774Z"}
+{"event": "Receipt PDF rendered for order 473", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:31.204132Z"}
+{"event": "Task app.tasks.orders.send_order_email[0a488fd1-1908-45b5-bdda-aee8c9b7b1db] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.239038Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[d7407e15-5254-460c-8064-370bc7de3565] succeeded in 2.13521704699815s: 'receipt_pdf for order 474: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:31.254961Z"}
+{"event": "Task app.tasks.orders.send_order_email[57cd8e33-7cb2-4c67-a6aa-121816177ac9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.258491Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6437c1b7-20a3-47ca-b267-e23c69bd8929] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.276854Z"}
+{"event": "Task app.tasks.orders.send_order_email[36708693-4986-4f63-9875-8984ff01a386] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.297437Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a0d193dc-3955-4992-819c-26a05c2ef7c8] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.320059Z"}
+{"event": "Receipt PDF rendered for order 477", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:31.350507Z"}
+{"event": "Task app.tasks.orders.send_order_email[4e7c728e-1b82-435c-865e-1b44da115789] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:31.356649Z"}
+{"event": "Receipt PDF rendered for order 476", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:31.363503Z"}
+{"event": "Receipt PDF rendered for order 475", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:31.370040Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6d8576c6-6098-485e-b51a-77de60c56066] succeeded in 2.1943879630016454s: 'receipt_pdf for order 477: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:31.407454Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ee610646-a031-4d03-9d00-f212dbd3cdbc] succeeded in 2.2420019209966995s: 'receipt_pdf for order 476: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:31.409678Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0b1d61d2-8487-4c28-b134-0affc86ac4fc] succeeded in 2.3021822610025993s: 'receipt_pdf for order 473: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:31.421498Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a5976ecd-b537-49a1-871a-4945b3407379] succeeded in 2.3339526710005885s: 'receipt_pdf for order 475: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:31.480744Z"}
+{"event": "Order 478 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:32.256950Z"}
+{"event": "Task app.tasks.orders.send_order_email[b08f03da-e389-40cb-aee8-271249ca3278] succeeded in 1.114604195998254s: 'email for order 478: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:32.261804Z"}
+{"event": "Order 481 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:32.345562Z"}
+{"event": "Task app.tasks.orders.send_order_email[57cd8e33-7cb2-4c67-a6aa-121816177ac9] succeeded in 1.1304853520014149s: 'email for order 481: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:32.391274Z"}
+{"event": "Order 480 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:32.431564Z"}
+{"event": "Task app.tasks.orders.send_order_email[0a488fd1-1908-45b5-bdda-aee8c9b7b1db] succeeded in 1.1936068949980836s: 'email for order 480: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:32.438638Z"}
+{"event": "Order 482 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:32.444799Z"}
+{"event": "Order 479 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:32.447709Z"}
+{"event": "Task app.tasks.orders.send_order_email[a99cab41-b584-48a0-a7ed-d13befa5d5e1] succeeded in 1.2384873109986074s: 'email for order 479: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:32.457676Z"}
+{"event": "Task app.tasks.orders.send_order_email[36708693-4986-4f63-9875-8984ff01a386] succeeded in 1.1514560320028977s: 'email for order 482: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:32.458933Z"}
+{"event": "Order 483 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:32.483498Z"}
+{"event": "Task app.tasks.orders.send_order_email[4e7c728e-1b82-435c-865e-1b44da115789] succeeded in 1.1333288280002307s: 'email for order 483: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:32.501005Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ef5800af-aa53-4dbc-bf96-5ea44cf24298] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.152186Z"}
+{"event": "Task app.tasks.orders.send_order_email[5c817c1d-5bab-4104-9124-35f55104ba2b] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.156437Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[94f46083-b3ec-4bac-afb3-521feac33a3e] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.166951Z"}
+{"event": "Task app.tasks.orders.send_order_email[7d2746e6-da01-4799-9701-6c947985357d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.176498Z"}
+{"event": "Receipt PDF rendered for order 478", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:33.179576Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[172f9db7-b2fe-4c55-a0d0-d14d8bb073b1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.190743Z"}
+{"event": "Task app.tasks.orders.send_order_email[f385215d-87b3-4bd4-8823-023489c589ba] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.201265Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[93f86150-373e-411d-ac1f-a71b44fb02da] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.210591Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2a42dffb-267c-4c8d-ba88-7edeb909c93f] succeeded in 2.098917895997147s: 'receipt_pdf for order 478: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:33.233631Z"}
+{"event": "Task app.tasks.orders.send_order_email[ea9f686a-b3fc-4b67-9078-3542f363bfdd] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.248794Z"}
+{"event": "Receipt PDF rendered for order 480", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:33.261252Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[30433261-d672-47e2-81ca-c77334c620d1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.276085Z"}
+{"event": "Receipt PDF rendered for order 481", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:33.283509Z"}
+{"event": "Receipt PDF rendered for order 479", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:33.292185Z"}
+{"event": "Task app.tasks.orders.send_order_email[4a73eb3d-714e-4a92-8393-26591fce8312] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.296501Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a5dd66c7-da6e-4dfc-b529-49f565ce2929] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:33.315088Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2d5e8e1c-3e63-439d-bdd2-c315426447ef] succeeded in 2.1709465840031044s: 'receipt_pdf for order 480: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:33.334371Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a743a216-48af-44be-8c4a-69db9a8d9542] succeeded in 2.1617245400011598s: 'receipt_pdf for order 481: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:33.345642Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[473fc7d3-c26b-41fc-adaa-051bf4952f76] succeeded in 2.189141467999434s: 'receipt_pdf for order 479: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:33.357070Z"}
+{"event": "Receipt PDF rendered for order 482", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:33.433979Z"}
+{"event": "Receipt PDF rendered for order 483", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:33.435903Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6437c1b7-20a3-47ca-b267-e23c69bd8929] succeeded in 2.155690195999341s: 'receipt_pdf for order 482: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:33.442993Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a0d193dc-3955-4992-819c-26a05c2ef7c8] succeeded in 2.098166596999363s: 'receipt_pdf for order 483: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:33.444353Z"}
+{"event": "Order 484 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:34.263344Z"}
+{"event": "Task app.tasks.orders.send_order_email[5c817c1d-5bab-4104-9124-35f55104ba2b] succeeded in 1.1109896279995155s: 'email for order 484: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:34.270442Z"}
+{"event": "Order 485 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:34.274358Z"}
+{"event": "Task app.tasks.orders.send_order_email[7d2746e6-da01-4799-9701-6c947985357d] succeeded in 1.0939733890008938s: 'email for order 485: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:34.279142Z"}
+{"event": "Order 488 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:34.362275Z"}
+{"event": "Order 487 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:34.365856Z"}
+{"event": "Task app.tasks.orders.send_order_email[ea9f686a-b3fc-4b67-9078-3542f363bfdd] succeeded in 1.1515326410008129s: 'email for order 488: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:34.405484Z"}
+{"event": "Order 489 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:34.409497Z"}
+{"event": "Task app.tasks.orders.send_order_email[f385215d-87b3-4bd4-8823-023489c589ba] succeeded in 1.2157014640033594s: 'email for order 487: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:34.418885Z"}
+{"event": "Task app.tasks.orders.send_order_email[4a73eb3d-714e-4a92-8393-26591fce8312] succeeded in 1.1189826800000446s: 'email for order 489: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:34.419697Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6eaf32bc-bfc9-4c1c-a5bf-202644a73256] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:34.989666Z"}
+{"event": "Task app.tasks.orders.send_order_email[951a018e-31e2-46f3-b81c-c870c1ab362f] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:34.994662Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[78b9aa6a-1c7e-4a4c-87b0-a49842872a5d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.002673Z"}
+{"event": "Task app.tasks.orders.send_order_email[1afec00c-063a-4d18-b9a2-5e13a3725e1b] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.023392Z"}
+{"event": "Task app.tasks.orders.send_order_email[5424e12f-72b0-4bcb-a8d6-318813b3cd0c] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.043867Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[4240ce3e-62ab-4bf0-a67d-84912a42f955] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.056633Z"}
+{"event": "Task app.tasks.orders.send_order_email[79ac1dbf-3afb-4129-acfd-71f427da6f7a] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.072015Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c72ce163-4fd6-49ba-a66d-7254eceb34c5] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.086703Z"}
+{"event": "Task app.tasks.orders.send_order_email[c41ce674-5441-4254-aa42-2d10ec2c7d02] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.101510Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ae5cb451-7645-4d6b-b59c-23cad287663c] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:35.110570Z"}
+{"event": "Receipt PDF rendered for order 484", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:35.237873Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ef5800af-aa53-4dbc-bf96-5ea44cf24298] succeeded in 2.0961633879996953s: 'receipt_pdf for order 484: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:35.249754Z"}
+{"event": "Receipt PDF rendered for order 485", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:35.261273Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[94f46083-b3ec-4bac-afb3-521feac33a3e] succeeded in 2.1027880780020496s: 'receipt_pdf for order 485: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:35.271332Z"}
+{"event": "Receipt PDF rendered for order 487", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:35.364164Z"}
+{"event": "Receipt PDF rendered for order 488", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:35.385558Z"}
+{"event": "Receipt PDF rendered for order 489", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:35.389906Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[172f9db7-b2fe-4c55-a0d0-d14d8bb073b1] succeeded in 2.2167355969977507s: 'receipt_pdf for order 487: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:35.411264Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[30433261-d672-47e2-81ca-c77334c620d1] succeeded in 2.1436003149974567s: 'receipt_pdf for order 489: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:35.427597Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[93f86150-373e-411d-ac1f-a71b44fb02da] succeeded in 2.2123800449990085s: 'receipt_pdf for order 488: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:35.429859Z"}
+{"event": "Receipt PDF rendered for order 492", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:35.432238Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a5dd66c7-da6e-4dfc-b529-49f565ce2929] succeeded in 2.1214052780014754s: 'receipt_pdf for order 492: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:35.440453Z"}
+{"event": "Order 492 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:36.070308Z"}
+{"event": "Order 490 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:36.085112Z"}
+{"event": "Order 493 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:36.086526Z"}
+{"event": "Order 491 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:36.102423Z"}
+{"event": "Task app.tasks.orders.send_order_email[951a018e-31e2-46f3-b81c-c870c1ab362f] succeeded in 1.118317232998379s: 'email for order 492: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:36.114567Z"}
+{"event": "Order 486 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:36.131158Z"}
+{"event": "Task app.tasks.orders.send_order_email[5424e12f-72b0-4bcb-a8d6-318813b3cd0c] succeeded in 1.0936589060002007s: 'email for order 490: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:36.139336Z"}
+{"event": "Task app.tasks.orders.send_order_email[1afec00c-063a-4d18-b9a2-5e13a3725e1b] succeeded in 1.1112004720016557s: 'email for order 493: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:36.141289Z"}
+{"event": "Task app.tasks.orders.send_order_email[79ac1dbf-3afb-4129-acfd-71f427da6f7a] succeeded in 1.0678499569985433s: 'email for order 491: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:36.142563Z"}
+{"event": "Task app.tasks.orders.send_order_email[c41ce674-5441-4254-aa42-2d10ec2c7d02] succeeded in 1.0424286699999357s: 'email for order 486: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:36.147021Z"}
+{"event": "Receipt PDF rendered for order 493", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:37.031575Z"}
+{"event": "Receipt PDF rendered for order 490", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:37.053639Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6eaf32bc-bfc9-4c1c-a5bf-202644a73256] succeeded in 2.0833722800016403s: 'receipt_pdf for order 493: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:37.074521Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[78b9aa6a-1c7e-4a4c-87b0-a49842872a5d] succeeded in 2.0683239600002707s: 'receipt_pdf for order 490: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:37.075153Z"}
+{"event": "Receipt PDF rendered for order 491", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:37.102257Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[4240ce3e-62ab-4bf0-a67d-84912a42f955] succeeded in 2.0460540179992677s: 'receipt_pdf for order 491: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:37.107933Z"}
+{"event": "Receipt PDF rendered for order 486", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:37.111960Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c72ce163-4fd6-49ba-a66d-7254eceb34c5] succeeded in 2.027285993000987s: 'receipt_pdf for order 486: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:37.116707Z"}
+{"event": "Receipt PDF rendered for order 494", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:37.133479Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ae5cb451-7645-4d6b-b59c-23cad287663c] succeeded in 2.025945961002435s: 'receipt_pdf for order 494: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:37.138120Z"}
+{"event": "Task app.tasks.orders.send_order_email[9b2f8197-3aed-46fa-86ed-0074fb73971f] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.173467Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[eb504668-f4e3-4c41-99ad-30f47e2ab5a0] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.178071Z"}
+{"event": "Task app.tasks.orders.send_order_email[caab89df-6fe3-486a-a6be-fd02f33c1fa5] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.183501Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6e7b4ac6-3e63-4f4b-90be-5521f7818e06] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.191403Z"}
+{"event": "Task app.tasks.orders.send_order_email[4cb417d8-a770-4f6e-acaf-cdae70524174] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.198952Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2a00a23f-734a-4bbb-9a5a-98c542732d3d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.213937Z"}
+{"event": "Task app.tasks.orders.send_order_email[2e374bd3-6c11-47be-9e0b-70c4968ac9b6] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.220665Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a406adcf-f2e0-406d-8a7f-052838a84cd9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.232603Z"}
+{"event": "Task app.tasks.orders.send_order_email[e8993764-c3de-4bbb-a3ad-2597605e9d37] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.239579Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a594b596-5be0-4586-a1b2-123cc1de43c7] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.255812Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[5699392f-3eaa-4f19-9f24-8212c40575a1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.265968Z"}
+{"event": "Task app.tasks.orders.send_order_email[5b914f2a-a200-43bb-b9b9-1d120d4118b2] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.290862Z"}
+{"event": "Task app.tasks.orders.send_order_email[a42e1a45-1c43-4cf4-9275-5300caf85a9f] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.313292Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c96524c1-cf8b-4359-a21b-3697a464a1ce] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.332676Z"}
+{"event": "Task app.tasks.orders.send_order_email[acce6497-940b-4deb-8d96-eccb644f0eed] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.347462Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[1be3d9a2-2b2e-4785-8f3f-4c14fb2e52d7] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:37.359747Z"}
+{"event": "Order 494 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.208038Z"}
+{"event": "Task app.tasks.orders.send_order_email[9b2f8197-3aed-46fa-86ed-0074fb73971f] succeeded in 1.0379960960017343s: 'email for order 494: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.212832Z"}
+{"event": "Order 495 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.213754Z"}
+{"event": "Task app.tasks.orders.send_order_email[caab89df-6fe3-486a-a6be-fd02f33c1fa5] succeeded in 1.032748272002209s: 'email for order 495: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.217929Z"}
+{"event": "Order 496 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.227873Z"}
+{"event": "Task app.tasks.orders.send_order_email[4cb417d8-a770-4f6e-acaf-cdae70524174] succeeded in 1.0325002880017564s: 'email for order 496: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.234079Z"}
+{"event": "Order 497 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.264771Z"}
+{"event": "Task app.tasks.orders.send_order_email[2e374bd3-6c11-47be-9e0b-70c4968ac9b6] succeeded in 1.0466776260000188s: 'email for order 497: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.270453Z"}
+{"event": "Order 498 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.291513Z"}
+{"event": "Task app.tasks.orders.send_order_email[e8993764-c3de-4bbb-a3ad-2597605e9d37] succeeded in 1.0518038340014755s: 'email for order 498: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.295020Z"}
+{"event": "Order 499 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.340786Z"}
+{"event": "Order 500 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.374232Z"}
+{"event": "Order 501 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:38.382593Z"}
+{"event": "Task app.tasks.orders.send_order_email[5b914f2a-a200-43bb-b9b9-1d120d4118b2] succeeded in 1.0879198719994747s: 'email for order 499: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.384086Z"}
+{"event": "Task app.tasks.orders.send_order_email[a42e1a45-1c43-4cf4-9275-5300caf85a9f] succeeded in 1.0754883929985226s: 'email for order 500: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.395965Z"}
+{"event": "Task app.tasks.orders.send_order_email[acce6497-940b-4deb-8d96-eccb644f0eed] succeeded in 1.0455331049997767s: 'email for order 501: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:38.397201Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[68a33c30-2d96-4942-84bc-5174613a5168] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.185274Z"}
+{"event": "Task app.tasks.orders.send_order_email[75e0f0fc-1f51-486d-ac47-0c4ca330121a] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.191987Z"}
+{"event": "Task app.tasks.orders.send_order_email[fd44f0ec-2af5-4147-888f-bc4c458e3b93] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.198369Z"}
+{"event": "Receipt PDF rendered for order 495", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.206853Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ebfef47e-bf56-4214-8103-e0486b40716c] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.218265Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[eb504668-f4e3-4c41-99ad-30f47e2ab5a0] succeeded in 2.0457272909989115s: 'receipt_pdf for order 495: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.225918Z"}
+{"event": "Receipt PDF rendered for order 496", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.232712Z"}
+{"event": "Task app.tasks.orders.send_order_email[e6503dfb-7ab0-4d32-aaa5-fa611174dfb0] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.234872Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[6e7b4ac6-3e63-4f4b-90be-5521f7818e06] succeeded in 2.0519263360001787s: 'receipt_pdf for order 496: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.245783Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2c0c68d6-58ed-4f84-b6b3-5e6ef76f4de1] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.249362Z"}
+{"event": "Receipt PDF rendered for order 497", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.255030Z"}
+{"event": "Task app.tasks.orders.send_order_email[b94ce655-f608-4ee5-98f7-d370ae1a0ca9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.270973Z"}
+{"event": "Receipt PDF rendered for order 498", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.274771Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2a00a23f-734a-4bbb-9a5a-98c542732d3d] succeeded in 2.0550285879980947s: 'receipt_pdf for order 497: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.278885Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[817eacd2-42b2-468d-b56a-b59bac8638da] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.285459Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a406adcf-f2e0-406d-8a7f-052838a84cd9] succeeded in 2.0562647660008224s: 'receipt_pdf for order 498: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.292321Z"}
+{"event": "Task app.tasks.orders.send_order_email[7469ab0f-a38d-4647-9a95-6e0d3847e073] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.302307Z"}
+{"event": "Receipt PDF rendered for order 500", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.309918Z"}
+{"event": "Receipt PDF rendered for order 499", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.312272Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[5699392f-3eaa-4f19-9f24-8212c40575a1] succeeded in 2.0515393990026496s: 'receipt_pdf for order 500: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.323191Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a594b596-5be0-4586-a1b2-123cc1de43c7] succeeded in 2.061061290998623s: 'receipt_pdf for order 499: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.326020Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a2ea33f4-0cbd-4203-a7a7-cc440af28152] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.332131Z"}
+{"event": "Task app.tasks.orders.send_order_email[36c7fb48-a731-450a-b649-e8ba41504c98] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.353530Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[7fda0d02-924a-4c02-91b3-a8de37186e27] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.357703Z"}
+{"event": "Task app.tasks.orders.send_order_email[cb11f8ed-2bd8-4241-b24e-85118cc20334] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.380937Z"}
+{"event": "Receipt PDF rendered for order 501", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.387826Z"}
+{"event": "Receipt PDF rendered for order 503", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:39.392010Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[e8c40d5e-6c9b-46a5-aac6-3a2bcd6bf5c7] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.404431Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c96524c1-cf8b-4359-a21b-3697a464a1ce] succeeded in 2.06538446400009s: 'receipt_pdf for order 501: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.415432Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[1be3d9a2-2b2e-4785-8f3f-4c14fb2e52d7] succeeded in 2.042648067999835s: 'receipt_pdf for order 503: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:39.416407Z"}
+{"event": "Task app.tasks.orders.send_order_email[49092531-ddd8-4f29-b069-8f195632d890] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.967588Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a0144c93-242f-44b8-88b1-b267f219e18d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:39.972935Z"}
+{"event": "Order 502 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.233896Z"}
+{"event": "Task app.tasks.orders.send_order_email[75e0f0fc-1f51-486d-ac47-0c4ca330121a] succeeded in 1.046380660001887s: 'email for order 502: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.240303Z"}
+{"event": "Order 503 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.254868Z"}
+{"event": "Task app.tasks.orders.send_order_email[fd44f0ec-2af5-4147-888f-bc4c458e3b93] succeeded in 1.0565897390006285s: 'email for order 503: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.257961Z"}
+{"event": "Order 504 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.286523Z"}
+{"event": "Task app.tasks.orders.send_order_email[e6503dfb-7ab0-4d32-aaa5-fa611174dfb0] succeeded in 1.0535797900010948s: 'email for order 504: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.292036Z"}
+{"event": "Order 505 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.324045Z"}
+{"event": "Task app.tasks.orders.send_order_email[b94ce655-f608-4ee5-98f7-d370ae1a0ca9] succeeded in 1.0516944520022662s: 'email for order 505: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.329253Z"}
+{"event": "Order 506 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.352849Z"}
+{"event": "Task app.tasks.orders.send_order_email[7469ab0f-a38d-4647-9a95-6e0d3847e073] succeeded in 1.054119793996506s: 'email for order 506: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.358961Z"}
+{"event": "Order 507 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.398057Z"}
+{"event": "Task app.tasks.orders.send_order_email[36c7fb48-a731-450a-b649-e8ba41504c98] succeeded in 1.046977303998574s: 'email for order 507: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.402277Z"}
+{"event": "Order 508 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:40.426220Z"}
+{"event": "Task app.tasks.orders.send_order_email[cb11f8ed-2bd8-4241-b24e-85118cc20334] succeeded in 1.0423135929995624s: 'email for order 508: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:40.431877Z"}
+{"event": "Order 509 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.026532Z"}
+{"event": "Task app.tasks.orders.send_order_email[49092531-ddd8-4f29-b069-8f195632d890] succeeded in 1.0735836290004954s: 'email for order 509: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.043023Z"}
+{"event": "Task app.tasks.orders.send_order_email[57977272-eb02-4b9e-a54e-1f0b6afa4a1e] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.211771Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[df7cdc33-2901-4e15-aaec-a5d5dad54dd5] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.222891Z"}
+{"event": "Task app.tasks.orders.send_order_email[7c80a573-b290-412b-b578-c23165092b7e] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.236500Z"}
+{"event": "Receipt PDF rendered for order 502", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.245215Z"}
+{"event": "Receipt PDF rendered for order 504", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.258359Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[df94c4c5-fd92-4930-9dc9-d649c2e5d1e9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.264322Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[ebfef47e-bf56-4214-8103-e0486b40716c] succeeded in 2.0716506499993557s: 'receipt_pdf for order 504: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.292452Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[68a33c30-2d96-4942-84bc-5174613a5168] succeeded in 2.1070519349996175s: 'receipt_pdf for order 502: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.294576Z"}
+{"event": "Receipt PDF rendered for order 505", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.300465Z"}
+{"event": "Task app.tasks.orders.send_order_email[61ebc250-cc16-4409-986d-41d816ebe601] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.304268Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[2c0c68d6-58ed-4f84-b6b3-5e6ef76f4de1] succeeded in 2.073582618999353s: 'receipt_pdf for order 505: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.326141Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c9fcc229-1254-4a8f-9091-f97450c9e074] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.336254Z"}
+{"event": "Task app.tasks.orders.send_order_email[a33d73b5-e794-433d-8d99-a08ca943b722] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.346718Z"}
+{"event": "Receipt PDF rendered for order 506", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.358421Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0a25525f-6f2e-4a93-a6f6-b220d325ae96] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.362190Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[d4b1aad4-90e0-4bd6-8cba-d41e7ba9cb2d] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.375542Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[817eacd2-42b2-468d-b56a-b59bac8638da] succeeded in 2.0865105699995183s: 'receipt_pdf for order 506: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.380529Z"}
+{"event": "Receipt PDF rendered for order 507", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.387120Z"}
+{"event": "Task app.tasks.orders.send_order_email[a1f685b8-ee4e-46d7-8560-2a59a844e54b] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.394969Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a2ea33f4-0cbd-4203-a7a7-cc440af28152] succeeded in 2.066312165999989s: 'receipt_pdf for order 507: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.399774Z"}
+{"event": "Task app.tasks.orders.send_order_email[d0846e8d-2e76-4a18-973f-2a106b2464c9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.415674Z"}
+{"event": "Receipt PDF rendered for order 508", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.420280Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[54881d55-4125-4644-bb82-45a44714a1c9] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.425781Z"}
+{"event": "Receipt PDF rendered for order 509", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:41.431745Z"}
+{"event": "Task app.tasks.orders.send_order_email[57d66d15-e78f-4e62-b1ab-42811c405c78] received", "logger": "celery.worker.strategy", "level": "info", "timestamp": "2026-11-19T12:50:41.437515Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[7fda0d02-924a-4c02-91b3-a8de37186e27] succeeded in 2.071735202000127s: 'receipt_pdf for order 508: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.441964Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[e8c40d5e-6c9b-46a5-aac6-3a2bcd6bf5c7] succeeded in 2.0358346950015402s: 'receipt_pdf for order 509: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:41.443854Z"}
+{"event": "Receipt PDF rendered for order 510", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.029123Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[a0144c93-242f-44b8-88b1-b267f219e18d] succeeded in 2.0922116410001763s: 'receipt_pdf for order 510: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.072342Z"}
+
+worker: Warm shutdown (MainProcess)
+{"event": "Order 510 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.296183Z"}
+{"event": "Order 511 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.310572Z"}
+{"event": "Task app.tasks.orders.send_order_email[57977272-eb02-4b9e-a54e-1f0b6afa4a1e] succeeded in 1.1273525219985459s: 'email for order 510: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.340516Z"}
+{"event": "Order 512 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.344405Z"}
+{"event": "Task app.tasks.orders.send_order_email[7c80a573-b290-412b-b578-c23165092b7e] succeeded in 1.1133430769987172s: 'email for order 511: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.355338Z"}
+{"event": "Task app.tasks.orders.send_order_email[61ebc250-cc16-4409-986d-41d816ebe601] succeeded in 1.0475544500004617s: 'email for order 512: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.356880Z"}
+{"event": "Order 513 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.386527Z"}
+{"event": "Task app.tasks.orders.send_order_email[a33d73b5-e794-433d-8d99-a08ca943b722] succeeded in 1.0397024029989552s: 'email for order 513: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.390232Z"}
+{"event": "Order 514 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.452667Z"}
+{"event": "Order 515 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.454348Z"}
+{"event": "Order 516 email sent", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:42.461179Z"}
+{"event": "Task app.tasks.orders.send_order_email[a1f685b8-ee4e-46d7-8560-2a59a844e54b] succeeded in 1.0938573759995052s: 'email for order 514: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.494935Z"}
+{"event": "Task app.tasks.orders.send_order_email[57d66d15-e78f-4e62-b1ab-42811c405c78] succeeded in 1.0677618100016844s: 'email for order 516: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.507076Z"}
+{"event": "Task app.tasks.orders.send_order_email[d0846e8d-2e76-4a18-973f-2a106b2464c9] succeeded in 1.0885031370016804s: 'email for order 515: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:42.507818Z"}
+{"event": "Receipt PDF rendered for order 511", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:43.319834Z"}
+{"event": "Receipt PDF rendered for order 512", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:43.344564Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[df7cdc33-2901-4e15-aaec-a5d5dad54dd5] succeeded in 2.136407057001634s: 'receipt_pdf for order 511: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:43.362533Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[df94c4c5-fd92-4930-9dc9-d649c2e5d1e9] succeeded in 2.106711501997779s: 'receipt_pdf for order 512: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:43.375355Z"}
+{"event": "Receipt PDF rendered for order 513", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:43.390062Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[c9fcc229-1254-4a8f-9091-f97450c9e074] succeeded in 2.057082834002358s: 'receipt_pdf for order 513: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:43.394538Z"}
+{"event": "Receipt PDF rendered for order 514", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:43.405324Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[0a25525f-6f2e-4a93-a6f6-b220d325ae96] succeeded in 2.0382880630022555s: 'receipt_pdf for order 514: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:43.409535Z"}
+{"event": "Receipt PDF rendered for order 515", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:43.410423Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[d4b1aad4-90e0-4bd6-8cba-d41e7ba9cb2d] succeeded in 2.034111580996978s: 'receipt_pdf for order 515: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:43.417070Z"}
+{"event": "Receipt PDF rendered for order 516", "logger": "app.tasks.stubs", "level": "info", "timestamp": "2026-11-19T12:50:43.459009Z"}
+{"event": "Task app.tasks.orders.generate_order_pdf[54881d55-4125-4644-bb82-45a44714a1c9] succeeded in 2.038693897000485s: 'receipt_pdf for order 516: done'", "logger": "celery.app.trace", "level": "info", "timestamp": "2026-11-19T12:50:43.465926Z"}

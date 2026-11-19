@@ -1,0 +1,18 @@
+{
+  "provider": "yookassa",
+  "test_mode": true,
+  "order_id": 106,
+  "notification_http_statuses": [
+    503,
+    200,
+    200
+  ],
+  "order_paid_events_before": 1,
+  "order_paid_events_after": 1,
+  "payment_status": "succeeded",
+  "note": "First verification returned HTTP 503 during a transient provider/API failure; two redeliveries succeeded. Exactly one OrderPaid remained. Notifications were replayed manually through public HTTPS, not sent automatically by YooKassa.",
+  "verification": {
+    "at_least_one_success": true,
+    "one_order_paid_preserved": true
+  }
+}

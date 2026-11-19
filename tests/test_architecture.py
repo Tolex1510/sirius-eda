@@ -20,7 +20,7 @@ def imported_packages(path: Path) -> set[str]:
 
 
 def test_all_modules_have_service():
-    assert {p.parent.name for p in SERVICES} == {"auth", "users", "menu", "orders", "delivery", "kitchen"}
+    assert {p.parent.name for p in SERVICES} == {"auth", "users", "menu", "orders", "delivery", "kitchen", "payments", "assistant"}
 
 
 @pytest.mark.parametrize("path", SERVICES, ids=lambda p: p.parent.name)

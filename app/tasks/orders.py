@@ -44,13 +44,15 @@ class OrderTask(Task):
 
 def run_once(task: OrderTask, order_id: int, action: Callable[[Order, User], None]) -> str:
     with session_scope() as db:
+        orders = SqlAlchemyOrderRepository(db)
+        order = orders.get_order(order_id)
+        if order and order.payment_source == "gateway" and order.status not in ("paid", "delivered"):
+            return f"{task.kind} for order {order_id}: unpaid or cancelled, skipped"
         journal = TaskJournal(db)
         if not journal.claim(order_id, task.kind):
             logger.info("Order %s %s already done or in progress, skipped", order_id, task.kind)
             return f"{task.kind} for order {order_id}: skipped"
 
-        orders = SqlAlchemyOrderRepository(db)
-        order = orders.get_order(order_id)
         try:
             action(order, orders.get_user_by_id(order.user_id))
         except Exception as exc:

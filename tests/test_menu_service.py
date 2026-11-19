@@ -16,6 +16,14 @@ def test_create_item_is_available(service):
     assert item.is_available is True
 
 
+def test_get_item_returns_unavailable_dish_and_rejects_missing(service):
+    item = service.create_item("Борщ", 150)
+    service.update_item(item.id, is_available=False)
+    assert service.get_item(item.id).is_available is False
+    with pytest.raises(NotFoundError, match="Блюдо не найдено"):
+        service.get_item(999999)
+
+
 def test_create_item_rejects_duplicate_name(service):
     service.create_item("Борщ", 150)
 

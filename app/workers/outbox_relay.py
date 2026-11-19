@@ -18,8 +18,12 @@ from datetime import UTC, datetime
 import aio_pika
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from opentelemetry import trace
+from opentelemetry.propagate import extract, inject
+from opentelemetry.trace import SpanKind
 
 from app.core.config import settings
+from app.core.observability import configure_worker
 from app.core.rabbitmq import Topology, event_message
 from app.database import database_url
 from app.outbox import NOTIFY_CHANNEL, OutboxStore
@@ -83,9 +87,24 @@ class OutboxRelay:
         published = []
         try:
             for event in events:
-                message = event_message(event.event_id, event.routing_key, event.payload, event.created_at)
-                # Канал с publisher confirms: publish возвращается, когда брокер записал сообщение.
-                await exchange.publish(message, routing_key=event.routing_key, timeout=PUBLISH_TIMEOUT_SECONDS)
+                headers = {}
+                correlation_id = event.payload.get("correlation_id")
+                parent = extract({"traceparent": event.payload["traceparent"]}) if event.payload.get("traceparent") else None
+                with trace.get_tracer("sirius.eda").start_as_current_span(
+                    f"rabbitmq.publish {event.routing_key}", context=parent, kind=SpanKind.PRODUCER,
+                ) as span:
+                    span.set_attribute("messaging.system", "rabbitmq")
+                    span.set_attribute("messaging.destination.name", event.routing_key)
+                    span.set_attribute("messaging.message.id", event.event_id)
+                    if correlation_id:
+                        span.set_attribute("app.correlation_id", correlation_id)
+                        headers["X-Correlation-ID"] = correlation_id
+                    inject(headers)
+                    message = event_message(
+                        event.event_id, event.routing_key, event.payload, event.created_at, headers,
+                    )
+                    # Span охватывает сетевую публикацию; publisher confirm значит, что брокер записал сообщение.
+                    await exchange.publish(message, routing_key=event.routing_key, timeout=PUBLISH_TIMEOUT_SECONDS)
                 published.append(event.id)
         except Exception as e:
             await asyncio.to_thread(self.store.record_failure, events[len(published)].id, repr(e))
@@ -132,7 +151,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.workers.outbox_relay")
     parser.add_argument("--poll-only", action="store_true", help="не слушать NOTIFY, только опрос раз в секунду")
     args = parser.parse_args()
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
+    configure_worker("sirius-outbox")
     logging.getLogger("aio_pika").setLevel(logging.ERROR)
     logging.getLogger("aiormq").setLevel(logging.ERROR)
 

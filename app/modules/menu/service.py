@@ -13,7 +13,13 @@ class MenuService:
         self.repository = repository
 
     def list_items(self) -> list[MenuItem]:
-        return self.repository.list_all()
+        return [item for item in self.repository.list_all() if not item.is_archived]
+
+    def get_item(self, item_id: int) -> MenuItem:
+        item = self.repository.get_by_id(item_id)
+        if not item:
+            raise NotFoundError("Блюдо не найдено")
+        return item
 
     def list_categories(self) -> list[Category]:
         return self.repository.list_categories()
@@ -22,6 +28,7 @@ class MenuService:
         menu = self.repository.get_category_menu(category_id)
         if not menu:
             raise NotFoundError("Категория не найдена")
+        menu.items = [item for item in menu.items if not item.is_archived]
         return menu
 
     def create_category(self, name: str) -> Category:

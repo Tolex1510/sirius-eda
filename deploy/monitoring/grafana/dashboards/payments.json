@@ -1,0 +1,395 @@
+{
+  "uid": "sirius-payments",
+  "title": "Платёжные уведомления",
+  "tags": [
+    "sirius",
+    "payments"
+  ],
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "refresh": "5s",
+  "timezone": "browser",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "order",
+        "label": "Номер заказа (.* = все)",
+        "type": "textbox",
+        "query": ".*",
+        "current": {
+          "text": ".*",
+          "value": ".*"
+        },
+        "hide": 0
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 8,
+      "type": "text",
+      "title": "Как читать журнал",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 3
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Таблица содержит все валидные обращения, включая ручные повторы. **Входящий тип события** — утверждение отправителя; **статусы платежа и возврата** получены после сверки через API. Старые уведомления до добавления журнала видны в нижнем блоке HTTP."
+      }
+    },
+    {
+      "id": 1,
+      "title": "Уведомления",
+      "type": "stat",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({app=\"sirius-eda\", service=\"api\"} | json | kind=\"payment_webhook\" | order_id=~\"${order:raw}\" [$__range]))",
+          "queryType": "instant"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "title": "Обработаны",
+      "type": "stat",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({app=\"sirius-eda\", service=\"api\"} | json | kind=\"payment_webhook\" | order_id=~\"${order:raw}\" | result=\"processed\" [$__range]))",
+          "queryType": "instant"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "title": "Ошибки",
+      "type": "stat",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({app=\"sirius-eda\", service=\"api\"} | json | kind=\"payment_webhook\" | order_id=~\"${order:raw}\" | result=\"failed\" [$__range]))",
+          "queryType": "instant"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "red"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "title": "Неизвестный объект",
+      "type": "stat",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({app=\"sirius-eda\", service=\"api\"} | json | kind=\"payment_webhook\" | order_id=~\"${order:raw}\" | result=\"ignored\" [$__range]))",
+          "queryType": "instant"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "orange"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "title": "Типы входящих событий",
+      "type": "timeseries",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 24,
+        "h": 7
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (event) (count_over_time({app=\"sirius-eda\", service=\"api\"} | json | kind=\"payment_webhook\" | order_id=~\"${order:raw}\" [$__interval]))",
+          "legendFormat": "{{event}}",
+          "queryType": "range"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 50
+          },
+          "min": 0
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "title": "История webhook — статус после сверки через API провайдера",
+      "type": "table",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 11
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{app=\"sirius-eda\", service=\"api\"} | json | kind=\"payment_webhook\" | order_id=~\"${order:raw}\"",
+          "queryType": "range",
+          "maxLines": 1000
+        }
+      ],
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "source": "Line",
+            "format": "json",
+            "replace": true,
+            "keepTime": true
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "kind": true,
+              "timestamp": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "event": 1,
+              "order_id": 2,
+              "payment_status": 3,
+              "refund_status": 4,
+              "result": 5,
+              "http_status": 6,
+              "duration_ms": 7,
+              "object_id": 8
+            },
+            "renameByName": {
+              "event": "Входящее событие",
+              "order_id": "Заказ",
+              "payment_status": "Статус платежа",
+              "refund_status": "Возврат",
+              "result": "Обработка",
+              "http_status": "HTTP",
+              "duration_ms": "Время, мс",
+              "object_id": "ID объекта"
+            }
+          }
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Time",
+            "desc": true
+          }
+        ]
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 7,
+      "title": "Входящие HTTP-запросы — включая старые уведомления до структурированного журнала",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "sirius-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{app=\"sirius-eda\", service=\"webhook-proxy\"} |= \"POST /api/payments/webhook\"",
+          "queryType": "range",
+          "maxLines": 500
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      }
+    }
+  ],
+  "description": "Входящие события не доказывают оплату. Статус показывается после проверки через API. processed = выполнена сверка, ignored = объект не найден; повторы видны отдельными строками, денежные операции идемпотентны."
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "path": "/",
+    "query": "горячий обед",
+    "names": [
+      "Минтай под овощной шапкой",
+      "Рис с курицей и яйцом",
+      "Котлеты из индейки с пюре",
+      "Чечевичный суп с томатами",
+      "Курица терияки с рисом",
+      "Тыквенный крем-суп",
+      "Картофельные зразы с грибами",
+      "Карри из нута с рисом"
+    ],
+    "constraints": [
+      "Горячий обед: горячее, супы и паста"
+    ],
+    "desktop": {
+      "columns": 4,
+      "photo": 164,
+      "font": "\"Segoe UI\", system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+      "inputFont": "\"Segoe UI\", system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+      "overflow": false
+    }
+  },
+  {
+    "path": "/menu",
+    "query": "горячий обед",
+    "names": [
+      "Минтай под овощной шапкой",
+      "Рис с курицей и яйцом",
+      "Котлеты из индейки с пюре",
+      "Чечевичный суп с томатами",
+      "Курица терияки с рисом",
+      "Тыквенный крем-суп",
+      "Картофельные зразы с грибами",
+      "Карри из нута с рисом"
+    ],
+    "constraints": [
+      "Горячий обед: горячее, супы и паста"
+    ],
+    "desktop": {
+      "columns": 4,
+      "photo": 164,
+      "font": "\"Segoe UI\", system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+      "inputFont": "\"Segoe UI\", system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+      "overflow": false
+    }
+  },
+  {
+    "mobile": {
+      "columns": 1,
+      "overflow": false
+    }
+  }
+]

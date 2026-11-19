@@ -1,0 +1,284 @@
+......................................................s................. [ 19%]
+........................................................................ [ 38%]
+..................ssssss................................................ [ 57%]
+........................................................................ [ 76%]
+s....................................................................... [ 96%]
+.............../usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86725bc9a0>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a0dc8b0>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86704a8b80>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a018310>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689929300>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689a3e7a0>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f867358e5c0>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a0dc4f0>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/collections/__init__.py:455: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f867234ec50>
+  result = tuple_new(cls, iterable)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+                                                          [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.14/site-packages/fastapi/testclient.py:1
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.14/site-packages/pact/generate/__init__.py:167
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/pact/generate/__init__.py:167: DeprecationWarning: testcontainers.postgres is deprecated, use testcontainers.community.postgres instead
+    return __builtins_import(name, globals, locals, fromlist, level)
+
+tests/test_events.py::test_dispatch_assigns_first_free_courier[sqlite]
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/orm/strategies.py:2913: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8672f1a4d0>
+    def _create_scalar_loader(self, context, key, _instance, populators):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_events.py::test_dispatch_assigns_first_free_courier[sqlite]
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/orm/strategies.py:2913: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86725216c0>
+    def _create_scalar_loader(self, context, key, _instance, populators):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_update_drops_only_affected_keys
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/stack/_topk_mixin.py:15: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86704aa4d0>
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868829e6b0>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8672651d50>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a018b80>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a0822f0>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a0834c0>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f868a01b880>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86725227a0>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689d0c130>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_menu_cache.py::test_stampede_sends_one_query_to_database
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/fakeredis/_commands.py:51: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689d80130>
+    def __init__(self, key: bytes, db: Database, item: CommandItem | None = None, default: Any = None) -> None:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689928220>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689a662f0>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86735eb4c0>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86899ccb80>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f867372e980>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8673710310>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_payment_methodic.py::test_amount_is_required_and_must_match_server_order
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/starlette/datastructures.py:537: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8673269f30>
+    def getlist(self, key: str) -> list[str]:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_repository_contract.py::test_sql_repositories_release_connection_after_each_call
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py:1011: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86737a4040>
+    def __init__(self, col, name, alt_names=()):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_repository_contract.py::test_sql_repositories_release_connection_after_each_call
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py:1011: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f867345a4d0>
+    def __init__(self, col, name, alt_names=()):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_repository_contract.py::test_sql_repositories_release_connection_after_each_call
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py:1011: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f86732fb790>
+    def __init__(self, col, name, alt_names=()):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_repository_contract.py::test_sql_repositories_release_connection_after_each_call
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py:1011: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8689a67880>
+    def __init__(self, col, name, alt_names=()):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+tests/test_repository_contract.py::test_sql_repositories_release_connection_after_each_call
+  /home/tolex/Programming/RPM/sirius-eda/.venv/lib/python3.14/site-packages/sqlalchemy/sql/compiler.py:1011: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8672912d40>
+    def __init__(self, col, name, alt_names=()):
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.14.9-final-0 ________________
+
+Name                                   Stmts   Miss  Cover
+----------------------------------------------------------
+app/__init__.py                            0      0   100%
+app/cli.py                               136    136     0%
+app/core/__init__.py                       0      0   100%
+app/core/cache.py                         59      3    95%
+app/core/celery_app.py                     8      0   100%
+app/core/config.py                        37      0   100%
+app/core/dependencies.py                  25      0   100%
+app/core/jwt.py                           42      0   100%
+app/core/observability.py                124     43    65%
+app/core/rabbitmq.py                      62     25    60%
+app/core/rate_limit.py                    20      0   100%
+app/core/redis.py                         14      5    64%
+app/core/security.py                      12      0   100%
+app/database.py                           30      4    87%
+app/dependencies.py                       81     42    48%
+app/domain/__init__.py                     0      0   100%
+app/domain/entities.py                    62      0   100%
+app/domain/events.py                      71      4    94%
+app/domain/exceptions.py                   9      0   100%
+app/domain/money.py                        9      0   100%
+app/http_errors.py                         7      0   100%
+app/main.py                               47      2    96%
+app/memory_storage.py                     21      0   100%
+app/models.py                            173      0   100%
+app/modules/__init__.py                    0      0   100%
+app/modules/assistant/__init__.py          0      0   100%
+app/modules/assistant/contracts.py        17      3    82%
+app/modules/assistant/guards.py           13      2    85%
+app/modules/assistant/ollama.py           36      5    86%
+app/modules/assistant/quality.py          30      6    80%
+app/modules/assistant/repository.py      125     49    61%
+app/modules/assistant/router.py           31      9    71%
+app/modules/assistant/service.py          62      6    90%
+app/modules/auth/__init__.py               0      0   100%
+app/modules/auth/oauth.py                 42      0   100%
+app/modules/auth/repository.py            62     16    74%
+app/modules/auth/router.py                77      4    95%
+app/modules/auth/service.py               75      3    96%
+app/modules/auth/session_router.py        36      2    94%
+app/modules/delivery/__init__.py           0      0   100%
+app/modules/delivery/gateway.py           34      1    97%
+app/modules/delivery/grpc_client.py       89      0   100%
+app/modules/delivery/repository.py       156     31    80%
+app/modules/delivery/router.py            55      4    93%
+app/modules/delivery/service.py           80      2    98%
+app/modules/kitchen/__init__.py            0      0   100%
+app/modules/kitchen/repository.py         78      2    97%
+app/modules/kitchen/router.py             10      1    90%
+app/modules/kitchen/service.py            18      0   100%
+app/modules/menu/__init__.py               0      0   100%
+app/modules/menu/filters.py               76     11    86%
+app/modules/menu/repository.py           155     11    93%
+app/modules/menu/router.py                65     15    77%
+app/modules/menu/semantic.py              55     30    45%
+app/modules/menu/service.py               47      1    98%
+app/modules/orders/__init__.py             0      0   100%
+app/modules/orders/notifier.py            29      2    93%
+app/modules/orders/repository.py         153     12    92%
+app/modules/orders/router.py              47      0   100%
+app/modules/orders/service.py             84      3    96%
+app/modules/payments/__init__.py           0      0   100%
+app/modules/payments/contracts.py         28      0   100%
+app/modules/payments/dependencies.py      21      3    86%
+app/modules/payments/gateway.py           45      3    93%
+app/modules/payments/repository.py       147     15    90%
+app/modules/payments/router.py            87     19    78%
+app/modules/payments/service.py           83      9    89%
+app/modules/payments/telemetry.py         13      0   100%
+app/modules/users/__init__.py              0      0   100%
+app/modules/users/repository.py           64      5    92%
+app/modules/users/router.py               49      8    84%
+app/modules/users/service.py              35      1    97%
+app/outbox.py                             52     16    69%
+app/schemas.py                            31      0   100%
+app/tasks/__init__.py                      0      0   100%
+app/tasks/dead_letters.py                 35      0   100%
+app/tasks/journal.py                      51      1    98%
+app/tasks/maintenance.py                  55     18    67%
+app/tasks/orders.py                       44      0   100%
+app/tasks/payments.py                     21      1    95%
+app/tasks/stubs.py                        18      0   100%
+app/workers/__init__.py                    0      0   100%
+app/workers/consumer.py                   88     23    74%
+app/workers/dead_letters.py               42     33    21%
+app/workers/kitchen_consumer.py           19      9    53%
+app/workers/orders_consumer.py            16      7    56%
+app/workers/outbox_relay.py              125     63    50%
+app/workers/payments_consumer.py          15      3    80%
+----------------------------------------------------------
+TOTAL                                   4070    732    82%
+Coverage XML written to file docs/lab10/results/coverage.xml
+367 passed, 8 skipped, 26 warnings in 30.49s

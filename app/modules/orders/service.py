@@ -9,6 +9,7 @@ from app.domain.events import DeliveryFailed, OrderCancelled, OrderPaid, Receipt
 from app.domain.exceptions import AccessDeniedError, AlreadyProcessedError, BusinessRuleError, NotFoundError
 from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
+from app.core.observability import orders_created, start_span
 
 KITCHEN_STATUSES = (OrderStatus.PROCESSING, OrderStatus.PAID)
 
@@ -18,7 +19,17 @@ class OrderService:
         self.repository = repository
         self.notifier = notifier
 
-    def create_order(self, user_id: int, item_id: int, quantity: int) -> int:
+    def create_order(
+        self, user_id: int, item_id: int, quantity: int, correlation_id: str | None = None,
+    ) -> int:
+        with start_span("orders.create") as span:
+            span.set_attribute("app.user_id", user_id)
+            span.set_attribute("app.item_id", item_id)
+            if correlation_id:
+                span.set_attribute("app.correlation_id", correlation_id)
+            return self._create_order(user_id, item_id, quantity, correlation_id)
+
+    def _create_order(self, user_id: int, item_id: int, quantity: int, correlation_id: str | None) -> int:
         """Сценарий оформления заказа. Возвращает идентификатор заказа."""
         user = self.repository.get_user_by_id(user_id)
         if not user:
@@ -35,12 +46,21 @@ class OrderService:
         if user.balance < total_cost:
             raise BusinessRuleError("Недостаточно средств на балансе студента")
 
-        order_id = self.repository.save_order(
+        save_order_args = dict(
             user_id=user_id,
             item_id=item_id,
             quantity=quantity,
             total_cost=total_cost,
             new_balance=user.balance - total_cost,
+        )
+        if correlation_id is not None:
+            save_order_args["correlation_id"] = correlation_id
+        order_id = self.repository.save_order(**save_order_args)
+        orders_created.inc()
+        import structlog
+
+        structlog.get_logger(__name__).info(
+            "order_created", order_id=order_id, user_id=user_id, correlation_id=correlation_id,
         )
         # После сохранения: чек и уведомления о заказе, которого нет в БД, никому не нужны.
         self.notifier.order_created(order_id, user)
@@ -55,6 +75,9 @@ class OrderService:
         # Защита от IDOR: order_id пришёл от клиента, владельца сверяем с пользователем из JWT.
         if order.user_id != actor.id and actor.role != Role.ADMIN:
             raise AccessDeniedError("Нет доступа к чужому заказу")
+
+        if order.payment_source != "internal_balance":
+            raise BusinessRuleError("Используйте отмену внешнего заказа")
 
         if order.status != OrderStatus.PROCESSING or not self.repository.cancel_and_refund(order):
             raise BusinessRuleError("Отменить можно только заказ в обработке")
@@ -74,7 +97,13 @@ class OrderService:
         if order.user_id != actor.id and actor.role != Role.ADMIN:
             raise AccessDeniedError("Нет доступа к чужому заказу")
 
-        event = OrderPaid(order_id=order.id, customer_id=order.user_id, amount=order.total_cost)
+        if order.payment_source != "internal_balance":
+            raise BusinessRuleError("Внешнюю оплату подтверждает платёжный провайдер")
+
+        event = OrderPaid(
+            order_id=order.id, customer_id=order.user_id, amount=order.total_cost,
+            correlation_id=order.correlation_id,
+        )
         # Статус и событие сохраняются одной транзакцией: оплаченный заказ без события невозможен.
         if order.status != OrderStatus.PROCESSING or not self.repository.mark_paid(order, event):
             raise BusinessRuleError("Оплатить можно только заказ в обработке")
@@ -95,7 +124,8 @@ class OrderService:
             return None
 
         cancelled = OrderCancelled(
-            order_id=order.id, customer_id=order.user_id, refund=order.total_cost, reason=event.reason
+            order_id=order.id, customer_id=order.user_id, refund=order.total_cost, reason=event.reason,
+            correlation_id=event.correlation_id,
         )
         return cancelled if self.repository.cancel_paid_and_refund(order, cancelled, receipt) else None
 

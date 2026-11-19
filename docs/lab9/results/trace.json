@@ -1,0 +1,185 @@
+{
+  "trace_id": "42176a1e985daf7599f8c0d91267c61c",
+  "spans": [
+    {
+      "operation": "rabbitmq.consume order.paid",
+      "service": "sirius-kitchen",
+      "duration_us": 126418
+    },
+    {
+      "operation": "rabbitmq.publish order.paid",
+      "service": "sirius-outbox",
+      "duration_us": 15514
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 792
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-kitchen",
+      "duration_us": 603
+    },
+    {
+      "operation": "rabbitmq.consume order.paid",
+      "service": "sirius-delivery",
+      "duration_us": 177597
+    },
+    {
+      "operation": "POST /orders/{order_id}/pay http send",
+      "service": "sirius-api",
+      "duration_us": 38
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-api",
+      "duration_us": 672
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-delivery",
+      "duration_us": 44867
+    },
+    {
+      "operation": "UPDATE sirius_food",
+      "service": "sirius-api",
+      "duration_us": 1222
+    },
+    {
+      "operation": "NOTIFY sirius_food",
+      "service": "sirius-api",
+      "duration_us": 290
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-delivery",
+      "duration_us": 838
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 1951
+    },
+    {
+      "operation": "INSERT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 765
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 1337
+    },
+    {
+      "operation": "INSERT sirius_food",
+      "service": "sirius-kitchen",
+      "duration_us": 2275
+    },
+    {
+      "operation": "POST /orders/{order_id}/pay",
+      "service": "sirius-api",
+      "duration_us": 56751
+    },
+    {
+      "operation": "INSERT sirius_food",
+      "service": "sirius-api",
+      "duration_us": 11703
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-delivery",
+      "duration_us": 793
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-kitchen",
+      "duration_us": 1267
+    },
+    {
+      "operation": "INSERT sirius_food",
+      "service": "sirius-kitchen",
+      "duration_us": 2428
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-delivery",
+      "duration_us": 598
+    },
+    {
+      "operation": "INSERT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 2010
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-kitchen",
+      "duration_us": 736
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-kitchen",
+      "duration_us": 40043
+    },
+    {
+      "operation": "POST /orders/{order_id}/pay http send",
+      "service": "sirius-api",
+      "duration_us": 45
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-api",
+      "duration_us": 458
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-api",
+      "duration_us": 493
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 6276
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 3450
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-kitchen",
+      "duration_us": 1003
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-delivery",
+      "duration_us": 1289
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-delivery",
+      "duration_us": 720
+    },
+    {
+      "operation": "POST /orders/{order_id}/pay http send",
+      "service": "sirius-api",
+      "duration_us": 60
+    },
+    {
+      "operation": "connect",
+      "service": "sirius-api",
+      "duration_us": 560
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-api",
+      "duration_us": 1096
+    },
+    {
+      "operation": "SELECT sirius_food",
+      "service": "sirius-kitchen",
+      "duration_us": 12514
+    }
+  ]
+}

@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.database import Base
-from app.domain.entities import DeliveryStatus, KitchenTicketStatus, OrderStatus, Role
+from app.domain.entities import Delivery, DeliveryStatus, KitchenTicketStatus, OrderStatus, Role
 from app.domain.events import (
     DeliveryFailed, InvalidEventError, OrderCancelled, OrderPaid, Receipt, parse_event,
 )
@@ -275,6 +275,17 @@ def test_dispatch_assigns_first_free_courier(world):
     delivery = DeliveryService(world.delivery_repo()).dispatch(event, Receipt("delivery", event.event_id))
 
     assert (delivery.order_id, delivery.courier_id, delivery.status) == (order_id, free, DeliveryStatus.IN_PROGRESS)
+    assert world.outbox() == []
+
+
+def test_dispatch_reuses_courier_with_active_delivery(world):
+    courier = world.user(role=Role.COURIER)
+    world.delivery(world.order(world.user(), OrderStatus.PAID), courier, DeliveryStatus.ON_THE_WAY)
+    order_id = world.order(world.user(), OrderStatus.PAID)
+    event = OrderPaid(order_id=order_id, customer_id=1, amount=100.0)
+    delivery = DeliveryService(world.delivery_repo()).dispatch(event, Receipt("delivery", event.event_id))
+    assert isinstance(delivery, Delivery)
+    assert delivery.courier_id == courier
     assert world.outbox() == []
 
 

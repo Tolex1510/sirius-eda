@@ -1,0 +1,8 @@
+    app.domain.money.x_money__mutmut_5: survived
+    app.domain.money.x_money__mutmut_6: survived
+    app.domain.money.x_money__mutmut_7: survived
+    app.domain.money.x_money__mutmut_8: survived
+    app.domain.money.x_money__mutmut_15: survived
+    app.domain.money.x_money__mutmut_16: survived
+    app.domain.money.x_money__mutmut_17: survived
+    app.domain.money.x_money__mutmut_18: survived

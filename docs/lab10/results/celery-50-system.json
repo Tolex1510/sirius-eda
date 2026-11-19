@@ -1,0 +1,100 @@
+[
+  {
+    "time": 1795092613.9613066,
+    "api_cpu_percent": 0.0,
+    "api_rss_mib": 137.5,
+    "db_active_connections": 1,
+    "celery_pending": 0
+  },
+  {
+    "time": 1795092615.968359,
+    "api_cpu_percent": 7.5,
+    "api_rss_mib": 140.7,
+    "db_active_connections": 1,
+    "celery_pending": 0
+  },
+  {
+    "time": 1795092617.9868865,
+    "api_cpu_percent": 69.4,
+    "api_rss_mib": 145.3,
+    "db_active_connections": 1,
+    "celery_pending": 0
+  },
+  {
+    "time": 1795092619.9931147,
+    "api_cpu_percent": 77.2,
+    "api_rss_mib": 146.6,
+    "db_active_connections": 1,
+    "celery_pending": 24
+  },
+  {
+    "time": 1795092622.0001357,
+    "api_cpu_percent": 95.7,
+    "api_rss_mib": 147.3,
+    "db_active_connections": 1,
+    "celery_pending": 56
+  },
+  {
+    "time": 1795092624.0050468,
+    "api_cpu_percent": 98.8,
+    "api_rss_mib": 147.7,
+    "db_active_connections": 1,
+    "celery_pending": 116
+  },
+  {
+    "time": 1795092626.0098548,
+    "api_cpu_percent": 97.8,
+    "api_rss_mib": 147.9,
+    "db_active_connections": 1,
+    "celery_pending": 171
+  },
+  {
+    "time": 1795092628.0136244,
+    "api_cpu_percent": 80.8,
+    "api_rss_mib": 149.2,
+    "db_active_connections": 1,
+    "celery_pending": 186
+  },
+  {
+    "time": 1795092630.021511,
+    "api_cpu_percent": 74.7,
+    "api_rss_mib": 149.5,
+    "db_active_connections": 1,
+    "celery_pending": 203
+  },
+  {
+    "time": 1795092632.0343957,
+    "api_cpu_percent": 69.1,
+    "api_rss_mib": 150.3,
+    "db_active_connections": 1,
+    "celery_pending": 222
+  },
+  {
+    "time": 1795092634.0489268,
+    "api_cpu_percent": 76.9,
+    "api_rss_mib": 150.6,
+    "db_active_connections": 1,
+    "celery_pending": 247
+  },
+  {
+    "time": 1795092636.0585039,
+    "api_cpu_percent": 82.6,
+    "api_rss_mib": 151.0,
+    "db_active_connections": 1,
+    "celery_pending": 279
+  },
+  {
+    "time": 1795092638.0652702,
+    "api_cpu_percent": 87.2,
+    "api_rss_mib": 151.0,
+    "db_active_connections": 1,
+    "celery_pending": 308
+  },
+  {
+    "time": 1795092640.0693405,
+    "api_cpu_percent": 86.8,
+    "api_rss_mib": 151.1,
+    "db_active_connections": 1,
+    "celery_pending": 345
+  }
+]

@@ -73,10 +73,10 @@ def test_assign_blocked_courier(service, storage, paid_order, admin):
         service.assign_courier(paid_order.id, blocked.id, actor=admin)
 
 
-def test_courier_has_single_active_delivery(service, paid_order, courier):
+def test_order_has_single_active_delivery(service, paid_order, courier):
     service.assign_courier(paid_order.id, courier.id, actor=courier)
 
-    with pytest.raises(BusinessRuleError, match="активная доставка"):
+    with pytest.raises(BusinessRuleError, match="У заказа уже есть доставка"):
         service.assign_courier(paid_order.id, courier.id, actor=courier)
 
 
@@ -155,12 +155,12 @@ def test_pick_up_foreign_delivery_is_forbidden(service, storage, paid_order, cou
         service.pick_up(delivery.id, actor=add_user(storage, role=Role.COURIER))
 
 
-def test_courier_on_the_way_is_busy(service, storage, paid_order, courier):
+def test_courier_on_the_way_can_take_another_order(service, storage, paid_order, courier):
     add_delivery(storage, paid_order.id, courier.id, DeliveryStatus.ON_THE_WAY)
     other_order = add_order(storage, add_user(storage).id, add_menu_item(storage).id, OrderStatus.PAID)
 
-    with pytest.raises(BusinessRuleError, match="уже есть активная доставка"):
-        service.assign_courier(other_order.id, courier.id, actor=courier)
+    delivery_id = service.assign_courier(other_order.id, courier.id, actor=courier)
+    assert storage.deliveries[delivery_id].courier_id == courier.id
 
 
 def test_delivery_on_the_way_can_be_completed(service, storage, paid_order, courier):

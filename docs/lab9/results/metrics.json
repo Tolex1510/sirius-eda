@@ -1,0 +1,143 @@
+{
+  "up": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "localhost:9090",
+            "job": "prometheus"
+          },
+          "value": [
+            1794982287.214,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "rabbitmq:15692",
+            "job": "rabbitmq"
+          },
+          "value": [
+            1794982287.214,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "up",
+            "instance": "api:8000",
+            "job": "sirius-api"
+          },
+          "value": [
+            1794982287.214,
+            "1"
+          ]
+        }
+      ]
+    }
+  },
+  "rabbitmq_queue_messages_ready{queue=\"kitchen_queue\"}": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "rabbitmq_queue_messages_ready",
+            "instance": "rabbitmq:15692",
+            "job": "rabbitmq",
+            "queue": "kitchen_queue",
+            "vhost": "/"
+          },
+          "value": [
+            1794982287.218,
+            "0"
+          ]
+        }
+      ]
+    }
+  },
+  "http_requests_total{handler=\"/orders/create\"}": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "http_requests_total",
+            "handler": "/orders/create",
+            "instance": "api:8000",
+            "job": "sirius-api",
+            "method": "POST",
+            "status": "200"
+          },
+          "value": [
+            1794982287.221,
+            "1"
+          ]
+        }
+      ]
+    }
+  },
+  "sirius_orders_created_total": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "sirius_orders_created_total",
+            "instance": "api:8000",
+            "job": "sirius-api"
+          },
+          "value": [
+            1794982287.228,
+            "1"
+          ]
+        }
+      ]
+    }
+  },
+  "sirius_cache_operations_total": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "sirius_cache_operations_total",
+            "instance": "api:8000",
+            "job": "sirius-api",
+            "result": "hit"
+          },
+          "value": [
+            1794982287.232,
+            "1"
+          ]
+        }
+      ]
+    }
+  },
+  "histogram_quantile(0.95,sum by(le)(rate(http_request_duration_seconds_bucket[5m])))": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1794982287.234,
+            "0.095"
+          ]
+        }
+      ]
+    },
+    "infos": [
+      "PromQL info: input to histogram_quantile needed to be fixed for monotonicity (see https://prometheus.io/docs/prometheus/latest/querying/functions/#histogram_quantile) for metric name \"\" (1:25)"
+    ]
+  }
+}

@@ -89,6 +89,7 @@ class TaskJournal:
             Order.created_at >= created_from,
             Order.created_at < created_to,
             ~exists().where(TaskLog.order_id == Order.id, TaskLog.kind == kind),
+            or_(Order.payment_source == "internal_balance", Order.status.in_(("paid", "delivered"))),
         )
         if with_phone:
             query = query.join(User, User.id == Order.user_id).filter(User.phone.isnot(None))

@@ -1,0 +1,4 @@
+# Optional NVIDIA acceleration for the ai profile (requires supported GPU/runtime).
+services:
+  ollama:
+    gpus: all

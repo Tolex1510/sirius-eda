@@ -1,0 +1,1127 @@
+{
+  "version": 1,
+  "kind": "educational_demo_menu",
+  "note": "Учебные рецептуры и цены. Состав и dietary_tags описывают рецепт, но не гарантируют отсутствие следов аллергенов. Пищевая ценность не рассчитывалась.",
+  "items": [
+    {
+      "slug": "syrniki-berry",
+      "category": "Завтраки",
+      "name": "Сырники с ягодным соусом",
+      "price": 195,
+      "currency": "RUB",
+      "portion": {
+        "value": 180,
+        "unit": "g"
+      },
+      "description": "Три нежных сырника с прохладной сметаной и соусом из чёрной смородины.",
+      "ingredients": [
+        "творог",
+        "яйцо",
+        "пшеничная мука",
+        "сахар",
+        "сметана",
+        "чёрная смородина"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "oatmeal-apple",
+      "category": "Завтраки",
+      "name": "Овсяная каша с печёным яблоком",
+      "price": 135,
+      "currency": "RUB",
+      "portion": {
+        "value": 280,
+        "unit": "g"
+      },
+      "description": "Молочная овсянка с дольками яблока, корицей и небольшим количеством мёда.",
+      "ingredients": [
+        "овсяные хлопья",
+        "молоко",
+        "яблоко",
+        "корица",
+        "мёд"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "omelette-spinach",
+      "category": "Завтраки",
+      "name": "Омлет со шпинатом и сыром",
+      "price": 185,
+      "currency": "RUB",
+      "portion": {
+        "value": 220,
+        "unit": "g"
+      },
+      "description": "Пышный омлет с молодым шпинатом и тянущимся сыром.",
+      "ingredients": [
+        "яйцо",
+        "молоко",
+        "шпинат",
+        "сыр гауда",
+        "сливочное масло"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "rice-porridge",
+      "category": "Завтраки",
+      "name": "Рисовая каша с курагой",
+      "price": 125,
+      "currency": "RUB",
+      "portion": {
+        "value": 270,
+        "unit": "g"
+      },
+      "description": "Сливочная рисовая каша с мягкой курагой.",
+      "ingredients": [
+        "рис",
+        "молоко",
+        "курага",
+        "сливочное масло",
+        "сахар"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "shakshuka",
+      "category": "Завтраки",
+      "name": "Шакшука с тостом",
+      "price": 225,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "g"
+      },
+      "description": "Два яйца в густом соусе из томатов и сладкого перца, с хрустящим хлебом.",
+      "ingredients": [
+        "яйцо",
+        "томат",
+        "сладкий перец",
+        "лук",
+        "пшеничный хлеб",
+        "паприка"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "pancakes-chicken",
+      "category": "Завтраки",
+      "name": "Блинчики с курицей и грибами",
+      "price": 210,
+      "currency": "RUB",
+      "portion": {
+        "value": 230,
+        "unit": "g"
+      },
+      "description": "Два тонких блинчика с сочной начинкой из курицы и шампиньонов.",
+      "ingredients": [
+        "пшеничная мука",
+        "молоко",
+        "яйцо",
+        "курица",
+        "шампиньоны",
+        "лук",
+        "сливки"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "borscht-beef",
+      "category": "Супы",
+      "name": "Борщ с говядиной",
+      "price": 210,
+      "currency": "RUB",
+      "portion": {
+        "value": 350,
+        "unit": "g"
+      },
+      "description": "Наваристый свекольный суп с говядиной; сметана подаётся отдельно.",
+      "ingredients": [
+        "говядина",
+        "свёкла",
+        "капуста",
+        "картофель",
+        "морковь",
+        "лук",
+        "томатная паста",
+        "сметана"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "chicken-noodle",
+      "category": "Супы",
+      "name": "Куриный суп с лапшой",
+      "price": 165,
+      "currency": "RUB",
+      "portion": {
+        "value": 350,
+        "unit": "g"
+      },
+      "description": "Прозрачный куриный бульон с лапшой, морковью и зеленью.",
+      "ingredients": [
+        "курица",
+        "пшеничная лапша",
+        "яйцо",
+        "морковь",
+        "лук",
+        "укроп"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "pumpkin-cream",
+      "category": "Супы",
+      "name": "Тыквенный крем-суп",
+      "price": 185,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "g"
+      },
+      "description": "Бархатистый суп из запечённой тыквы со сливками и тыквенными семечками.",
+      "ingredients": [
+        "тыква",
+        "картофель",
+        "морковь",
+        "лук",
+        "сливки",
+        "тыквенные семечки"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "lentil-tomato",
+      "category": "Супы",
+      "name": "Чечевичный суп с томатами",
+      "price": 170,
+      "currency": "RUB",
+      "portion": {
+        "value": 350,
+        "unit": "g"
+      },
+      "description": "Густой суп из красной чечевицы с томатами, зирой и лимоном.",
+      "ingredients": [
+        "красная чечевица",
+        "томат",
+        "морковь",
+        "лук",
+        "лимон",
+        "зира",
+        "растительное масло"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "fish-soup",
+      "category": "Супы",
+      "name": "Уха с горбушей",
+      "price": 220,
+      "currency": "RUB",
+      "portion": {
+        "value": 350,
+        "unit": "g"
+      },
+      "description": "Лёгкий рыбный бульон с кусочками горбуши, картофелем и укропом.",
+      "ingredients": [
+        "горбуша",
+        "картофель",
+        "морковь",
+        "лук",
+        "укроп",
+        "лавровый лист"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "mushroom-barley",
+      "category": "Супы",
+      "name": "Грибной суп с перловкой",
+      "price": 175,
+      "currency": "RUB",
+      "portion": {
+        "value": 350,
+        "unit": "g"
+      },
+      "description": "Ароматный суп с шампиньонами и перловкой на овощном бульоне.",
+      "ingredients": [
+        "шампиньоны",
+        "перловая крупа",
+        "картофель",
+        "морковь",
+        "лук",
+        "растительное масло"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "greek",
+      "category": "Салаты",
+      "name": "Греческий салат",
+      "price": 225,
+      "currency": "RUB",
+      "portion": {
+        "value": 230,
+        "unit": "g"
+      },
+      "description": "Крупно нарезанные овощи с фетой, маслинами и заправкой из оливкового масла.",
+      "ingredients": [
+        "томат",
+        "огурец",
+        "сладкий перец",
+        "фета",
+        "маслины",
+        "красный лук",
+        "оливковое масло"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "caesar-chicken",
+      "category": "Салаты",
+      "name": "Цезарь с курицей",
+      "price": 275,
+      "currency": "RUB",
+      "portion": {
+        "value": 250,
+        "unit": "g"
+      },
+      "description": "Куриное филе, хрустящие листья салата, сухарики и сыр под соусом с анчоусами.",
+      "ingredients": [
+        "курица",
+        "салат романо",
+        "пшеничный хлеб",
+        "пармезан",
+        "яйцо",
+        "анчоус",
+        "горчица"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "beet-feta",
+      "category": "Салаты",
+      "name": "Свёкла с фетой и грецким орехом",
+      "price": 175,
+      "currency": "RUB",
+      "portion": {
+        "value": 200,
+        "unit": "g"
+      },
+      "description": "Сладкая печёная свёкла, солоноватая фета и грецкие орехи с лимонной заправкой.",
+      "ingredients": [
+        "свёкла",
+        "фета",
+        "грецкий орех",
+        "петрушка",
+        "лимон",
+        "растительное масло"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "cabbage-carrot",
+      "category": "Салаты",
+      "name": "Капустный салат с яблоком",
+      "price": 95,
+      "currency": "RUB",
+      "portion": {
+        "value": 180,
+        "unit": "g"
+      },
+      "description": "Хрустящая капуста с морковью и кисло-сладким яблоком.",
+      "ingredients": [
+        "капуста",
+        "морковь",
+        "яблоко",
+        "лимон",
+        "растительное масло"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "bulgur-vegetables",
+      "category": "Салаты",
+      "name": "Булгур с запечёнными овощами",
+      "price": 190,
+      "currency": "RUB",
+      "portion": {
+        "value": 230,
+        "unit": "g"
+      },
+      "description": "Сытный салат с рассыпчатым булгуром, баклажаном, кабачком и зеленью.",
+      "ingredients": [
+        "булгур",
+        "баклажан",
+        "кабачок",
+        "томат",
+        "петрушка",
+        "лимон",
+        "растительное масло"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "tuna-beans",
+      "category": "Салаты",
+      "name": "Салат с тунцом и фасолью",
+      "price": 245,
+      "currency": "RUB",
+      "portion": {
+        "value": 230,
+        "unit": "g"
+      },
+      "description": "Тунец и белая фасоль со свежими овощами под лимонной заправкой.",
+      "ingredients": [
+        "тунец",
+        "белая фасоль",
+        "огурец",
+        "томат",
+        "красный лук",
+        "лимон",
+        "оливковое масло"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "chicken-teriyaki",
+      "category": "Горячее",
+      "name": "Курица терияки с рисом",
+      "price": 295,
+      "currency": "RUB",
+      "portion": {
+        "value": 330,
+        "unit": "g"
+      },
+      "description": "Куриные кусочки в сладко-солёном соусе с рисом и брокколи.",
+      "ingredients": [
+        "курица",
+        "рис",
+        "брокколи",
+        "соевый соус",
+        "сахар",
+        "имбирь",
+        "чеснок",
+        "кунжут"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "turkey-cutlet",
+      "category": "Горячее",
+      "name": "Котлеты из индейки с пюре",
+      "price": 310,
+      "currency": "RUB",
+      "portion": {
+        "value": 340,
+        "unit": "g"
+      },
+      "description": "Две запечённые котлеты из индейки с картофельным пюре и сливочной подливкой.",
+      "ingredients": [
+        "индейка",
+        "лук",
+        "пшеничный хлеб",
+        "молоко",
+        "яйцо",
+        "картофель",
+        "сливочное масло",
+        "сливки"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "beef-stroganoff",
+      "category": "Горячее",
+      "name": "Бефстроганов с гречкой",
+      "price": 365,
+      "currency": "RUB",
+      "portion": {
+        "value": 330,
+        "unit": "g"
+      },
+      "description": "Тонкие полоски говядины в сметанном соусе с рассыпчатой гречкой.",
+      "ingredients": [
+        "говядина",
+        "шампиньоны",
+        "лук",
+        "сметана",
+        "пшеничная мука",
+        "гречка",
+        "сливочное масло"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "pollock-baked",
+      "category": "Горячее",
+      "name": "Минтай под овощной шапкой",
+      "price": 285,
+      "currency": "RUB",
+      "portion": {
+        "value": 320,
+        "unit": "g"
+      },
+      "description": "Запечённое филе минтая с морковью и томатами, гарнир — рис.",
+      "ingredients": [
+        "минтай",
+        "морковь",
+        "томат",
+        "лук",
+        "рис",
+        "растительное масло"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "chickpea-curry",
+      "category": "Горячее",
+      "name": "Карри из нута с рисом",
+      "price": 255,
+      "currency": "RUB",
+      "portion": {
+        "value": 340,
+        "unit": "g"
+      },
+      "description": "Нут и овощи в мягком кокосовом карри с рисом басмати.",
+      "ingredients": [
+        "нут",
+        "кокосовое молоко",
+        "томат",
+        "морковь",
+        "лук",
+        "рис басмати",
+        "куркума",
+        "зира"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "potato-zrazy",
+      "category": "Горячее",
+      "name": "Картофельные зразы с грибами",
+      "price": 235,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "g"
+      },
+      "description": "Две румяные картофельные зразы с грибной начинкой и сметаной.",
+      "ingredients": [
+        "картофель",
+        "яйцо",
+        "пшеничная мука",
+        "шампиньоны",
+        "лук",
+        "сметана"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "pasta-chicken",
+      "category": "Паста и вок",
+      "name": "Пенне с курицей и шпинатом",
+      "price": 295,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "g"
+      },
+      "description": "Пенне с куриным филе в сливочном соусе со шпинатом.",
+      "ingredients": [
+        "пшеничные макароны",
+        "курица",
+        "шпинат",
+        "сливки",
+        "пармезан",
+        "чеснок"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "spaghetti-tomato",
+      "category": "Паста и вок",
+      "name": "Спагетти с томатами и базиликом",
+      "price": 245,
+      "currency": "RUB",
+      "portion": {
+        "value": 280,
+        "unit": "g"
+      },
+      "description": "Спагетти в соусе из томатов с чесноком и свежим базиликом.",
+      "ingredients": [
+        "пшеничные макароны",
+        "томат",
+        "базилик",
+        "чеснок",
+        "оливковое масло"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "pasta-mushroom",
+      "category": "Паста и вок",
+      "name": "Фузилли с грибами",
+      "price": 265,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "g"
+      },
+      "description": "Спиральки пасты с обжаренными шампиньонами в сливочном соусе.",
+      "ingredients": [
+        "пшеничные макароны",
+        "шампиньоны",
+        "лук",
+        "сливки",
+        "пармезан"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "udon-beef",
+      "category": "Паста и вок",
+      "name": "Удон с говядиной и овощами",
+      "price": 345,
+      "currency": "RUB",
+      "portion": {
+        "value": 330,
+        "unit": "g"
+      },
+      "description": "Пшеничная лапша с говядиной, сладким перцем и морковью в соевом соусе.",
+      "ingredients": [
+        "пшеничная лапша",
+        "говядина",
+        "сладкий перец",
+        "морковь",
+        "лук",
+        "соевый соус",
+        "кунжут"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "soba-tofu",
+      "category": "Паста и вок",
+      "name": "Соба с тофу и овощами",
+      "price": 275,
+      "currency": "RUB",
+      "portion": {
+        "value": 320,
+        "unit": "g"
+      },
+      "description": "Гречневая лапша с тофу, брокколи и сладким перцем.",
+      "ingredients": [
+        "гречнево-пшеничная лапша",
+        "тофу",
+        "брокколи",
+        "сладкий перец",
+        "соевый соус",
+        "кунжут"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "rice-chicken-wok",
+      "category": "Паста и вок",
+      "name": "Рис с курицей и яйцом",
+      "price": 285,
+      "currency": "RUB",
+      "portion": {
+        "value": 330,
+        "unit": "g"
+      },
+      "description": "Обжаренный рис с курицей, яйцом, зелёным горошком и морковью.",
+      "ingredients": [
+        "рис",
+        "курица",
+        "яйцо",
+        "зелёный горошек",
+        "морковь",
+        "соевый соус",
+        "зелёный лук"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "sandwich-turkey",
+      "category": "Перекусы",
+      "name": "Сэндвич с индейкой",
+      "price": 215,
+      "currency": "RUB",
+      "portion": {
+        "value": 210,
+        "unit": "g"
+      },
+      "description": "Зерновой хлеб с запечённой индейкой, сыром, томатом и йогуртовым соусом.",
+      "ingredients": [
+        "зерновой пшеничный хлеб",
+        "индейка",
+        "сыр гауда",
+        "томат",
+        "салат",
+        "йогурт",
+        "горчица"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "wrap-falafel",
+      "category": "Перекусы",
+      "name": "Ролл с фалафелем",
+      "price": 225,
+      "currency": "RUB",
+      "portion": {
+        "value": 260,
+        "unit": "g"
+      },
+      "description": "Пшеничная лепёшка с фалафелем, свежими овощами и соусом тахини.",
+      "ingredients": [
+        "пшеничная лепёшка",
+        "нут",
+        "огурец",
+        "томат",
+        "капуста",
+        "кунжутная паста",
+        "лимон"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "chicken-wrap",
+      "category": "Перекусы",
+      "name": "Ролл с курицей и овощами",
+      "price": 245,
+      "currency": "RUB",
+      "portion": {
+        "value": 280,
+        "unit": "g"
+      },
+      "description": "Тёплый ролл с куриным филе, хрустящей капустой и чесночным соусом.",
+      "ingredients": [
+        "пшеничная лепёшка",
+        "курица",
+        "капуста",
+        "огурец",
+        "томат",
+        "йогурт",
+        "чеснок"
+      ],
+      "dietary_tags": [],
+      "is_available": true
+    },
+    {
+      "slug": "cheese-toast",
+      "category": "Перекусы",
+      "name": "Тост с сыром и томатами",
+      "price": 155,
+      "currency": "RUB",
+      "portion": {
+        "value": 170,
+        "unit": "g"
+      },
+      "description": "Горячий тост с расплавленным сыром, томатами и орегано.",
+      "ingredients": [
+        "пшеничный хлеб",
+        "сыр гауда",
+        "томат",
+        "сливочное масло",
+        "орегано"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "cabbage-pie",
+      "category": "Перекусы",
+      "name": "Пирожок с капустой и яйцом",
+      "price": 75,
+      "currency": "RUB",
+      "portion": {
+        "value": 100,
+        "unit": "g"
+      },
+      "description": "Печёный пирожок с тушёной капустой и рубленым яйцом.",
+      "ingredients": [
+        "пшеничная мука",
+        "молоко",
+        "яйцо",
+        "капуста",
+        "лук",
+        "дрожжи",
+        "сливочное масло"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "potato-pie",
+      "category": "Перекусы",
+      "name": "Пирожок с картофелем и укропом",
+      "price": 70,
+      "currency": "RUB",
+      "portion": {
+        "value": 100,
+        "unit": "g"
+      },
+      "description": "Мягкий печёный пирожок с картофельной начинкой.",
+      "ingredients": [
+        "пшеничная мука",
+        "молоко",
+        "яйцо",
+        "картофель",
+        "укроп",
+        "дрожжи",
+        "сливочное масло"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "cottage-casserole",
+      "category": "Десерты",
+      "name": "Творожная запеканка с изюмом",
+      "price": 155,
+      "currency": "RUB",
+      "portion": {
+        "value": 180,
+        "unit": "g"
+      },
+      "description": "Нежная запеканка с изюмом; ягодный соус подаётся отдельно.",
+      "ingredients": [
+        "творог",
+        "яйцо",
+        "манная крупа",
+        "сахар",
+        "изюм",
+        "чёрная смородина"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "apple-charlotte",
+      "category": "Десерты",
+      "name": "Яблочная шарлотка",
+      "price": 145,
+      "currency": "RUB",
+      "portion": {
+        "value": 150,
+        "unit": "g"
+      },
+      "description": "Воздушный бисквит с яблоками и тонкой корочкой.",
+      "ingredients": [
+        "яблоко",
+        "пшеничная мука",
+        "яйцо",
+        "сахар",
+        "корица"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "brownie",
+      "category": "Десерты",
+      "name": "Шоколадный брауни",
+      "price": 175,
+      "currency": "RUB",
+      "portion": {
+        "value": 100,
+        "unit": "g"
+      },
+      "description": "Плотный шоколадный десерт с влажной серединой.",
+      "ingredients": [
+        "тёмный шоколад",
+        "сливочное масло",
+        "яйцо",
+        "сахар",
+        "пшеничная мука",
+        "какао"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "berry-yogurt",
+      "category": "Десерты",
+      "name": "Йогурт с ягодами и гранолой",
+      "price": 165,
+      "currency": "RUB",
+      "portion": {
+        "value": 200,
+        "unit": "g"
+      },
+      "description": "Натуральный йогурт с ягодным соусом и хрустящей гранолой.",
+      "ingredients": [
+        "йогурт",
+        "овсяные хлопья",
+        "мёд",
+        "миндаль",
+        "клубника",
+        "чёрная смородина"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "carrot-cake",
+      "category": "Десерты",
+      "name": "Морковный кекс с орехами",
+      "price": 150,
+      "currency": "RUB",
+      "portion": {
+        "value": 130,
+        "unit": "g"
+      },
+      "description": "Пряный кекс с тёртой морковью, грецким орехом и корицей.",
+      "ingredients": [
+        "морковь",
+        "пшеничная мука",
+        "яйцо",
+        "грецкий орех",
+        "сахар",
+        "растительное масло",
+        "корица"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "baked-apple",
+      "category": "Десерты",
+      "name": "Печёное яблоко с изюмом",
+      "price": 125,
+      "currency": "RUB",
+      "portion": {
+        "value": 180,
+        "unit": "g"
+      },
+      "description": "Тёплое яблоко с изюмом, корицей и небольшим количеством мёда.",
+      "ingredients": [
+        "яблоко",
+        "изюм",
+        "мёд",
+        "корица"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "cranberry-mors",
+      "category": "Напитки",
+      "name": "Клюквенный морс",
+      "price": 85,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "ml"
+      },
+      "description": "Кисло-сладкий морс из клюквы, подаётся охлаждённым.",
+      "ingredients": [
+        "вода",
+        "клюква",
+        "сахар"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "dried-fruit-compote",
+      "category": "Напитки",
+      "name": "Компот из сухофруктов",
+      "price": 65,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "ml"
+      },
+      "description": "Компот из сушёных яблок, груш и чернослива.",
+      "ingredients": [
+        "вода",
+        "сушёное яблоко",
+        "сушёная груша",
+        "чернослив",
+        "сахар"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "black-tea",
+      "category": "Напитки",
+      "name": "Чёрный чай с лимоном",
+      "price": 55,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "ml"
+      },
+      "description": "Горячий чёрный чай с долькой лимона, без добавленного сахара.",
+      "ingredients": [
+        "вода",
+        "чёрный чай",
+        "лимон"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "cappuccino",
+      "category": "Напитки",
+      "name": "Капучино",
+      "price": 145,
+      "currency": "RUB",
+      "portion": {
+        "value": 250,
+        "unit": "ml"
+      },
+      "description": "Эспрессо с горячим молоком и плотной молочной пеной.",
+      "ingredients": [
+        "вода",
+        "кофе",
+        "молоко"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "americano",
+      "category": "Напитки",
+      "name": "Американо",
+      "price": 95,
+      "currency": "RUB",
+      "portion": {
+        "value": 250,
+        "unit": "ml"
+      },
+      "description": "Эспрессо, разбавленный горячей водой, без сахара и молока.",
+      "ingredients": [
+        "вода",
+        "кофе"
+      ],
+      "dietary_tags": [
+        "vegan"
+      ],
+      "is_available": true
+    },
+    {
+      "slug": "sea-buckthorn-tea",
+      "category": "Напитки",
+      "name": "Облепиховый чай с имбирём",
+      "price": 125,
+      "currency": "RUB",
+      "portion": {
+        "value": 300,
+        "unit": "ml"
+      },
+      "description": "Горячий ягодный напиток с облепихой, имбирём и мёдом.",
+      "ingredients": [
+        "вода",
+        "облепиха",
+        "имбирь",
+        "мёд",
+        "лимон"
+      ],
+      "dietary_tags": [
+        "vegetarian"
+      ],
+      "is_available": true
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "app/domain/money.py.meta": {
+    "exit_code_by_key": {
+      "app.domain.money.x_money__mutmut_1": 1,
+      "app.domain.money.x_money__mutmut_2": 1,
+      "app.domain.money.x_money__mutmut_3": 1,
+      "app.domain.money.x_money__mutmut_4": 1,
+      "app.domain.money.x_money__mutmut_5": 0,
+      "app.domain.money.x_money__mutmut_6": 0,
+      "app.domain.money.x_money__mutmut_7": 0,
+      "app.domain.money.x_money__mutmut_8": 0,
+      "app.domain.money.x_money__mutmut_9": 1,
+      "app.domain.money.x_money__mutmut_10": 1,
+      "app.domain.money.x_money__mutmut_11": 1,
+      "app.domain.money.x_money__mutmut_12": 1,
+      "app.domain.money.x_money__mutmut_13": 1,
+      "app.domain.money.x_money__mutmut_14": 1,
+      "app.domain.money.x_money__mutmut_15": 0,
+      "app.domain.money.x_money__mutmut_16": 0,
+      "app.domain.money.x_money__mutmut_17": 0,
+      "app.domain.money.x_money__mutmut_18": 0
+    },
+    "hash_by_function_name": {
+      "x_money": "56cd27868313"
+    },
+    "type_check_error_by_key": {},
+    "durations_by_key": {
+      "app.domain.money.x_money__mutmut_1": 0.191225,
+      "app.domain.money.x_money__mutmut_2": 0.187499,
+      "app.domain.money.x_money__mutmut_3": 0.129581,
+      "app.domain.money.x_money__mutmut_4": 0.132789,
+      "app.domain.money.x_money__mutmut_5": 0.096599,
+      "app.domain.money.x_money__mutmut_6": 0.103561,
+      "app.domain.money.x_money__mutmut_7": 0.10463,
+      "app.domain.money.x_money__mutmut_8": 0.10773,
+      "app.domain.money.x_money__mutmut_9": 0.099552,
+      "app.domain.money.x_money__mutmut_10": 0.103654,
+      "app.domain.money.x_money__mutmut_11": 0.099486,
+      "app.domain.money.x_money__mutmut_12": 0.099231,
+      "app.domain.money.x_money__mutmut_13": 0.101975,
+      "app.domain.money.x_money__mutmut_14": 0.097224,
+      "app.domain.money.x_money__mutmut_15": 0.104571,
+      "app.domain.money.x_money__mutmut_16": 0.103888,
+      "app.domain.money.x_money__mutmut_17": 0.102001,
+      "app.domain.money.x_money__mutmut_18": 0.098568
+    },
+    "estimated_durations_by_key": {
+      "app.domain.money.x_money__mutmut_1": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_2": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_3": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_4": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_5": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_6": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_7": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_8": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_9": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_10": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_11": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_12": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_13": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_14": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_15": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_16": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_17": 0.003754479002964217,
+      "app.domain.money.x_money__mutmut_18": 0.003754479002964217
+    }
+  }
+}

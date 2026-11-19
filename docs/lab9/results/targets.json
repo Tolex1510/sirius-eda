@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "data": {
+    "activeTargets": [
+      {
+        "discoveredLabels": {
+          "__address__": "localhost:9090",
+          "__metrics_path__": "/metrics",
+          "__scheme__": "http",
+          "__scrape_interval__": "15s",
+          "__scrape_timeout__": "10s",
+          "job": "prometheus"
+        },
+        "labels": {
+          "instance": "localhost:9090",
+          "job": "prometheus"
+        },
+        "scrapePool": "prometheus",
+        "scrapeUrl": "http://localhost:9090/metrics",
+        "globalUrl": "http://346f194aa84c:9090/metrics",
+        "lastError": "",
+        "lastScrape": "2026-11-18T06:11:24.760268123Z",
+        "lastScrapeDuration": 0.011203203,
+        "health": "up",
+        "scrapeInterval": "15s",
+        "scrapeTimeout": "10s"
+      },
+      {
+        "discoveredLabels": {
+          "__address__": "rabbitmq:15692",
+          "__metrics_path__": "/metrics",
+          "__scheme__": "http",
+          "__scrape_interval__": "15s",
+          "__scrape_timeout__": "10s",
+          "job": "rabbitmq"
+        },
+        "labels": {
+          "instance": "rabbitmq:15692",
+          "job": "rabbitmq"
+        },
+        "scrapePool": "rabbitmq",
+        "scrapeUrl": "http://rabbitmq:15692/metrics",
+        "globalUrl": "http://rabbitmq:15692/metrics",
+        "lastError": "",
+        "lastScrape": "2026-11-18T06:11:12.940099328Z",
+        "lastScrapeDuration": 0.064189066,
+        "health": "up",
+        "scrapeInterval": "15s",
+        "scrapeTimeout": "10s"
+      },
+      {
+        "discoveredLabels": {
+          "__address__": "api:8000",
+          "__metrics_path__": "/metrics",
+          "__scheme__": "http",
+          "__scrape_interval__": "15s",
+          "__scrape_timeout__": "10s",
+          "job": "sirius-api"
+        },
+        "labels": {
+          "instance": "api:8000",
+          "job": "sirius-api"
+        },
+        "scrapePool": "sirius-api",
+        "scrapeUrl": "http://api:8000/metrics",
+        "globalUrl": "http://api:8000/metrics",
+        "lastError": "",
+        "lastScrape": "2026-11-18T06:11:13.282658416Z",
+        "lastScrapeDuration": 0.007764411,
+        "health": "up",
+        "scrapeInterval": "15s",
+        "scrapeTimeout": "10s"
+      }
+    ],
+    "droppedTargets": [],
+    "droppedTargetCounts": {
+      "prometheus": 0,
+      "rabbitmq": 0,
+      "sirius-api": 0
+    }
+  }
+}

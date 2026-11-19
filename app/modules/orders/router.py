@@ -3,7 +3,7 @@
 Принимает HTTP-запрос, выполняет техническую валидацию,
 вызывает сервис и переводит исключения в HTTP-статусы.
 """
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from app.core.dependencies import get_current_user, require_role
 from app.dependencies import get_order_notifier, get_order_repository
@@ -13,6 +13,7 @@ from app.http_errors import to_http_exception
 from app.modules.orders.notifier import OrderNotifier
 from app.modules.orders.repository import OrderRepository
 from app.modules.orders.service import OrderService, OrderStatsService
+from app.core.observability import correlation_id_from_context
 from app.schemas import OrderCreate
 
 router = APIRouter()
@@ -30,6 +31,7 @@ def get_order_service(
 
 @router.post("/create")
 def create_order(
+    request: Request,
     payload: OrderCreate,
     current_user: User = Depends(require_role(Role.STUDENT)),
     service: OrderService = Depends(get_order_service),
@@ -45,6 +47,7 @@ def create_order(
             user_id=current_user.id,
             item_id=payload.item_id,
             quantity=payload.quantity,
+            correlation_id=getattr(request.state, "correlation_id", None) or correlation_id_from_context(),
         )
     except DomainError as e:
         raise to_http_exception(e)

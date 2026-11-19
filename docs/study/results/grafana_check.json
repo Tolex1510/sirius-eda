@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-11-03T10:11:15.410Z",
+  "url": "http://localhost:3000/d/sirius-payments",
+  "browser_errors": [],
+  "unknown_order_filter_empty": true,
+  "manual_replays_order": 109,
+  "manual_replay_events": [
+    "payment.succeeded",
+    "refund.succeeded"
+  ],
+  "original_provider_http_requests_visible": true,
+  "payment_tests_passed": 37,
+  "docker_unused_images_reclaimed": "5.979 GB"
+}

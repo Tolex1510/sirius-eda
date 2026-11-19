@@ -4,13 +4,13 @@
 from abc import ABC, abstractmethod
 from dataclasses import replace
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.database import short_transactions
 from app.domain.entities import Delivery, DeliveryStatus, Order, Role, User
 from app.domain.events import DeliveryFailed, Receipt
-from app.domain.exceptions import AlreadyProcessedError
+from app.domain.exceptions import AlreadyProcessedError, BusinessRuleError
 from app.memory_storage import InMemoryStorage
 from app.models import Delivery as DeliveryModel
 from app.models import Order as OrderModel
@@ -62,8 +62,8 @@ class DeliveryRepository(ABC):
     @abstractmethod
     def assign_free_courier(self, order_id: int, receipt: Receipt) -> Delivery | None:
         """
-        Находит свободного курьера, создаёт доставку и пишет отметку об обработке одной транзакцией.
-        None, если свободных курьеров нет: тогда не пишется ничего. Повтор отметки: AlreadyProcessedError.
+        Находит наименее загруженного курьера, создаёт доставку и пишет отметку об обработке одной транзакцией.
+        None, если незаблокированных курьеров нет: тогда не пишется ничего. Повтор отметки: AlreadyProcessedError.
         """
 
     @abstractmethod
@@ -109,6 +109,12 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
         return [row.to_entity() for row in rows]
 
     def create(self, order_id: int, courier_id: int, status: str) -> int:
+        order = self.db.query(OrderModel).filter(OrderModel.id == order_id).with_for_update().one()
+        if order.status != "paid":
+            raise BusinessRuleError("Заказ уже отменён или не оплачен")
+        courier = self.db.query(UserModel).filter(UserModel.id == courier_id).with_for_update(of=UserModel).one()
+        if courier.is_blocked or courier.role.name != Role.COURIER:
+            raise BusinessRuleError("Курьер недоступен")
         new_delivery = DeliveryModel(order_id=order_id, courier_id=courier_id, status=status)
         self.db.add(new_delivery)
         self.db.commit()
@@ -116,11 +122,18 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
         return new_delivery.id
 
     def save_status(self, delivery: Delivery) -> None:
-        self.db.query(DeliveryModel).filter(DeliveryModel.id == delivery.id).update({"status": delivery.status})
+        self.db.query(OrderModel).filter(OrderModel.id == delivery.order_id).with_for_update().one()
+        row = self.db.query(DeliveryModel).filter(DeliveryModel.id == delivery.id).with_for_update().one()
+        if row.status != DeliveryStatus.IN_PROGRESS:
+            raise BusinessRuleError("Статус доставки изменился: обновите данные")
+        row.status = delivery.status
         self.db.commit()
 
     def save_completion(self, delivery: Delivery, order: Order | None) -> None:
+        self.db.query(OrderModel).filter(OrderModel.id == delivery.order_id).with_for_update().one()
         row = self.db.query(DeliveryModel).filter(DeliveryModel.id == delivery.id).one()
+        if row.status in DeliveryStatus.FINAL:
+            raise BusinessRuleError("Доставка уже завершена или отменена")
         row.status = delivery.status
         if order:
             order_row = self.db.query(OrderModel).filter(OrderModel.id == order.id).one()
@@ -138,18 +151,21 @@ class SqlAlchemyDeliveryRepository(DeliveryRepository):
         return has_receipt(self.db, receipt)
 
     def assign_free_courier(self, order_id: int, receipt: Receipt) -> Delivery | None:
-        busy = select(DeliveryModel.courier_id).where(
+        order = self.db.query(OrderModel).filter(OrderModel.id == order_id).with_for_update().one()
+        if order.status != "paid":
+            return None
+        # Строка курьера блокируется до фиксации доставки; один заказ остаётся
+        # защищён блокировкой заказа и уникальным индексом активной доставки.
+        load = select(func.count(DeliveryModel.id)).where(
+            DeliveryModel.courier_id == UserModel.id,
             DeliveryModel.status.in_(DeliveryStatus.ACTIVE),
-            DeliveryModel.courier_id.is_not(None),
-        )
-        # SKIP LOCKED: два заказа, оплаченные одновременно, не получат одного курьера,
-        # второй возьмёт следующего свободного.
+        ).correlate(UserModel).scalar_subquery()
         courier = (
             self.db.query(UserModel)
             .join(RoleModel, RoleModel.id == UserModel.role_id)
-            .filter(RoleModel.name == Role.COURIER, UserModel.is_blocked.is_(False), UserModel.id.not_in(busy))
-            .order_by(UserModel.id)
-            .with_for_update(of=UserModel, skip_locked=True)
+            .filter(RoleModel.name == Role.COURIER, UserModel.is_blocked.is_(False))
+            .order_by(load, UserModel.id)
+            .with_for_update(of=UserModel)
             .first()
         )
         if not courier:
@@ -233,15 +249,21 @@ class InMemoryDeliveryRepository(DeliveryRepository):
         self.storage.receipts.add(receipt)
 
     def assign_free_courier(self, order_id: int, receipt: Receipt) -> Delivery | None:
-        busy = {d.courier_id for d in self.storage.deliveries.values() if d.status in DeliveryStatus.ACTIVE}
+        order = self.storage.orders[order_id]
+        if order.status != "paid":
+            return None
         free = sorted(
             u.id for u in self.storage.users.values()
-            if u.role == Role.COURIER and not u.is_blocked and u.id not in busy
+            if u.role == Role.COURIER and not u.is_blocked
         )
         if not free:
             return None
         self._receive(receipt)
-        delivery_id = self.create(order_id, free[0], DeliveryStatus.IN_PROGRESS)
+        courier_id = min(free, key=lambda uid: (
+            sum(d.courier_id == uid and d.status in DeliveryStatus.ACTIVE for d in self.storage.deliveries.values()),
+            uid,
+        ))
+        delivery_id = self.create(order_id, courier_id, DeliveryStatus.IN_PROGRESS)
         return replace(self.storage.deliveries[delivery_id])
 
     def record_failure(self, event: DeliveryFailed, receipt: Receipt) -> None:

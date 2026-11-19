@@ -1,0 +1,19 @@
+{
+  "correlation_id": "sentry-demo-9-20261118-fixed",
+  "transport_statuses": [
+    200,
+    200
+  ],
+  "events": [
+    {
+      "event_id": "d1940b37e8024a37aa30bd35bd21ffb6",
+      "tags": {
+        "correlation_id": "sentry-demo-9-20261118-fixed"
+      },
+      "exception_types": [
+        "RuntimeError"
+      ]
+    }
+  ],
+  "http_status": 500
+}

@@ -2,9 +2,11 @@
 Доменные события «Сириус.Еды». Сервис фиксирует факт, а кто на него реагирует, не знает.
 Не зависят от брокера: в RabbitMQ события попадают через outbox.
 """
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import MISSING, asdict, dataclass, field, fields
 from datetime import UTC, datetime
+from types import UnionType
 from typing import ClassVar
+from typing import get_args, get_origin
 from uuid import uuid4
 
 
@@ -19,9 +21,12 @@ class Event:
     # Ключ идемпотентности: по нему получатель узнаёт повторную доставку.
     event_id: str = field(default_factory=lambda: str(uuid4()))
     occurred_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    correlation_id: str | None = None
 
     def to_payload(self) -> dict:
         payload = asdict(self)
+        if self.correlation_id is None:
+            payload.pop("correlation_id", None)
         payload["occurred_at"] = self.occurred_at.isoformat()
         payload["event_type"] = self.ROUTING_KEY
         return payload
@@ -31,6 +36,12 @@ class Event:
         values = {}
         for f in fields(cls):
             if f.name not in payload:
+                if f.default is not MISSING:
+                    values[f.name] = f.default
+                    continue
+                if f.default_factory is not MISSING:
+                    values[f.name] = f.default_factory()
+                    continue
                 raise InvalidEventError(f"Нет поля {f.name}")
             values[f.name] = _check(f.name, f.type, payload[f.name])
         return cls(**values)
@@ -84,6 +95,11 @@ def parse_event(payload: object) -> Event:
 
 
 def _check(name: str, expected: type, value: object) -> object:
+    origin = get_origin(expected)
+    if value is None and origin in (UnionType,) and type(None) in get_args(expected):
+        return None
+    if origin is UnionType:
+        expected = next((arg for arg in get_args(expected) if arg is not type(None)), expected)
     if expected is datetime:
         try:
             parsed = datetime.fromisoformat(value)

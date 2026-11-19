@@ -1,0 +1,7 @@
+SPA semantic search: [ 'Капучино' ]
+Browser assistant reply: Стоимость капучино - 145.00 RUB.
+SSR semantic results: [
+  'Тыквенный крем-суп',
+  'Грибной суп с перловкой',
+  'Чечевичный суп с томатами'
+]
