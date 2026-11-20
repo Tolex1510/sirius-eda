@@ -22,3 +22,10 @@ GitHub API подтвердил `mergeable_state: blocked`. [Снимок API](r
 - Намеренно сломанный демонстрационный тест удалён после сохранения красного результата.
 
 Локально после исправлений: 68 затронутых Python-тестов и три компонентных браузерных сценария прошли; полный предшествующий pytest — 367 passed, 8 skipped, coverage 82%. Локальные пропуски не скрыты, см. RESULTS.md. Окончательный статус внешнего CI оценивается по ссылкам выше, не по локальному pytest.
+
+
+## Подтверждённый зелёный запуск
+
+[Исправленный CI — success](https://github.com/Tolex1510/sirius-eda/actions/runs/44531856789), commit `0fa7f992`. Все шесть jobs завершились успешно: tests, migrations, frontend, browser, integration, mutation. PR сменил `mergeable_state` с `blocked` на `clean` без отключения защиты.
+
+[Снимок GitHub API](results/github-green.json). Полный браузерный прогон прошёл в GitHub Actions; [краткий вывод](results/github-browser-summary.txt). Это внешняя проверка полного Compose-стенда, а не только локальные API-моки.
