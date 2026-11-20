@@ -1,0 +1,55 @@
+{
+  "run_url": "https://github.com/Tolex1510/sirius-eda/actions/runs/44531856789",
+  "run_status": "completed",
+  "run_conclusion": "success",
+  "head_sha": "0fa7f9924a71bca42be483db89dd0cd25d51ead7",
+  "pr_url": "https://github.com/Tolex1510/sirius-eda/pull/1",
+  "mergeable_state": "clean",
+  "required_status_checks": [
+    "tests",
+    "migrations",
+    "frontend",
+    "browser",
+    "integration",
+    "mutation"
+  ],
+  "enforce_admins": true,
+  "jobs": [
+    {
+      "id": 135586948533,
+      "name": "frontend",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 135586948981,
+      "name": "integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 135586948992,
+      "name": "mutation",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 135586948994,
+      "name": "migrations",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 135586949005,
+      "name": "tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 135586949234,
+      "name": "browser",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

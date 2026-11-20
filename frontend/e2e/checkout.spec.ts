@@ -8,18 +8,18 @@ test("menu, registration, demo payment, refund, assistant fallback and responsiv
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "Что сегодня на обед?" }),
+    page.getByRole("heading", { name: "Обед по вашему вкусу" }),
   ).toBeVisible();
   await expect(page.locator(".food-card").first()).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath("menu-desktop.png"),
     fullPage: true,
   });
-  await page.getByLabel("Поиск блюд").fill("НетТакогоБлюда");
+  await page.getByLabel("Поиск по названию").fill("НетТакогоБлюда");
   await expect(
-    page.getByRole("heading", { name: "Ничего не нашлось" }),
+    page.getByRole("heading", { name: "Подходящих блюд не нашлось" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Очистить поиск" }).click();
+  await page.getByRole("button", { name: "Очистить", exact: true }).click();
   await page
     .getByRole("button", { name: /^Заказать:/ })
     .first()
@@ -100,7 +100,8 @@ test("menu, registration, demo payment, refund, assistant fallback and responsiv
       });
       await page.getByRole("button", { name: "Закрыть", exact: true }).click();
       // A second order exercises cancellation/refund independently from the delivered one.
-      await page.getByRole("link", { name: "Меню", exact: true }).click();
+      // Continue the SPA checkout flow; header menu links to the separate SSR storefront.
+      await page.goto("/");
       await page
         .getByRole("button", { name: /^Заказать:/ })
         .first()
@@ -130,7 +131,8 @@ test("menu, registration, demo payment, refund, assistant fallback and responsiv
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole("link", { name: "Меню", exact: true }).click();
+  // Continue the SPA checkout flow; header menu links to the separate SSR storefront.
+      await page.goto("/");
   await page.screenshot({
     path: testInfo.outputPath("menu-mobile.png"),
     fullPage: true,

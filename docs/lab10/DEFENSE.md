@@ -74,9 +74,9 @@ LOCUST_TOKENS=/path/to/private/test-tokens.txt .venv/bin/locust -f locustfile_la
 
 `.github/workflows/tests.yml` срабатывает на push и pull_request. Jobs: быстрые тесты с coverage, миграции, сборка фронтенда, браузер, Testcontainers + Pact и mutmut с проверкой улучшения результата. XML тестов, Pact и отчёты мутаций сохраняются в artifacts.
 
-**Состояние:** workflow подготовлен, локальные проверки выполнены. У текущего Git-репозитория не задан remote. Зелёный/красный запуск в GitHub Actions и блокировка PR пока не подтверждены. Наличие YAML само по себе не блокирует кнопку Merge.
+**Состояние:** проект опубликован на GitHub; защита main применена, красный CI и `mergeable_state: blocked` подтверждены. История запусков и исправлений — в [GITHUB.md](GITHUB.md). Наличие YAML само по себе не блокирует кнопку Merge.
 
-После размещения проекта на GitHub:
+Порядок настройки и демонстрации (защита уже применена):
 
 1. Дождаться зелёного workflow.
 2. В Settings → Branches → защитить основную ветку, включить Require status checks to pass и выбрать jobs `tests`, `migrations`, `frontend`, `browser`, `integration`, `mutation`. Для ruleset также запретить обход проверки, если он доступен. Пример настроек API — `.github/branch-protection.example.json`; файл сам настройки GitHub не применяет.
@@ -131,4 +131,4 @@ PACT_DO_NOT_TRACK=true .venv/bin/pytest tests/contracts -v -s
 - **Почему покрытие не равно качеству?** Слабый тест проходит изменённый код: это показал mutmut.
 - **Почему не достаточно хорошего RPS?** Нужны p95, ошибки и состояние фоновой очереди: быстрый HTTP может скрывать накопление задач.
 - **Зачем Pact?** Ловит несовместимый формат сообщения до выпуска провайдера.
-- **Что осталось для окончательной сдачи?** Подключить GitHub remote, выполнить workflow и показать требуемые status checks на PR. Локальные бонусы Pact и mutmut реализованы.
+- **Что показывать для окончательной сдачи?** Тесты, нагрузку, красный/зелёный CI и обязательные проверки PR по ссылкам в GITHUB.md. Оба бонуса Pact и mutmut реализованы.

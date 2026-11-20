@@ -1,7 +1,31 @@
-# GitHub Actions — проверка лабораторной № 10
+# GitHub Actions — лабораторная № 10
 
-Репозиторий: https://github.com/Tolex1510/sirius-eda (приватный).
+Репозиторий: https://github.com/Tolex1510/sirius-eda. По разрешению владельца переведён в публичный для использования защиты ветки без GitHub Pro.
 
-Локально: 367 passed, 8 skipped; семь Testcontainers-тестов и два Pact-теста прошли. Mutmut: 18 мутаций, выжившие уменьшились с 10 до 8.
+PR с исправлениями CI: https://github.com/Tolex1510/sirius-eda/pull/1. Актуальный результат проверок — вкладка Checks этого PR; запуски основной ветки — https://github.com/Tolex1510/sirius-eda/actions.
 
-Публикация workflow и проверка запусков выполняются. Обязательные status checks требуют отдельной настройки GitHub; до её подтверждения блокировка PR не считается выполненной.
+## Красный CI и блокировка
+
+[Реальный красный запуск на PR](https://github.com/Tolex1510/sirius-eda/actions/runs/44530710536). В отдельной ветке был добавлен тест `assert 1 == 2`, job `tests` упала. Основная ветка намеренно сломанного теста не содержала.
+
+GitHub API подтвердил `mergeable_state: blocked`. [Снимок API](results/github-red.json), [вывод сломанного теста](results/github-red-tests.txt). Одновременно первоначальный CI обнаружил ещё два настоящих дефекта: незакреплённую версию gRPC-генератора и расхождение уникального индекса каталога с ORM. Они исправлены в PR вместе с обновлением браузерных тестов после редизайна.
+
+Для `main` включены `strict` required status checks: **tests, migrations, frontend, browser, integration, mutation**. `enforce_admins=true`: администратор также обязан дождаться проверок. Защита применена через GitHub API, а не только описана в JSON.
+
+## Что исправлено после первого запуска
+
+- `grpcio-tools==1.84.0`: сравнение сгенерированных файлов воспроизводимо. До фикса CI установил 1.85.3 и получил отличающийся заголовок генератора.
+- `MenuItem.__table_args__` описывает тот же `uq_menu_catalog_slug`, что Alembic 0013. Дополнительная миграция и изменение рабочих данных не требуются.
+- Проверен полный цикл Alembic: upgrade → check → downgrade base → upgrade → check. Отчёт: `results/migrations.txt`.
+- Браузерные тесты используют актуальные названия полей и заголовков; checkout проверяется в SPA, отдельно от Next.js-витрины. Добавлена проверка независимости обычного и семантического поиска.
+- Push запускает CI для main; PR — для рабочих веток. Concurrency отменяет устаревшие запуски одной ветки.
+- Намеренно сломанный демонстрационный тест удалён после сохранения красного результата.
+
+Локально после исправлений: 68 затронутых Python-тестов и три компонентных браузерных сценария прошли; полный предшествующий pytest — 367 passed, 8 skipped, coverage 82%. Локальные пропуски не скрыты, см. RESULTS.md. Окончательный статус внешнего CI оценивается по ссылкам выше, не по локальному pytest.
+
+
+## Подтверждённый зелёный запуск
+
+[Исправленный CI — success](https://github.com/Tolex1510/sirius-eda/actions/runs/44531856789), commit `0fa7f992`. Все шесть jobs завершились успешно: tests, migrations, frontend, browser, integration, mutation. PR сменил `mergeable_state` с `blocked` на `clean` без отключения защиты.
+
+[Снимок GitHub API](results/github-green.json). Полный браузерный прогон прошёл в GitHub Actions; [краткий вывод](results/github-browser-summary.txt). Это внешняя проверка полного Compose-стенда, а не только локальные API-моки.

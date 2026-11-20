@@ -60,6 +60,7 @@ class Category(Base):
 
 class MenuItem(Base):
     __tablename__ = "menu_items"
+    __table_args__ = (Index("uq_menu_catalog_slug", "catalog_slug", unique=True),)
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
@@ -67,7 +68,7 @@ class MenuItem(Base):
     is_available = Column(Boolean, default=True)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=True, index=True)
 
-    catalog_slug = Column(String(100), unique=True, nullable=True)
+    catalog_slug = Column(String(100), nullable=True)
     description = Column(Text, nullable=False, default="", server_default="")
     ingredients = Column(JSON, nullable=False, default=list, server_default="[]")
     dietary_tags = Column(JSON, nullable=False, default=list, server_default="[]")

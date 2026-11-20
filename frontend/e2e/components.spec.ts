@@ -28,6 +28,8 @@ async function fixtureApi(page: Page) {
       return failMenu
         ? reply({ detail: "Меню недоступно" }, 503)
         : reply(items);
+    if (path === "/menu/search")
+      return reply({items: [items[0]], mode: "semantic", explanation: {constraints: ["Без мяса"], ranking: "Сначала ограничения, затем близость описаний"}});
     if (path === "/menu/categories")
       return reply([
         { id: 1, name: "Завтраки" },
@@ -153,9 +155,9 @@ test("components keep registration, checkout, orders, chat and courier operation
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   await expect(page.locator(".food-card")).toHaveCount(2);
-  await page.getByLabel("Поиск блюд").fill("Кофе");
+  await page.getByLabel("Поиск по названию").fill("Кофе");
   await expect(page.locator(".food-card")).toHaveCount(1);
-  await page.getByRole("button", { name: "Очистить поиск" }).click();
+  await page.getByRole("button", { name: "Очистить", exact: true }).click();
   await page.getByRole("button", { name: "Напитки", exact: true }).click();
   await expect(page.locator(".food-card")).toHaveCount(1);
   await page.getByRole("button", { name: "Всё меню" }).click();
@@ -235,4 +237,28 @@ test("menu error retry and checkout modal still work on a mobile screen", async 
   ).toBe(true);
   await page.getByRole("button", { name: "Закрыть", exact: true }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
+});
+
+
+test("name search and wish selection stay separate", async ({ page }) => {
+  await fixtureApi(page);
+  let semanticCalls = 0;
+  page.on("request", request => {
+    if (new URL(request.url()).pathname === "/api/menu/search") semanticCalls++;
+  });
+  await page.goto("/");
+  await expect(page.locator(".food-card")).toHaveCount(2);
+  await page.getByLabel("Поиск по названию").fill("Кофе");
+  await page.getByLabel("Поиск по названию").press("Enter");
+  await expect(page.locator(".food-card")).toHaveCount(1);
+  expect(semanticCalls).toBe(0);
+  await page.getByRole("tab", { name: "По пожеланиям" }).click();
+  await expect(page.getByLabel("Пожелания к блюду", { exact: true })).toHaveValue("");
+  await page.getByLabel("Пожелания к блюду", { exact: true }).fill("Обед без мяса");
+  await page.getByRole("button", { name: "Подобрать", exact: true }).click();
+  await expect(page.getByText("Подобрано: 1", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Учтённые пожелания")).toContainText("Без мяса");
+  expect(semanticCalls).toBe(1);
+  await page.getByRole("tab", { name: "По названию" }).click();
+  await expect(page.getByLabel("Поиск по названию")).toHaveValue("Кофе");
 });
